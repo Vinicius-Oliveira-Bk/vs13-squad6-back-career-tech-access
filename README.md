@@ -1,1 +1,1 @@
-# vs13-squad6-educationtech
+# VS13 - Squad06 - EducationTech
