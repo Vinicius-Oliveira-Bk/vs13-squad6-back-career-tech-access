@@ -2,39 +2,15 @@
 
 🚀 Este projeto, desenvolvido pelo Squad 06 na 13ª edição do programa [Vem Ser - DBC](https://www.dbccompany.com.br/vem-ser/), visa criar uma solução tecnológica para enfrentar desafios específicos relacionados aos [Objetivos de Desenvolvimento Sustentável (ODS)](https://brasil.un.org/pt-br/sdgs) da ONU.
 
-## Integrantes do Grupo
-
-<details>
-  <summary><strong>Colaboradores 👥</strong></summary><br />
-1. Vinicius Oliveira
-   <br>
-2. Luiz Barbosa
-   <br>
-3. Bruno Scarpari
-   <br>
-4. Gabriel Zampieri
-   <br>
-5. Lucas Araujo
-   <br>
-6. Thales Brasileiro
-   <br>
-7. Gustavo Rocha
-   <br>
-8. Matheus Franco
-   <br>
-9. Fabrício Milanio 
-</details>
-
 ## Descrição do Projeto
 
 🌐 O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
 
 ## [Documentação](https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit) 📄
 
-## Modelo conceitual 🎨
+## Modelo conceitual
 
 <strong>🚧 Em construção 🚧</strong>
-<br />
 
 ## Tecnologias e técnicas utilizadas
 
@@ -72,6 +48,30 @@
    <br>
    - Mongo DB
 </details>
+
+## Integrantes do Grupo
+
+<details>
+  <summary><strong>Colaboradores 👥</strong></summary><br />
+1. Vinicius Oliveira
+   <br>
+2. Luiz Barbosa
+   <br>
+3. Bruno Scarpari
+   <br>
+4. Gabriel Zampieri
+   <br>
+5. Lucas Araujo
+   <br>
+6. Thales Brasileiro
+   <br>
+7. Gustavo Rocha
+   <br>
+8. Matheus Franco
+   <br>
+9. Fabrício Milanio 
+</details>
+
 
 ## Como acessar o projeto
 
