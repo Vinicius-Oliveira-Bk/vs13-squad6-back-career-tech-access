@@ -1,8 +1,8 @@
-# Career Tech Access 
+# Career Tech Access 🚀
 
-Este projeto representa a Task 02 do squad 06 do programa Vem Ser (13ª edição) da DBC. Nele, está sendo desenvolvido uma solução tecnológica para enfrentar desafios específicos relacionados aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU.
+Este projeto, desenvolvido pelo Squad 06 no programa Vem Ser (13ª edição) da DBC, visa criar uma solução tecnológica para enfrentar desafios específicos relacionados aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU.
 
-## Lista de integrantes do grupo:
+## Lista de Integrantes do Grupo 👥
 
 1. Vinicius Oliveira
 2. Luiz Barbosa
@@ -14,14 +14,14 @@ Este projeto representa a Task 02 do squad 06 do programa Vem Ser (13ª edição
 8. Matheus Franco
 9. Fabrício Milanio 
 
-## Descrição do Projeto
+## Descrição do Projeto 🌐
 
 O **Career Tech Access** é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
 
-## Documentação
+## Documentação 📄
 - [Relatório](https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit)
 
-## Modelo conceitual
+## Modelo conceitual 🎨
 
 Em construção.. 
 
@@ -31,7 +31,7 @@ Em construção..
 - CSS
 - Java
 
-## Como acessar e visualizar os arquivos do projeto no IntelliJ IDEA
+## Como acessar e visualizar os arquivos do projeto no IntelliJ IDEA ⚙️
 
 Se você deseja explorar e visualizar os arquivos do projeto no IntelliJ IDEA, siga estas instruções simples:
 
