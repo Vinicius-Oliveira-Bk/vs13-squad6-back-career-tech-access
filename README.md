@@ -6,7 +6,8 @@
 
 🌐 O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
 
-## [Documentação](https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit) 📄
+<h2><strong><a href="https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit" target="_blank" rel="noopener noreferrer">Documentação 📄</strong></h2></a>
+
 
 ## Modelo conceitual
 
