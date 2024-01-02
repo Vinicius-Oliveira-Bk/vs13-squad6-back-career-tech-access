@@ -1,13 +1,11 @@
-# Career Tech Access 🚀
+# Career Tech Access
 
-Este projeto, desenvolvido pelo Squad 06 na 13ª edição do programa [Vem Ser - DBC](https://www.dbccompany.com.br/vem-ser/), visa criar uma solução tecnológica para enfrentar desafios específicos relacionados aos [Objetivos de Desenvolvimento Sustentável (ODS)](https://brasil.un.org/pt-br/sdgs) da ONU.
+🚀 Este projeto, desenvolvido pelo Squad 06 na 13ª edição do programa [Vem Ser - DBC](https://www.dbccompany.com.br/vem-ser/), visa criar uma solução tecnológica para enfrentar desafios específicos relacionados aos [Objetivos de Desenvolvimento Sustentável (ODS)](https://brasil.un.org/pt-br/sdgs) da ONU.
 
-:warning: **Projeto em processo de idealização. As informações contidas aqui podem ser atualizadas durante o desenvolvimento** :warning:
-
-## Integrantes do Grupo 👥
+## Integrantes do Grupo
 
 <details>
-  <summary><strong>Colaboradores</strong></summary><br />
+  <summary><strong>Colaboradores 👥</strong></summary><br />
 1. Vinicius Oliveira
    <br>
 2. Luiz Barbosa
@@ -27,15 +25,16 @@ Este projeto, desenvolvido pelo Squad 06 na 13ª edição do programa [Vem Ser -
 9. Fabrício Milanio 
 </details>
 
-## Descrição do Projeto 🌐
+## Descrição do Projeto
 
-O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
+🌐 O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
 
 ## [Documentação](https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit) 📄
 
 ## Modelo conceitual 🎨
 
-<summary><strong>🚧 Em construção 🚧</strong></summary><br />
+<strong>🚧 Em construção 🚧</strong>
+<br />
 
 ## Tecnologias e técnicas utilizadas
 
@@ -74,9 +73,9 @@ O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimo
    - Mongo DB
 </details>
 
-## Como acessar e visualizar os arquivos do projeto no IntelliJ IDEA ⚙️
+## Como acessar o projeto
 
-Se você deseja explorar e visualizar os arquivos do projeto no IntelliJ IDEA, siga estas instruções simples:
+⚙️ Se você deseja explorar e visualizar os arquivos do projeto no IntelliJ IDEA, siga estas instruções simples:
 
 <details>
   <summary><strong>Passo-a-passo</strong></summary><br />
@@ -106,3 +105,4 @@ git clone https://github.com/Vinicius-Oliveira-Bk/vs13-squad6-CareerTechAccess
    - Clique com o botão direito no arquivo principal e selecionando "Run" (Executar) ou utilizando as opções de execução disponíveis.
 </details>
 
+### :warning: Projeto em processo de idealização. As informações contidas aqui podem ser atualizadas durante o desenvolvimento :warning: </strong>
