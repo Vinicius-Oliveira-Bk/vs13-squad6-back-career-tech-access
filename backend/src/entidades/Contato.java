@@ -29,4 +29,15 @@ public class Contato {
     public void setTelefone(String telefone) { this.telefone = telefone; }
     public TipoEnum getTipo() { return tipo; }
     public void setTipo(TipoEnum tipo) { this.tipo = tipo; }
+
+
+    @Override
+    public String toString() {
+        String texto = "Id: "+this.id+"\n{";
+        texto += "\n\tDescrição: "+this.descricao;
+        texto += "\n\tTelefone: "+this.telefone;
+        texto += "\n\tTipo: "+this.tipo;
+        texto += "\n}";
+        return texto;
+    }
 }
