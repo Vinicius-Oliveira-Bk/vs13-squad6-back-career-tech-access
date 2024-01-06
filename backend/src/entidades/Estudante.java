@@ -18,6 +18,16 @@ public class Estudante extends Cliente {
     public Estudante() {
     }
 
+    public Estudante(long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+        this.matricula = matricula;
+        this.comprovanteMatricula = comprovanteMatricula;
+        this.tipoEstudante = tipoEstudante;
+        this.cruso = cruso;
+        this.instituicao = instituicao;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+    }
+
     public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.matricula = matricula;
