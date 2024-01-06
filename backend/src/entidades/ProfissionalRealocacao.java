@@ -59,4 +59,13 @@ public class ProfissionalRealocacao extends Cliente {
     public void setAreaInteresse(String areaInteresse) {
         this.areaInteresse = areaInteresse;
     }
+
+    public String toString() {
+        return "ProfissionalRealocacao{" +
+                "profissao='" + profissao + '\'' +
+                ", areaAtuacao='" + areaAtuacao + '\'' +
+                ", objetivoProfissional='" + objetivoProfissional + '\'' +
+                ", areaInteresse='" + areaInteresse + '\'' +
+                '}';
+    }
 }

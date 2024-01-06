@@ -37,4 +37,12 @@ public class Pcd extends Cliente {
     public void setCertificadoDeficienciaGov(String certificadoDeficienciaGov) {
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;
     }
+
+    @Override
+    public String toString() {
+        return "Pcd{" +
+                "tipoDeficiencia='" + tipoDeficiencia + '\'' +
+                ", certificadoDeficienciaGov='" + certificadoDeficienciaGov + '\'' +
+                '}';
+    }
 }

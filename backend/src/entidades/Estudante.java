@@ -94,4 +94,16 @@ public class Estudante extends Cliente {
     public void setDataFim(LocalDate dataFim) {
         this.dataFim = dataFim;
     }
+
+    public String toString() {
+        return "Estudante{" +
+                "matricula=" + matricula +
+                ", comprovanteMatricula='" + comprovanteMatricula + '\'' +
+                ", tipoEstudante=" + tipoEstudante +
+                ", cruso='" + cruso + '\'' +
+                ", instituicao='" + instituicao + '\'' +
+                ", dataInicio=" + dataInicio +
+                ", dataFim=" + dataFim +
+                '}';
+    }
 }

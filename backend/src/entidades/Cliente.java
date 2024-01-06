@@ -131,4 +131,23 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     public boolean validarAcessoPcd(boolean acessoPcd) {
         return true;
     }
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + getId() +
+                ", nome='" + getNome() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", dataDeNascimento='" + getDataDeNascimento() + '\'' +
+                ", enderecos=" + getEnderecos() +
+                ", contatos=" + getContatos() +
+                ", email='" + getEmail() + '\'' +
+                ", tipo=" + getTipo() +
+                ", plano='" + plano + '\'' +
+                ", interesses='" + interesses + '\'' +
+                ", imagemDocumento='" + imagemDocummento + '\'' +
+                ", controleParental=" + controleParental +
+                ", acessoPcd=" + acessoPcd +
+                '}';
+    }
+
 }
