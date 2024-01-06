@@ -1,5 +1,7 @@
 package servicos;
 
+import entidades.Contato;
+import entidades.Endereco;
 import entidades.Usuario;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ public class UsuarioServico {
             System.err.println("O usuário não pode ser nulo!");
         } else {
             lista.add(usuario);
+            System.out.println("Usuário cadastrado!");
         }
     }
 
@@ -65,6 +68,20 @@ public class UsuarioServico {
         } else {
             System.err.println("Usuário não encontrado!");
         }
+    }
+
+    public boolean vincularContato(Usuario usuario, Contato contato) {
+        ArrayList<Contato> contatos = usuario.getContatos() != null ? usuario.getContatos() : new ArrayList<>();
+        contatos.add(contato);
+        usuario.setContatos(contatos);
+        return true;
+    }
+
+    public boolean vincularEndereco(Usuario usuario, Endereco endereco) {
+        ArrayList<Endereco> enderecos = usuario.getEnderecos() != null ? usuario.getEnderecos() : new ArrayList<>();
+        enderecos.add(endereco);
+        usuario.setEnderecos(enderecos);
+        return true;
     }
 
 }
