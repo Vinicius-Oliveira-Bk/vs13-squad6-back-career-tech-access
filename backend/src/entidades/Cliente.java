@@ -1,26 +1,28 @@
 package entidades;
 
-import enums.TipoUsuarioEnum;
-import interfaces.IDocumentacaoPessoal;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+
+import enums.TipoUsuarioEnum;
+import interfaces.IDocumentacaoPessoal;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private String plano;
     private String interesses;
-    private String imagemDocummento;
+    private String imagemDocumento;
     private boolean controleParental;
     private boolean acessoPcd;
 
     public Cliente() {
     }
-    public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+
+    public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
+            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses,
+            String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
         this.plano = plano;
         this.interesses = interesses;
-        this.imagemDocummento = imagemDocummento;
+        this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
     }
@@ -42,11 +44,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     }
 
     public String getImagemDocummento() {
-        return imagemDocummento;
+        return imagemDocumento;
     }
 
-    public void setImagemDocummento(String imagemDocummento) {
-        this.imagemDocummento = imagemDocummento;
+    public void setImagemDocummento(String imagemDocumento) {
+        this.imagemDocumento = imagemDocumento;
     }
 
     public boolean isControleParental() {
