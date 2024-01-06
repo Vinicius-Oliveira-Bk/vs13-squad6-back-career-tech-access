@@ -1,8 +1,10 @@
 package entidades;
 
 import enums.TipoEstudanteEnum;
+import enums.TipoUsuarioEnum;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Estudante extends Cliente {
     private long matricula;
@@ -13,8 +15,11 @@ public class Estudante extends Cliente {
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
-    public Estudante(String nome, String cpf, LocalDate dataNascimento, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
-        super(nome, cpf, dataNascimento, plano, interesses, imagemDocummento, controleParental, acessoPcd);
+    public Estudante() {
+    }
+
+    public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+        super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
         this.tipoEstudante = tipoEstudante;
