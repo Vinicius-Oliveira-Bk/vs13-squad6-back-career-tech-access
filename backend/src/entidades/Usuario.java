@@ -3,28 +3,37 @@ package entidades;
 import enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Usuario {
 
+    private long id;
     private String nome;
     private String cpf;
-    private Date dataDeNascimento;
-    private ArrayList<Endereco> enderecos;
-    private ArrayList<Contato> contatos;
+    private String dataDeNascimento;
+    private ArrayList<Endereco> enderecos = new ArrayList<>();;
+    private ArrayList<Contato> contatos = new ArrayList<>();
     private String email;
     private TipoUsuarioEnum tipo;
 
     public Usuario () {}
 
-    public Usuario (String nome, String cpf, Date dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
+    public Usuario (long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataDeNascimento = dataDeNascimento;
-        this.enderecos = new ArrayList<>();
-        this.contatos = new ArrayList<>();
+        this.enderecos = enderecos;
+        this.contatos = contatos;
         this.email = email;
         this.tipo = tipo;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -43,11 +52,11 @@ public class Usuario {
         this.cpf = cpf;
     }
 
-    public Date getDataDeNascimento() {
+    public String getDataDeNascimento() {
         return dataDeNascimento;
     }
 
-    public void setDataDeNascimento(Date dataDeNascimento) {
+    public void setDataDeNascimento(String dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
 
@@ -86,14 +95,14 @@ public class Usuario {
     @Override
     public String toString() {
         return "Usuario{" +
-                "nome='" + nome + '\'' +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
                 ", cpf='" + cpf + '\'' +
-                ", dataDeNascimento=" + dataDeNascimento +
+                ", dataDeNascimento='" + dataDeNascimento + '\'' +
                 ", enderecos=" + enderecos +
                 ", contatos=" + contatos +
                 ", email='" + email + '\'' +
                 ", tipo=" + tipo +
                 '}';
     }
-
 }

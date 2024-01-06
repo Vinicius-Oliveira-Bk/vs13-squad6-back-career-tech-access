@@ -1,24 +1,23 @@
-import entidades.Contato;
-import entidades.Endereco;
 import entidades.Usuario;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import servicos.UsuarioServico;
 
 public class Main {
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
 
-        SimpleDateFormat formato3 = new SimpleDateFormat("dd/MM/yyyy");
-        Date dataFormatada3 = formato3.parse("21/07/2021");
-        //System.out.println(formato3.format(dataFormatada3));
+        Usuario usuario1 = new Usuario(1, "Maria Joana Texeira", "06497895622", "05-12-1990",  null, null, "mariatexeira@gmail.com", null);
+        Usuario usuario2 = new Usuario(2, "Carlos Pinto da Silva", "23569548966", "31-02-2000",  null, null, "carlossilva@gmail.com", null);
 
-        ArrayList<Contato> listaContatos = new ArrayList<>();
-        ArrayList<Endereco> listaEndereco = new ArrayList<>();
+        UsuarioServico contatoServico = new UsuarioServico();
+        contatoServico.cadastrar(usuario1);
+        contatoServico.cadastrar(usuario2);
 
-        Usuario usuario = new Usuario("Maria Joana Texeira", "06497895622", formato3.parse("21/07/2090"),  listaEndereco, listaContatos, "mariatexeira@gmail.com", null);
+        contatoServico.listarTodos();
+//        contatoServico.listarUm(3);
+//        contatoServico.atualizar(1, usuario1);
+//
+//        contatoServico.listarTodos();
+//        contatoServico.deletar(1);
+//        contatoServico.listarTodos();
 
-        System.out.println(usuario);
     }
 }
