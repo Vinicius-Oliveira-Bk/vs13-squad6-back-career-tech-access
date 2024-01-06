@@ -13,8 +13,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private boolean controleParental;
     private boolean acessoPcd;
 
-    public Cliente() {
-    }
+    public Cliente() {}
 
     public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
             ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses,
@@ -43,11 +42,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.interesses = interesses;
     }
 
-    public String getImagemDocummento() {
+    public String getImagemDocumento() {
         return imagemDocumento;
     }
 
-    public void setImagemDocummento(String imagemDocumento) {
+    public void setImagemDocumento(String imagemDocumento) {
         this.imagemDocumento = imagemDocumento;
     }
 

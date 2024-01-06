@@ -7,7 +7,6 @@ import entidades.Usuario;
 import java.util.ArrayList;
 
 public class UsuarioServico {
-
     private ArrayList<Usuario> lista = new ArrayList<>();
 
     public void cadastrar(Usuario usuario) {
@@ -19,11 +18,6 @@ public class UsuarioServico {
         }
     }
 
-    public void listarTodos() {
-        for (Usuario usuario : lista) {
-            System.out.println(usuario);
-        }
-    }
     public void listarUm(long id) {
         boolean usuarioEncontrado = false;
 
@@ -36,6 +30,12 @@ public class UsuarioServico {
         }
         if (!usuarioEncontrado) {
             System.err.println("Usuário não encontrado!");
+        }
+    }
+
+    public void listarTodos() {
+        for (Usuario usuario : lista) {
+            System.out.println(usuario);
         }
     }
 
@@ -56,7 +56,7 @@ public class UsuarioServico {
     public void deletar(long id) {
         Usuario usuarioDeletar = null;
 
-        for(Usuario usuario : lista) {
+        for (Usuario usuario : lista) {
             if (usuario.getId() == id) {
                 usuarioDeletar = usuario;
             }
