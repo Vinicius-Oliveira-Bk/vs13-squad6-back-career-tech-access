@@ -5,7 +5,6 @@ import interfaces.IDocumentacaoPessoal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private String plano;
@@ -16,6 +15,15 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     public Cliente() {
     }
+
+    public Cliente(String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+        this.plano = plano;
+        this.interesses = interesses;
+        this.imagemDocummento = imagemDocummento;
+        this.controleParental = controleParental;
+        this.acessoPcd = acessoPcd;
+    }
+
     public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
         this.plano = plano;
