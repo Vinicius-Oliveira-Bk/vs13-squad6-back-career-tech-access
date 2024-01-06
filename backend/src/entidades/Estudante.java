@@ -1,19 +1,19 @@
 package entidades;
 
-import enums.tipoEstudanteEnum;
+import enums.TipoEstudanteEnum;
 
 import java.time.LocalDate;
 
 public class Estudante extends Cliente {
     private long matricula;
     private String comprovanteMatricula;
-    private tipoEstudanteEnum tipoEstudante;
+    private TipoEstudanteEnum tipoEstudante;
     private String cruso;
     private String instituicao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
-    public Estudante(String nome, String cpf, LocalDate dataNascimento, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, tipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+    public Estudante(String nome, String cpf, LocalDate dataNascimento, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         super(nome, cpf, dataNascimento, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
@@ -40,11 +40,11 @@ public class Estudante extends Cliente {
         this.comprovanteMatricula = comprovanteMatricula;
     }
 
-    public tipoEstudanteEnum getTipoEstudante() {
+    public TipoEstudanteEnum getTipoEstudante() {
         return tipoEstudante;
     }
 
-    public void setTipoEstudante(tipoEstudanteEnum tipoEstudante) {
+    public void setTipoEstudante(TipoEstudanteEnum tipoEstudante) {
         this.tipoEstudante = tipoEstudante;
     }
 
