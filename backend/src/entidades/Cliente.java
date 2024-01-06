@@ -67,36 +67,60 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     @Override
     public boolean validarCPF(String cpf) {
-        return false;
+        // Remove caracteres não numéricos do CPF
+        String cpfNumerico = cpf.replaceAll("[^\\d]", "");
+
+        // Verifica se o CPF tem 11 dígitos
+        if (cpfNumerico.length() == 11) {
+            return true;
+        } else {
+            System.err.println("Erro: CPF deve conter exatamente 11 dígitos.");
+            return false;
+        }
     }
 
     @Override
-    public boolean validarIdade(LocalDate dataNascimento) {
-        return false;
+    public boolean validarIdade(LocalDate dataNascimento, boolean cadastroResponsavel) {
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataDezoitoAnosAtras = dataAtual.minusYears(18);
+
+        // Verifica se a pessoa é maior de 18 anos
+        if (!dataNascimento.isAfter(dataDezoitoAnosAtras)) {
+            return true;  // Pessoa é maior de idade
+        } else {
+            // Se a pessoa for menor de idade e não houver cadastro do responsável
+            if (!cadastroResponsavel) {
+                // Realizar o cadastro do responsável
+
+                System.out.println("É necessário cadastrar o responsável antes de prosseguir.");
+                return false;
+            }
+            return true;
+        }
     }
 
     @Override
     public boolean validarPlano(String plano) {
-        return false;
+        return plano != null && !plano.isEmpty();
     }
 
     @Override
     public boolean validarInteresses(String interesses) {
-        return false;
+        return interesses != null && !interesses.isEmpty();
     }
 
     @Override
     public boolean validarImagemDocumento(String imagemDocumento) {
-        return false;
+        return imagemDocumento != null && !imagemDocumento.isEmpty();
     }
 
     @Override
     public boolean validarControleParental(boolean controleParental) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean validarAcessoPcd(boolean acessoPcd) {
-        return false;
+        return true;
     }
 }
