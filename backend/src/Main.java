@@ -1,6 +1,9 @@
 import entidades.Contato;
+import entidades.Endereco;
+import enums.TipoEnum;
 import servicos.ContatoServico;
 import entidades.Usuario;
+import servicos.EnderecoServico;
 import servicos.UsuarioServico;
 
 import java.util.ArrayList;
