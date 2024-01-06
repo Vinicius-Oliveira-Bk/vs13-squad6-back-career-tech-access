@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Estudante extends Cliente {
-    private long matricula;
+    private String matricula;
     private String comprovanteMatricula;
     private TipoEstudanteEnum tipoEstudante;
     private String cruso;
@@ -18,7 +18,7 @@ public class Estudante extends Cliente {
     public Estudante() {
     }
 
-    public Estudante(long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+    public Estudante(String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
         this.tipoEstudante = tipoEstudante;
@@ -28,7 +28,7 @@ public class Estudante extends Cliente {
         this.dataFim = dataFim;
     }
 
-    public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+    public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
@@ -39,11 +39,11 @@ public class Estudante extends Cliente {
         this.dataFim = dataFim;
     }
 
-    public long getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(long matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 
