@@ -1,20 +1,26 @@
 package enums;
 
 public enum TipoEnum {
+
     RESIDENCIAL(1),
     COMERCIAL(2);
 
-    private final int tipo;
+    private final int valor;
 
-    TipoEnum(int tipoEndereco) {
-        this.tipo = tipoEndereco;
+    TipoEnum(int valor) {
+        this.valor = valor;
     }
 
     public int getValor() {
-        return tipo;
+        return valor;
     }
 
-    public long getId() {
-        return tipo;
+    public static TipoEnum fromValor(int valor) {
+        for (TipoEnum tipo : values()) {
+            if (tipo.getValor() == valor) {
+                return tipo;
+            }
+        }
+        throw new IllegalArgumentException("Valor inválido: " + valor);
     }
 }
