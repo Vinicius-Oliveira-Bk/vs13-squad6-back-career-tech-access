@@ -1,53 +1,28 @@
 package entidades;
 
+import enums.TipoUsuarioEnum;
 import interfaces.IDocumentacaoPessoal;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Cliente implements IDocumentacaoPessoal {
-    private String nome;
-    private String cpf;
-    private LocalDate dataNascimento;
+public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private String plano;
     private String interesses;
     private String imagemDocummento;
     private boolean controleParental;
     private boolean acessoPcd;
 
-    public Cliente(String nome, String cpf, LocalDate dataNascimento, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
+    public Cliente() {
+    }
+    public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+        super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
         this.plano = plano;
         this.interesses = interesses;
         this.imagemDocummento = imagemDocummento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public String getPlano() {
