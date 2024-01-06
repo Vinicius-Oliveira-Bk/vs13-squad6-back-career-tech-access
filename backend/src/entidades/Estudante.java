@@ -1,16 +1,17 @@
 package entidades;
 
-import enums.TipoEstudanteEnum;
-import enums.TipoUsuarioEnum;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import enums.TipoEstudanteEnum;
+import enums.TipoUsuarioEnum;
+
 public class Estudante extends Cliente {
+    // TODO: revisar se matricula é long ou String
     private long matricula;
     private String comprovanteMatricula;
     private TipoEstudanteEnum tipoEstudante;
-    private String cruso;
+    private String curso;
     private String instituicao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
@@ -18,12 +19,12 @@ public class Estudante extends Cliente {
     public Estudante() {
     }
 
-    public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
-        super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
+    public Estudante(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd, long matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+        super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocumento, controleParental, acessoPcd);
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
         this.tipoEstudante = tipoEstudante;
-        this.cruso = cruso;
+        this.curso = curso;
         this.instituicao = instituicao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
@@ -54,11 +55,11 @@ public class Estudante extends Cliente {
     }
 
     public String getCruso() {
-        return cruso;
+        return curso;
     }
 
-    public void setCruso(String cruso) {
-        this.cruso = cruso;
+    public void setCruso(String curso) {
+        this.curso = curso;
     }
 
     public String getInstituicao() {
