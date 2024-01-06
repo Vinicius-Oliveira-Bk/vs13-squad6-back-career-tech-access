@@ -10,7 +10,7 @@ public class Usuario {
     private String nome;
     private String cpf;
     private String dataDeNascimento;
-    private ArrayList<Endereco> enderecos = new ArrayList<>();;
+    private ArrayList<Endereco> enderecos = new ArrayList<>();
     private ArrayList<Contato> contatos = new ArrayList<>();
     private String email;
     private TipoUsuarioEnum tipo;
@@ -105,4 +105,5 @@ public class Usuario {
                 ", tipo=" + tipo +
                 '}';
     }
+
 }
