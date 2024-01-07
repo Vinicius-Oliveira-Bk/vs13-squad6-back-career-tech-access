@@ -131,10 +131,10 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     @Override
     public String toString() {
         return  super.toString() +
-                "\nPlano .................: " + this.plano +
-                "\nInteresses ............: " + this.interesses +
-                "\nControle Parental .....: " + this.controleParental +
-                "\nAcesso Pcd ............: " + this.acessoPcd;
+                "\n\tPlano .................: " + this.plano +
+                "\n\tInteresses ............: " + this.interesses +
+                "\n\tControle Parental .....: " + this.controleParental +
+                "\n\tAcesso Pcd ............: " + this.acessoPcd;
     }
 
 }

@@ -94,14 +94,12 @@ public abstract class Usuario {
 
     @Override
     public String toString() {
-        return " ******** Usuario ******** " +
-               "\nid ....................: " + this.id +
-               "\nNome ..................: " + this.nome +
-               "\nCpf ...................: " + this.cpf +
-               "\nData de Nascimento ....: " + this.dataDeNascimento +
-               "\nEnderecos .............: " + this.enderecos +
-               "\nContatos ..............: " + this.contatos +
-               "\nE-mail ................: " + this.email +
-               "\nTipo de usuario .......: " + this.tipo;
+        return "\t******** Usuario ********* " +
+               "\n\tid ....................: " + this.id +
+               "\n\tNome ..................: " + this.nome +
+               "\n\tCpf ...................: " + this.cpf +
+               "\n\tData de Nascimento ....: " + this.dataDeNascimento +
+               "\n\tE-mail ................: " + this.email +
+               "\n\tTipo de usuario .......: " + this.tipo;
     }
 }

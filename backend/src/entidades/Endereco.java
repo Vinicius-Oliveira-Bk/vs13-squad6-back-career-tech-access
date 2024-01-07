@@ -107,14 +107,14 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return "\nEndereço Id ...........: " + this.id +
-               "\nLogradouro ............: " + this.logradouro +
-               "\nNumero ................: " + this.numero +
-               "\nComplemento ...........: " + this.complemento +
-               "\nCep ...................: " + this.cep +
-               "\nCidade ................: " + this.cidade +
-               "\nEstado ................: " + this.estado +
-               "\nPais ..................: " + this.pais +
-               "\nTipo de endereco ......: " + this.tipo;
+        return "\n\tEndereço Id ...........: " + this.id +
+               "\n\tLogradouro ............: " + this.logradouro +
+               "\n\tNumero ................: " + this.numero +
+               "\n\tComplemento ...........: " + this.complemento +
+               "\n\tCep ...................: " + this.cep +
+               "\n\tCidade ................: " + this.cidade +
+               "\n\tEstado ................: " + this.estado +
+               "\n\tPais ..................: " + this.pais +
+               "\n\tTipo de endereco ......: " + this.tipo;
     }
 }

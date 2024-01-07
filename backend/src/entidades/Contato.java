@@ -52,9 +52,9 @@ public class Contato {
 
     @Override
     public String toString() {
-        return "\nContato Id ............: " + this.id +
-               "\nDescrição .............: " + this.descricao +
-               "\nTelefone ..............: " + this.telefone +
-               "\nTipo de contato .......: " + this.tipo;
+        return "\n\tContato Id ............: " + this.id +
+               "\n\tDescrição .............: " + this.descricao +
+               "\n\tTelefone ..............: " + this.telefone +
+               "\n\tTipo de contato .......: " + this.tipo;
     }
 }

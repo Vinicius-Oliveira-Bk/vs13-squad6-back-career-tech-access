@@ -41,6 +41,7 @@ public class Pcd extends Cliente {
     @Override
     public String toString() {
         return super.toString() +
-                "\nTipo de Deficiencia ...: " + this.tipoDeficiencia;
+                "\n\tTipo de Deficiencia ...: " + this.tipoDeficiencia +
+                "\n";
     }
 }

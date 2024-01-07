@@ -98,11 +98,12 @@ public class Estudante extends Cliente {
 
     public String toString() {
         return super.toString() +
-                "\nMatricula .............: " + this.matricula +
-                "\nTipo de Estudante .....: " + this.tipoEstudante +
-                "\nCurso .................: " + this.curso +
-                "\nInstituicao ...........: " + this.instituicao +
-                "\nData Inicio ...........: " + this.dataInicio +
-                "\nData Fim ..............: " + this.dataFim;
+                "\n\tMatricula .............: " + this.matricula +
+                "\n\tTipo de Estudante .....: " + this.tipoEstudante +
+                "\n\tCurso .................: " + this.cruso +
+                "\n\tInstituicao ...........: " + this.instituicao +
+                "\n\tData Inicio ...........: " + this.dataInicio +
+                "\n\tData Fim ..............: " + this.dataFim +
+                "\n";
     }
 }
