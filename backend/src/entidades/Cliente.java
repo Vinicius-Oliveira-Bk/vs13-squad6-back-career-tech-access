@@ -75,10 +75,8 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     @Override
     public boolean validarCPF(String cpf) {
-        // Remove caracteres não numéricos do CPF
         String cpfNumerico = cpf.replaceAll("[^\\d]", "");
 
-        // Verifica se o CPF tem 11 dígitos
         if (cpfNumerico.length() == 11) {
             return true;
         } else {
@@ -92,14 +90,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         LocalDate dataAtual = LocalDate.now();
         LocalDate dataDezoitoAnosAtras = dataAtual.minusYears(18);
 
-        // Verifica se a pessoa é maior de 18 anos
         if (!dataNascimento.isAfter(dataDezoitoAnosAtras)) {
-            return true;  // Pessoa é maior de idade
+            return true;
         } else {
-            // Se a pessoa for menor de idade e não houver cadastro do responsável
             if (!cadastroResponsavel) {
                 // Realizar o cadastro do responsável
-
                 System.out.println("É necessário cadastrar o responsável antes de prosseguir.");
                 return false;
             }
@@ -131,6 +126,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     public boolean validarAcessoPcd(boolean acessoPcd) {
         return true;
     }
+
     @Override
     public String toString() {
         return "Cliente{" +
