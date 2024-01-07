@@ -104,4 +104,17 @@ public class Endereco {
     public void setTipo(TipoEnum tipo) {
         this.tipo = tipo;
     }
+
+    @Override
+    public String toString() {
+        return "\n\tEndereço Id ...........: " + this.id +
+               "\n\tLogradouro ............: " + this.logradouro +
+               "\n\tNumero ................: " + this.numero +
+               "\n\tComplemento ...........: " + this.complemento +
+               "\n\tCep ...................: " + this.cep +
+               "\n\tCidade ................: " + this.cidade +
+               "\n\tEstado ................: " + this.estado +
+               "\n\tPais ..................: " + this.pais +
+               "\n\tTipo de endereco ......: " + this.tipo;
+    }
 }

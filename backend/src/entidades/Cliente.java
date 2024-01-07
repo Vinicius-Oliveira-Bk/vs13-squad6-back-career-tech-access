@@ -130,21 +130,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + getId() +
-                ", nome='" + getNome() + '\'' +
-                ", cpf='" + getCpf() + '\'' +
-                ", dataDeNascimento='" + getDataDeNascimento() + '\'' +
-                ", enderecos=" + getEnderecos() +
-                ", contatos=" + getContatos() +
-                ", email='" + getEmail() + '\'' +
-                ", tipo=" + getTipo() +
-                ", plano='" + plano + '\'' +
-                ", interesses='" + interesses + '\'' +
-                ", imagemDocumento='" + imagemDocummento + '\'' +
-                ", controleParental=" + controleParental +
-                ", acessoPcd=" + acessoPcd +
-                '}';
+        return  super.toString() +
+                "\n\tPlano .................: " + this.plano +
+                "\n\tInteresses ............: " + this.interesses +
+                "\n\tControle Parental .....: " + (this.controleParental ? "Sim" : "Nao")  +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "Sim" : "Nao");
     }
 
 }

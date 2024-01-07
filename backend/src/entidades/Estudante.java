@@ -97,14 +97,13 @@ public class Estudante extends Cliente {
     }
 
     public String toString() {
-        return "Estudante{" +
-                "matricula=" + matricula +
-                ", comprovanteMatricula='" + comprovanteMatricula + '\'' +
-                ", tipoEstudante=" + tipoEstudante +
-                ", cruso='" + cruso + '\'' +
-                ", instituicao='" + instituicao + '\'' +
-                ", dataInicio=" + dataInicio +
-                ", dataFim=" + dataFim +
-                '}';
+        return super.toString() +
+                "\n\tMatricula .............: " + this.matricula +
+                "\n\tTipo de Estudante .....: " + this.tipoEstudante +
+                "\n\tCurso .................: " + this.cruso +
+                "\n\tInstituicao ...........: " + this.instituicao +
+                "\n\tData Inicio ...........: " + this.dataInicio +
+                "\n\tData Fim ..............: " + this.dataFim +
+                "\n";
     }
 }
