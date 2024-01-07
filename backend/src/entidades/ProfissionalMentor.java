@@ -16,7 +16,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
 
     public ProfissionalMentor() {}
 
-    public ProfissionalMentor(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
+    public ProfissionalMentor(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
         this.areaAtuacao = areaAtuacao;
         this.nivelExperienciaEnum = nivelExperienciaEnum;
