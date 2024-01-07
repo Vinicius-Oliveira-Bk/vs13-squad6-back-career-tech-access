@@ -133,8 +133,8 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         return  super.toString() +
                 "\n\tPlano .................: " + this.plano +
                 "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + this.controleParental +
-                "\n\tAcesso Pcd ............: " + this.acessoPcd;
+                "\n\tControle Parental .....: " + (this.controleParental ? "Sim" : "Nao")  +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "Sim" : "Nao");
     }
 
 }
