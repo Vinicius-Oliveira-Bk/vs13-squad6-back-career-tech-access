@@ -1,5 +1,6 @@
 package entidades;
 
+import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
 
@@ -10,7 +11,7 @@ public class Estudante extends Cliente {
     private String matricula;
     private String comprovanteMatricula;
     private TipoEstudanteEnum tipoEstudante;
-    private String cruso;
+    private String curso;
     private String instituicao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
@@ -18,23 +19,23 @@ public class Estudante extends Cliente {
     public Estudante() {
     }
 
-    public Estudante(String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+    public Estudante(String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
         this.tipoEstudante = tipoEstudante;
-        this.cruso = cruso;
+        this.curso = curso;
         this.instituicao = instituicao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
     }
 
-    public Estudante(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String cruso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
+    public Estudante(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
 
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.matricula = matricula;
         this.comprovanteMatricula = comprovanteMatricula;
         this.tipoEstudante = tipoEstudante;
-        this.cruso = cruso;
+        this.curso = curso;
         this.instituicao = instituicao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
@@ -64,12 +65,12 @@ public class Estudante extends Cliente {
         this.tipoEstudante = tipoEstudante;
     }
 
-    public String getCruso() {
-        return cruso;
+    public String getCurso() {
+        return curso;
     }
 
-    public void setCruso(String cruso) {
-        this.cruso = cruso;
+    public void setCurso(String curso) {
+        this.curso = curso;
     }
 
     public String getInstituicao() {
@@ -100,7 +101,7 @@ public class Estudante extends Cliente {
         return super.toString() +
                 "\n\tMatricula .............: " + this.matricula +
                 "\n\tTipo de Estudante .....: " + this.tipoEstudante +
-                "\n\tCurso .................: " + this.cruso +
+                "\n\tCurso .................: " + this.curso +
                 "\n\tInstituicao ...........: " + this.instituicao +
                 "\n\tData Inicio ...........: " + this.dataInicio +
                 "\n\tData Fim ..............: " + this.dataFim +
