@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnderecoServico {
-
     private final ArrayList<Endereco> enderecos = new ArrayList<>();
 
     public EnderecoServico() {}
@@ -51,4 +50,4 @@ public class EnderecoServico {
         enderecos.removeIf(endereco -> endereco.getId().equals(id));
     }
 }
-
+    

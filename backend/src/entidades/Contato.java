@@ -1,8 +1,8 @@
 package entidades;
 
-import enums.TipoEnum;
-
 import java.util.concurrent.atomic.AtomicInteger;
+
+import enums.TipoEnum;
 
 public class Contato {
     private static final AtomicInteger count = new AtomicInteger(0);
@@ -22,21 +22,40 @@ public class Contato {
         this.tipo = tipo;
     }
 
-    public long getId() { return id; }
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
-    public TipoEnum getTipo() { return tipo; }
-    public void setTipo(TipoEnum tipo) { this.tipo = tipo; }
+    public long getId() {
+        return id;
+    }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public TipoEnum getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoEnum tipo) {
+        this.tipo = tipo;
+    }
 
     @Override
     public String toString() {
-        String texto = "Id: "+this.id+"\n{";
-        texto += "\n\tDescrição: "+this.descricao;
-        texto += "\n\tTelefone: "+this.telefone;
-        texto += "\n\tTipo: "+this.tipo;
+        String texto = "Id: " + this.id + "\n{";
+        texto += "\n\tDescrição: " + this.descricao;
+        texto += "\n\tTelefone: " + this.telefone;
+        texto += "\n\tTipo: " + this.tipo;
         texto += "\n}";
         return texto;
     }

@@ -1,11 +1,10 @@
 package entidades;
 
-import enums.TipoUsuarioEnum;
-
 import java.util.ArrayList;
 
-public class Usuario {
+import enums.TipoUsuarioEnum;
 
+public abstract class Usuario {
     private long id;
     private String nome;
     private String cpf;
@@ -15,9 +14,11 @@ public class Usuario {
     private String email;
     private TipoUsuarioEnum tipo;
 
-    public Usuario () {}
+    public Usuario() {
+    }
 
-    public Usuario (long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
+    public Usuario(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
+            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -40,7 +41,7 @@ public class Usuario {
         return nome;
     }
 
-    public void setNome (String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -105,5 +106,4 @@ public class Usuario {
                 ", tipo=" + tipo +
                 '}';
     }
-
 }

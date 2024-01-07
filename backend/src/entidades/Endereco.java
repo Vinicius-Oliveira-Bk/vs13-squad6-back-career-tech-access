@@ -3,7 +3,7 @@ package entidades;
 import enums.TipoEnum;
 
 public class Endereco {
-
+    // TODO: implementar AtomicInteger
     private Long id;
     private String logradouro;
     private String numero;
@@ -14,10 +14,10 @@ public class Endereco {
     private String pais;
     private TipoEnum tipo;
 
-    public Endereco() {
-    }
+    public Endereco() {}
 
-    public Endereco(Long id, String logradouro, String numero, String complemento, String cep, String cidade, String estado, String pais, TipoEnum tipo) {
+    public Endereco(Long id, String logradouro, String numero, String complemento, String cep, String cidade,
+            String estado, String pais, TipoEnum tipo) {
         this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
