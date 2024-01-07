@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface IDocumentacaoPessoal {
     public boolean validarCPF(String cpf);
-    public boolean validarIdade(LocalDate dataNascimento);
+    public boolean validarIdade(LocalDate dataNascimento, boolean cadastroResponsavel);
     public boolean validarPlano(String plano);
     public boolean validarInteresses(String interesses);
     public boolean validarImagemDocumento(String imagemDocumento);
