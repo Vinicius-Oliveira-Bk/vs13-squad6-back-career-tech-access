@@ -1,5 +1,6 @@
 package entidades;
 
+import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ProfissionalRealocacao extends Cliente {
         this.areaInteresse = areaInteresse;
     }
 
-    public ProfissionalRealocacao(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao, String areaAtuacao, String objetivoProfissional, String areaInteresse) {
+    public ProfissionalRealocacao(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao, String areaAtuacao, String objetivoProfissional, String areaInteresse) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.profissao = profissao;
         this.objetivoProfissional = objetivoProfissional;

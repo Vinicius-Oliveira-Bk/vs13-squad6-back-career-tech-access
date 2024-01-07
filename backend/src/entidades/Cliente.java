@@ -1,13 +1,14 @@
 package entidades;
 
+import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
 import interfaces.IDocumentacaoPessoal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Cliente extends Usuario implements IDocumentacaoPessoal {
-    private String plano;
+public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
+    private PlanoEnum plano;
     private String interesses;
     private String imagemDocummento;
     private boolean controleParental;
@@ -16,7 +17,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     public Cliente() {
     }
 
-    public Cliente(String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         this.plano = plano;
         this.interesses = interesses;
         this.imagemDocummento = imagemDocummento;
@@ -24,7 +25,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
-    public Cliente(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
 
         this.plano = plano;
@@ -34,11 +35,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
-    public String getPlano() {
+    public PlanoEnum getPlano() {
         return plano;
     }
 
-    public void setPlano(String plano) {
+    public void setPlano(PlanoEnum plano) {
         this.plano = plano;
     }
 

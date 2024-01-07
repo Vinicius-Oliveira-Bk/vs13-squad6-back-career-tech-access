@@ -1,9 +1,11 @@
-import entidades.Cliente;
 import entidades.Contato;
 import entidades.Endereco;
 
+import entidades.Pcd;
+import enums.PlanoEnum;
 import enums.TipoEnum;
 
+import enums.TipoUsuarioEnum;
 import servicos.ContatoServico;
 import servicos.EnderecoServico;
 import servicos.UsuarioServico;
@@ -15,18 +17,18 @@ public class Main {
         EnderecoServico enderecoServico = new EnderecoServico();
 
         // Cadastrando alguns usuários
-        Cliente cliente1 = new Cliente("Maria Joana Texeira", "06497895622", "05-12-1990", null, null,
-                "mariatexeira@gmail.com", null, null, null, null, false, false);
+        Pcd pcd1 = new Pcd("Maria Joana Texeira", "06497895622", "05-12-1990", null, null,
+                "mariatexeira@gmail.com", TipoUsuarioEnum.PCD, PlanoEnum.GRATUITO, "vazio", "vazio", true, true, "vazio", "vazio");
 
-        usuarioServico.cadastrar(cliente1);
+        usuarioServico.cadastrar(pcd1);
 
         // Adicionando alguns contatos no usuário
         Contato contato1 = new Contato("teste1", "99999999999", null);
         Contato contato2 = new Contato("teste2", "22222222222", null);
 
         // Vinculando o contato com o usuário
-        usuarioServico.vincularContato(cliente1, contato1);
-        usuarioServico.vincularContato(cliente1, contato2);
+        usuarioServico.vincularContato(pcd1, contato1);
+        usuarioServico.vincularContato(pcd1, contato2);
 
         usuarioServico.listarTodos();
 
