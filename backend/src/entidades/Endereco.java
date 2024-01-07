@@ -2,9 +2,11 @@ package entidades;
 
 import enums.TipoEnum;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Endereco {
-    // TODO: implementar AtomicInteger
-    private Long id;
+    private static final AtomicInteger counter = new AtomicInteger(0);
+    private long id;
     private String logradouro;
     private String numero;
     private String complemento;
@@ -14,11 +16,13 @@ public class Endereco {
     private String pais;
     private TipoEnum tipo;
 
-    public Endereco() {}
+    public Endereco() {
+        this.id = counter.incrementAndGet();
+    }
 
-    public Endereco(Long id, String logradouro, String numero, String complemento, String cep, String cidade,
+    public Endereco(String logradouro, String numero, String complemento, String cep, String cidade,
             String estado, String pais, TipoEnum tipo) {
-        this.id = id;
+        this.id = counter.incrementAndGet();
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;

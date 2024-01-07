@@ -15,7 +15,7 @@ public class Main {
         EnderecoServico enderecoServico = new EnderecoServico();
 
         // Cadastrando alguns usuários
-        Cliente cliente1 = new Cliente(1L, "Maria Joana Texeira", "06497895622", "05-12-1990", null, null,
+        Cliente cliente1 = new Cliente("Maria Joana Texeira", "06497895622", "05-12-1990", null, null,
                 "mariatexeira@gmail.com", null, null, null, null, false, false);
 
         usuarioServico.cadastrar(cliente1);
@@ -31,7 +31,7 @@ public class Main {
         usuarioServico.listarTodos();
 
         // Cria o endereço - Testes Vinicius
-        Endereco endereco = new Endereco(1L, "Rua das Flores", "123", "Casa", "12345-6789", "Atibaia", "SP", "Brasil",
+        Endereco endereco = new Endereco("Rua das Flores", "123", "Casa", "12345-6789", "Atibaia", "SP", "Brasil",
                 TipoEnum.RESIDENCIAL);
 
         // Cadastra o endereço

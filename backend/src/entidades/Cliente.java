@@ -24,8 +24,9 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
-    public Cliente(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
-        super(id, nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
+    public Cliente(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, String plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+        super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
+
         this.plano = plano;
         this.interesses = interesses;
         this.imagemDocummento = imagemDocummento;
