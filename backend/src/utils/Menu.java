@@ -1,17 +1,22 @@
 package utils;
 
+import servicos.ContatoServico;
+import servicos.EnderecoServico;
+import servicos.UsuarioServico;
+
 public class Menu {
     public static void main(String[] args) {
         CustomScanner scanner = new CustomScanner();
-        
+
+        UsuarioServico usuarioServico = new UsuarioServico();
+        ContatoServico contatoServico = new ContatoServico();
+        EnderecoServico enderecoServico = new EnderecoServico();
+
         int opcao;
-        
-        // TODO: remover todos os "scanner.nextInt()" presentes nos switches secundarios
-        // foi gerado somente para fins de teste pelos outros membros
+
         do {
             Utils.limparConsole();
             Utils.telaInicial();
-            
             opcao = scanner.nextInt();
 
             switch (opcao) {
@@ -21,226 +26,153 @@ public class Menu {
                     break;
                 case 1:
                     Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Cliente");
-                    Utils.exibirMenuOperacoes();
+                    Utils.selecionarTipoCliente();
                     opcao = scanner.nextInt();
 
                     switch (opcao) {
-                        case 0: 
+                        case 0:
                             System.out.println("\n👋 Até mais!\n");
                             break;
                         case 1:
-                            System.out.println("\nCadastrar \n");
+                            Utils.limparConsole();
+                            Utils.exibirEntidadeManipulada("Estudante");
+                            Utils.exibirMenuOperacoes();
+
+                            opcao = scanner.nextInt();
                             scanner.nextInt();
+
+                            switch (opcao) {
+                                case 0:
+                                    System.out.println("\n👋 Até mais!\n");
+                                    break;
+                                case 1:
+                                    System.out.println("\nCadastrar");
+                                    break;
+                                case 2:
+                                    System.out.println("\nListar um");
+                                    break;
+                                case 3:
+                                    System.out.println("\nListar todos");
+                                    break;
+                                case 4:
+                                    System.out.println("\nAtualizar");
+                                    break;
+                                case 5:
+                                    System.out.println("\nDeletar");
+                                    break;
+                                case 6:
+                                    break;
+                                default:
+                                    System.err.println("🚫 Opção inválida!");
+                                    break;
+                            }
                             break;
                         case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
+                            Utils.limparConsole();
+                            Utils.exibirEntidadeManipulada("PCD (Pessoa com Deficiência)");
+                            Utils.exibirMenuOperacoes();
+                            opcao = scanner.nextInt();
+
+                            switch (opcao) {
+                                case 0:
+                                    System.out.println("\n👋 Até mais!\n");
+                                    break;
+                                case 1:
+                                    System.out.println("\nCadastrar");
+                                    break;
+                                case 2:
+                                    System.out.println("\nListar um");
+                                    break;
+                                case 3:
+                                    System.out.println("\nListar todos");
+                                    break;
+                                case 4:
+                                    System.out.println("\nAtualizar");
+                                    break;
+                                case 5:
+                                    System.out.println("\nDeletar");
+                                    break;
+                                case 6:
+                                    break;
+                                default:
+                                    System.err.println("🚫 Opção inválida!");
+                                    break;
+                            }
                             break;
                         case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
+                            Utils.limparConsole();
+                            Utils.exibirEntidadeManipulada("Profissional em realocação");
+                            Utils.exibirMenuOperacoes();
+
+                            opcao = scanner.nextInt();
+
+                            switch (opcao) {
+                                case 0:
+                                    System.out.println("\n👋 Até mais!\n");
+                                    break;
+                                case 1:
+                                    System.out.println("\nCadastrar");
+                                    break;
+                                case 2:
+                                    System.out.println("\nListar um");
+                                    break;
+                                case 3:
+                                    System.out.println("\nListar todos");
+                                    break;
+                                case 4:
+                                    System.out.println("\nAtualizar");
+                                    break;
+                                case 5:
+                                    System.out.println("\nDeletar");
+                                    break;
+                                case 6:
+                                    break;
+                                default:
+                                    System.err.println("🚫 Opção inválida!");
+                                    break;
+                            }
                             break;
                         case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
-                            break;
-                        case 5:
                             break;
                         default:
-                            System.out.println("🚫 Opção inválida!");
+                            System.err.println("🚫 Opção inválida!");
                             break;
                     }
                     break;
                 case 2:
                     Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Contato");
+                    Utils.exibirEntidadeManipulada("Profissional Mentor");
                     Utils.exibirMenuOperacoes();
                     opcao = scanner.nextInt();
 
                     switch (opcao) {
-                        case 0: 
+                        case 0:
                             System.out.println("\n👋 Até mais!\n");
                             break;
                         case 1:
-                            System.out.println("\nCadastrar \n");
+                            System.out.println("\nCadastrar");
                             break;
                         case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
+                            System.out.println("\nListar um");
                             break;
                         case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
+                            System.out.println("\nListar todos");
                             break;
                         case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
-                            break;
-                        case 5:
-                            break;
-                        default:
-                            System.out.println("🚫 Opção inválida!");
-                            scanner.nextInt();
-                            break;
-                    }
-                    break;
-                case 3:
-                    Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Endereço");
-                    Utils.exibirMenuOperacoes();
-                    opcao = scanner.nextInt();
-
-                    switch (opcao) {
-                        case 0: 
-                            System.out.println("\n👋 Até mais!\n");
-                            scanner.nextInt();
-                            break;
-                        case 1:
-                            System.out.println("\nCadastrar \n");
-                            scanner.nextInt();
-                            break;
-                        case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
-                            break;
-                        case 3:
                             System.out.println("\nAtualizar");
-                            scanner.nextInt();
-                            break;
-                        case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
                             break;
                         case 5:
-                            break;
-                        default:
-                            System.out.println("🚫 Opção inválida!");
-                            break;
-                    }
-                    break;
-                case 4:
-                    Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Estudante");
-                    Utils.exibirMenuOperacoes();
-                    opcao = scanner.nextInt();
-
-                    switch (opcao) {
-                        case 0: 
-                            System.out.println("\n👋 Até mais!\n");
-                            break;
-                        case 1:
-                            System.out.println("\nCadastrar \n");
-                            scanner.nextInt();
-                            break;
-                        case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
-                            break;
-                        case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
-                            break;
-                        case 4:
                             System.out.println("\nDeletar");
-                            scanner.nextInt();
                             break;
-                        case 5:
-                            break;
-                        default:
-                            System.out.println("🚫 Opção inválida!");
-                            break;
-                    }
-                    break;
-                case 5:
-                    Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("PCD");
-                    Utils.exibirMenuOperacoes();
-                    opcao = scanner.nextInt();
-
-                    switch (opcao) {
-                        case 1:
-                            System.out.println("\nCadastrar \n");
-                            break;
-                        case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
-                            break;
-                        case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
-                            break;
-                        case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
-                            break;
-                        case 5:
+                        case 6:
                             break;
                         default:
-                            System.out.println("🚫 Opção inválida!");
-                            break;
-                    }
-                    break;
-                case 6:
-                    Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Profissional mentor");
-                    Utils.exibirMenuOperacoes();
-                    opcao = scanner.nextInt();
-
-                    switch (opcao) {
-                        case 1:
-                            System.out.println("\nCadastrar \n");
-                            break;
-                        case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
-                            break;
-                        case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
-                            break;
-                        case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
-                            break;
-                        case 5:
-                            break;
-                        default:
-                            System.out.println("🚫 Opção inválida!");
-                            break;
-                    }
-                    break;
-                case 7:
-                    Utils.limparConsole();
-                    Utils.exibirEntidadeManipulada("Profissional em realocação");
-                    Utils.exibirMenuOperacoes();
-                    opcao = scanner.nextInt();
-
-                    switch (opcao) {
-                        case 1:
-                            System.out.println("\nCadastrar \n");
-                            break;
-                        case 2:
-                            System.out.println("\nListar");
-                            scanner.nextInt();
-                            break;
-                        case 3:
-                            System.out.println("\nAtualizar");
-                            scanner.nextInt();
-                            break;
-                        case 4:
-                            System.out.println("\nDeletar");
-                            scanner.nextInt();
-                            break;
-                        case 5:
-                            break;
-                        default:
-                            System.out.println("🚫 Opção inválida!");
+                            System.err.println("🚫 Opção inválida!");
                             break;
                     }
                     break;
                 default:
-                    System.out.println("🚫 Opção inválida!");
+                    System.err.println("🚫 Opção inválida!");
                     break;
             }
         } while (opcao != 0);

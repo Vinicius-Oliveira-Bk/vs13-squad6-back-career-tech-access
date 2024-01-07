@@ -14,8 +14,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     private boolean controleParental;
     private boolean acessoPcd;
 
-    public Cliente() {
-    }
+    public Cliente() {}
 
     public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         this.plano = plano;
@@ -97,7 +96,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         } else {
             if (!cadastroResponsavel) {
                 // Realizar o cadastro do responsável
-                System.out.println("É necessário cadastrar o responsável antes de prosseguir.");
+                System.err.println("É necessário cadastrar o responsável antes de prosseguir.");
                 return false;
             }
             return true;

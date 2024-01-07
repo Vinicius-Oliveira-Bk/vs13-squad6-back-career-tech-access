@@ -23,9 +23,9 @@ public class CustomScanner {
                 
                 isInputValido = true;
             } catch (NumberFormatException e) {
-                System.out.println("\n🚫 Entrada inválida! Digite um número inteiro.");
+                System.err.println("\n🚫 Entrada inválida! Digite um número inteiro.");
             } catch (Exception e) {
-                System.out.println("\n🚫 Entrada inválida! Selecione uma opção listada.");
+                System.err.println("\n🚫 Entrada inválida! Selecione uma opção listada.");
             }
         }
         
@@ -45,7 +45,7 @@ public class CustomScanner {
 
                 isInputValido = true;
             } catch (Exception e) {
-                System.out.println("🚫 Entrada inválida!");
+                System.err.println("🚫 Entrada inválida!");
             }
         }
 

@@ -11,11 +11,18 @@ public class EnderecoServico {
     public EnderecoServico() {}
 
     public void cadastrar(Endereco endereco) {
+        if(endereco == null) {
+            System.err.println("🚫 O endereço não pode ser nulo!");
+            return;
+        }
+
         enderecos.add(endereco);
+        System.out.println("✅ Endereço cadastrado!");
     }
 
     public Endereco listarUm(Long id) {
         if (enderecos.isEmpty()) {
+            System.err.println("🚫 A lista de endereços está vazia!");
             return null;
         }
 
@@ -25,6 +32,7 @@ public class EnderecoServico {
             }
         }
 
+        System.err.println("🚫 Endereço não encontrado!");
         return null;
     }
 
@@ -43,11 +51,20 @@ public class EnderecoServico {
             enderecoExistente.setEstado(endereco.getEstado());
             enderecoExistente.setPais(endereco.getPais());
             enderecoExistente.setTipo(endereco.getTipo());
+            System.out.println("✅ Endereço atualizado!");
         }
+
+        System.err.println("🚫 Endereço não encontrado!");
     }
 
     public void deletar(Long id) {
+        if(enderecos.isEmpty()) {
+            System.err.println("🚫 A lista de endereços está vazia!");
+            return;
+        }
+
         enderecos.removeIf(endereco -> endereco.getId().equals(id));
+        System.out.println("✅ Endereço deletado!");
     }
 }
     
