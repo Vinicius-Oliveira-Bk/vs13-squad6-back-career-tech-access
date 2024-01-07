@@ -68,12 +68,9 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     @Override
     public String toString() {
         return super.toString() +
-                "ProfissionalMentor{" +
-                "areaAtuacao=" + areaAtuacao +
-                ", nivelExperienciaEnum=" + nivelExperienciaEnum +
-                ", carteiraDeTrabalho='" + carteiraDeTrabalho + '\'' +
-                ", certificadosDeCapacitacao=" + certificadosDeCapacitacao +
-                ", documentosValidados=" + documentosValidados +
-                '}';
+                "\nArea de Atuacao .......: " + this.areaAtuacao +
+                "\nNivel de Experiencia ..: " + this.nivelExperienciaEnum +
+                "\nCarteira de Trabalho ..: " + this.carteiraDeTrabalho +
+                "\nDocumentos Validados ..: " + this.documentosValidados;
     }
 }

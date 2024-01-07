@@ -49,11 +49,11 @@ public class ProfissionalRealocacao extends Cliente {
         this.areaInteresse = areaInteresse;
     }
 
+    @Override
     public String toString() {
-        return "ProfissionalRealocacao{" +
-                "profissao='" + profissao + '\'' +
-                ", objetivoProfissional='" + objetivoProfissional + '\'' +
-                ", areaInteresse='" + areaInteresse + '\'' +
-                '}';
+        return super.toString() +
+                "\nProfissao .............: " + this.profissao +
+                "\nObjetivo Profissional .: " + this.objetivoProfissional +
+                "\nÁrea de Interesse .....: " + this.areaInteresse;
     }
 }

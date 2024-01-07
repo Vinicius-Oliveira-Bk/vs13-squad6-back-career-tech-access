@@ -40,9 +40,7 @@ public class Pcd extends Cliente {
 
     @Override
     public String toString() {
-        return "Pcd{" +
-                "tipoDeficiencia='" + tipoDeficiencia + '\'' +
-                ", certificadoDeficienciaGov='" + certificadoDeficienciaGov + '\'' +
-                '}';
+        return super.toString() +
+                "\nTipo de Deficiencia ...: " + this.tipoDeficiencia;
     }
 }

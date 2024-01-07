@@ -52,11 +52,9 @@ public class Contato {
 
     @Override
     public String toString() {
-        String texto = "Id: " + this.id + "\n{";
-        texto += "\n\tDescrição: " + this.descricao;
-        texto += "\n\tTelefone: " + this.telefone;
-        texto += "\n\tTipo: " + this.tipo;
-        texto += "\n}";
-        return texto;
+        return "\nContato Id ............: " + this.id +
+               "\nDescrição .............: " + this.descricao +
+               "\nTelefone ..............: " + this.telefone +
+               "\nTipo de contato .......: " + this.tipo;
     }
 }
