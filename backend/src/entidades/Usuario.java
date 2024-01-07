@@ -1,10 +1,12 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import enums.TipoUsuarioEnum;
 
 public abstract class Usuario {
+    private static final AtomicInteger counter = new AtomicInteger(0);
     private long id;
     private String nome;
     private String cpf;
@@ -15,11 +17,12 @@ public abstract class Usuario {
     private TipoUsuarioEnum tipo;
 
     public Usuario() {
+        this.id = counter.incrementAndGet();
     }
 
-    public Usuario(long id, String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
+    public Usuario(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
             ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
-        this.id = id;
+        this.id = counter.incrementAndGet();
         this.nome = nome;
         this.cpf = cpf;
         this.dataDeNascimento = dataDeNascimento;
@@ -31,10 +34,6 @@ public abstract class Usuario {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNome() {
