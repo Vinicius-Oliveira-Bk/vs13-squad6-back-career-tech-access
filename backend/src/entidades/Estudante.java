@@ -16,8 +16,7 @@ public class Estudante extends Cliente {
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
-    public Estudante() {
-    }
+    public Estudante() {}
 
     public Estudante(String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
         this.matricula = matricula;
