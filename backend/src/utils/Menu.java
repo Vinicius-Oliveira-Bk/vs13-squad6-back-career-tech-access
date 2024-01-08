@@ -1,11 +1,15 @@
 package utils;
 
+import java.util.Scanner;
+
+import enums.TipoUsuarioEnum;
 import servicos.ContatoServico;
 import servicos.EnderecoServico;
 import servicos.UsuarioServico;
 
 public class Menu {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         CustomScanner scanner = new CustomScanner();
 
         UsuarioServico usuarioServico = new UsuarioServico();
@@ -33,7 +37,12 @@ public class Menu {
                         case 0:
                             System.out.println("\n👋 Até mais!\n");
                             break;
-                        case 1:
+                        case 1: 
+                            System.out.println("\nListar todos os tipos de clientes");
+                            usuarioServico.listarTodos();
+                            sc.nextLine();
+                            break;
+                        case 2:
                             Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("Estudante");
                             Utils.exibirMenuOperacoes();
@@ -67,7 +76,7 @@ public class Menu {
                                     break;
                             }
                             break;
-                        case 2:
+                        case 3:
                             Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("PCD (Pessoa com Deficiência)");
                             Utils.exibirMenuOperacoes();
@@ -99,7 +108,7 @@ public class Menu {
                                     break;
                             }
                             break;
-                        case 3:
+                        case 4:
                             Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("Profissional em realocação");
                             Utils.exibirMenuOperacoes();
@@ -132,7 +141,7 @@ public class Menu {
                                     break;
                             }
                             break;
-                        case 4:
+                        case 5:
                             break;
                         default:
                             System.err.println("🚫 Opção inválida!");
@@ -157,6 +166,8 @@ public class Menu {
                             break;
                         case 3:
                             System.out.println("\nListar todos");
+                            usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.MENTOR);
+                            sc.nextLine();
                             break;
                         case 4:
                             System.out.println("\nAtualizar");
