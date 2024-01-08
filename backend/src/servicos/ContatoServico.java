@@ -4,15 +4,15 @@ import entidades.Contato;
 import utils.Validacoes;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class ContatoServico {
-    private static ArrayList<Contato> lista = new ArrayList<Contato>();
+    private static ArrayList<Contato> lista = new ArrayList<>();
 
     public void cadastrar(Contato contato) {
         if (!Validacoes.validarContato(contato)) {
             return;
         }
-
         lista.add(contato);
         System.out.println("✅ Contato adicionado com sucesso!");
     }
@@ -39,6 +39,7 @@ public class ContatoServico {
     public void atualizar(long id, Contato contatoNovo) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
+            return;
         }
 
         Contato contato = lista.stream().filter(x -> x.getId() == id).findFirst().get();
@@ -51,8 +52,8 @@ public class ContatoServico {
     public void deletar(long id) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
+            return;
         }
-
         lista.remove((int) id);
         System.out.println("✅ Contato removido com sucesso!");
     }

@@ -18,7 +18,7 @@ public class ProfissionalRealocacao extends Cliente {
         this.objetivoProfissional = objetivoProfissional;
     }
 
-    public ProfissionalRealocacao(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao, String areaAtuacao, String objetivoProfissional) {
+    public ProfissionalRealocacao(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao, String objetivoProfissional) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.profissao = profissao;
         this.objetivoProfissional = objetivoProfissional;

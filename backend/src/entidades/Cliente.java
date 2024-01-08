@@ -16,10 +16,10 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     public Cliente() {}
 
-    public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(PlanoEnum plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         this.plano = plano;
         this.interesses = interesses;
-        this.imagemDocumento = imagemDocummento;
+        this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
     }
@@ -54,8 +54,8 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         return imagemDocumento;
     }
 
-    public void setImagemDocumento(String imagemDocumento) {
-        this.imagemDocumento = imagemDocumento;
+    public void setImagemDocumento(String imagemDocummento) {
+        this.imagemDocumento = imagemDocummento;
     }
 
     public boolean getControleParental() {
