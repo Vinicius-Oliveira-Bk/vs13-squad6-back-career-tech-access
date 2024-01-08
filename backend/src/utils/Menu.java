@@ -76,14 +76,12 @@ public class Menu {
                                     break;
                                 case 4:
                                     int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
-                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico
-                                            .listarUm((long) idEstudante);
+                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
                                     Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
-                                    int idUsuarioExcluido = scanner
-                                            .nextInt("Selecione o ID do estudante a ser excluído: ");
+                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
                                     usuarioServico.deletar((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
@@ -145,8 +143,7 @@ public class Menu {
                                     usuarioServico.cadastrar(profissionalRealocacao);
                                     break;
                                 case 2:
-                                    idUsuario = scanner
-                                            .nextInt("Selecione o ID do profissional a ser consultado: ");
+                                    idUsuario = scanner.nextInt("Selecione o ID do profissional a ser consultado: ");
                                     System.out.println(usuarioServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
@@ -156,21 +153,18 @@ public class Menu {
                                     profissionalRealocacaoServico.listarTodos();
                                     break;
                                 case 4:
-                                    int idProfissionalRealocacao = scanner
-                                            .nextInt("Selecione o ID do Profissional a ser atualizado: ");
-                                    ProfissionalRealocacao profissionalRealocacaoASerAtualizado = (ProfissionalRealocacao) usuarioServico
-                                            .listarUm((long) idProfissionalRealocacao);
+                                    // TODO: inserir o processo 
+                                    int idProfissionalRealocacao = scanner.nextInt("Selecione o ID do Profissional a ser atualizado: ");
+                                    ProfissionalRealocacao profissionalRealocacaoASerAtualizado = (ProfissionalRealocacao) usuarioServico.listarUm((long) idProfissionalRealocacao);
                                     Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoASerAtualizado);
                                     sc.nextLine();
-                                    idUsuario = scanner
-                                            .nextInt("Informe o id do profissional em realocação que deseja atualizar");
+                                    idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja atualizar");
                                     profissionalRealocacaoServico.listarUm(idUsuario);
+                                    
                                     ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
-
                                     profissionalRealocacaoAtualizar.setNome(scanner.nextLine("Informe seu nome"));
                                     profissionalRealocacaoAtualizar.setCpf(scanner.nextLine("Informe seu Cpf"));
-                                    profissionalRealocacaoAtualizar.setDataDeNascimento(LocalDate
-                                            .parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
+                                    profissionalRealocacaoAtualizar.setDataDeNascimento(LocalDate.parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
                                     profissionalRealocacaoAtualizar.setEnderecos(null);
                                     profissionalRealocacaoAtualizar.setContatos(null);
                                     profissionalRealocacaoAtualizar.setEmail(scanner.nextLine("Informe seu email"));
@@ -178,27 +172,19 @@ public class Menu {
                                     System.out.println("1 - Gratuito");
                                     System.out.println("2 - Básico");
                                     System.out.println("3 - Premium");
-                                    profissionalRealocacaoAtualizar.setPlano(PlanoEnum.fromValor(
-                                            scanner.nextInt("Informe o número correspondente ao seu plano")));
-                                    profissionalRealocacaoAtualizar
-                                            .setInteresses(scanner.nextLine("Informe seus interesses"));
-                                    profissionalRealocacaoAtualizar.setImagemDocumento(
-                                            scanner.nextLine("Informe o link da imagem do seu documento"));
+                                    profissionalRealocacaoAtualizar.setPlano(PlanoEnum.fromValor(scanner.nextInt("Informe o número correspondente ao seu plano")));
+                                    profissionalRealocacaoAtualizar.setInteresses(scanner.nextLine("Informe seus interesses"));
+                                    profissionalRealocacaoAtualizar.setImagemDocumento(scanner.nextLine("Informe o link da imagem do seu documento"));
                                     profissionalRealocacaoAtualizar.setControleParental(false);
                                     profissionalRealocacaoAtualizar.setAcessoPcd(false);
-                                    profissionalRealocacaoAtualizar
-                                            .setProfissao(scanner.nextLine("Informe sua profissão"));
-                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(
-                                            scanner.nextLine("Informe seu objetivo profissional"));
+                                    profissionalRealocacaoAtualizar.setProfissao(scanner.nextLine("Informe sua profissão"));
+                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(scanner.nextLine("Informe seu objetivo profissional"));
                                     profissionalRealocacaoServico.atualizar(idUsuario, profissionalRealocacaoAtualizar);
                                     break;
                                 case 5:
-                                    System.out.println("\nDeletar");
-                                    int idUsuarioDeletar = scanner
-                                            .nextInt("Informe o id do profissional em realocação que deseja deletar");
+                                    int idUsuarioDeletar = scanner.nextInt("Informe o id do profissional em realocação que deseja deletar");
                                     profissionalRealocacaoServico.deletar(idUsuarioDeletar);
-                                    int idUsuarioExcluido = scanner
-                                            .nextInt("Selecione o ID do Profissional a ser excluído: ");
+                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do Profissional a ser excluído: ");
                                     usuarioServico.deletar((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
