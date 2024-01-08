@@ -1,16 +1,18 @@
 package entidades;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import enums.TipoUsuarioEnum;
+import utils.Utils;
 
 public abstract class Usuario {
     private static final AtomicInteger counter = new AtomicInteger(0);
     private long id;
     private String nome;
     private String cpf;
-    private String dataDeNascimento;
+    private LocalDate dataDeNascimento;
     private ArrayList<Endereco> enderecos = new ArrayList<>();
     private ArrayList<Contato> contatos = new ArrayList<>();
     private String email;
@@ -20,7 +22,7 @@ public abstract class Usuario {
         this.id = counter.incrementAndGet();
     }
 
-    public Usuario(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos,
+    public Usuario(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
             ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
         this.id = counter.incrementAndGet();
         this.nome = nome;
@@ -52,11 +54,11 @@ public abstract class Usuario {
         this.cpf = cpf;
     }
 
-    public String getDataDeNascimento() {
+    public LocalDate getDataDeNascimento() {
         return dataDeNascimento;
     }
 
-    public void setDataDeNascimento(String dataDeNascimento) {
+    public void setDataDeNascimento(LocalDate dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
 
@@ -94,11 +96,13 @@ public abstract class Usuario {
 
     @Override
     public String toString() {
+        String dataDeNascimentoFormatada = Utils.formatarData(dataDeNascimento);
+
         return "\t******** Usuario ********* " +
-               "\n\tid ....................: " + this.id +
+               "\n\tId ....................: " + this.id +
                "\n\tNome ..................: " + this.nome +
                "\n\tCpf ...................: " + this.cpf +
-               "\n\tData de Nascimento ....: " + this.dataDeNascimento +
+               "\n\tData de Nascimento ....: " + dataDeNascimentoFormatada +
                "\n\tE-mail ................: " + this.email +
                "\n\tTipo de usuario .......: " + this.tipo;
     }

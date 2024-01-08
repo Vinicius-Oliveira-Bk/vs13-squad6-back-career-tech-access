@@ -14,8 +14,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     private boolean controleParental;
     private boolean acessoPcd;
 
-    public Cliente() {
-    }
+    public Cliente() {}
 
     public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         this.plano = plano;
@@ -26,8 +25,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     }
 
     public Cliente(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
-        super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
-
+        super();
         this.plano = plano;
         this.interesses = interesses;
         this.imagemDocummento = imagemDocummento;
@@ -97,7 +95,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         } else {
             if (!cadastroResponsavel) {
                 // Realizar o cadastro do responsável
-                System.out.println("É necessário cadastrar o responsável antes de prosseguir.");
+                System.err.println("É necessário cadastrar o responsável antes de prosseguir.");
                 return false;
             }
             return true;
@@ -133,9 +131,9 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     public String toString() {
         return  super.toString() +
                 "\n\tPlano .................: " + this.plano +
-                "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + (this.controleParental ? "Sim" : "Nao")  +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "Sim" : "Nao");
+                "\n\tInteresses ............: " + this.interesses.toUpperCase() +
+                "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO")  +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "SIM" : "NÃO");
     }
 
 }
