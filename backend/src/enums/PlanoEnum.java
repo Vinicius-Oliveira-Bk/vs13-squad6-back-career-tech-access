@@ -23,5 +23,4 @@ public enum PlanoEnum {
         System.err.println("Valor inválido: " + valor);
         return null;
     }
-
 }
