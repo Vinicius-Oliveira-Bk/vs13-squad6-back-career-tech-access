@@ -4,7 +4,6 @@ import entidades.*;
 import enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class UsuarioServico {
     private ArrayList<Usuario> lista = new ArrayList<>();
@@ -18,19 +17,13 @@ public class UsuarioServico {
         }
     }
 
-    public void listarUm(long id) {
-        boolean usuarioEncontrado = false;
-
+    public Usuario listarUm(long id) {
         for (Usuario usuario : lista) {
             if (usuario.getId() == id) {
-                System.out.println(usuario);
-                usuarioEncontrado = true;
-                break;
+                return usuario;
             }
         }
-        if (!usuarioEncontrado) {
-            System.err.println("🚫 Usuário não encontrado!");
-        }
+        return null;
     }
 
     public void listarTodos() {
@@ -42,6 +35,22 @@ public class UsuarioServico {
         for (Usuario usuario : lista) {
             System.out.println(usuario);
         }
+    }
+
+    public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
+        if (lista.isEmpty()) {
+            System.err.println("🚫 Nenhum usuário cadastrado!");
+            return;
+        }
+
+        if (tipoUsuario == null) {
+            System.err.println("🚫 Tipo de usuário não pode ser nulo!");
+            return;
+        }
+
+        lista.stream()
+                .filter(usuario -> usuario.getTipo() == tipoUsuario)
+                .forEach(System.out::println);
     }
 
     public void atualizar(long id, Usuario usuarioAtualiza) {
@@ -94,4 +103,13 @@ public class UsuarioServico {
         return true;
     }
 
+    public TipoUsuarioEnum getTipoUsuario(long id) {
+        for (Usuario usuario : lista) {
+            if (usuario.getId() == id) {
+                return usuario.getTipo();
+            }
+        }
+
+        return null;
+    }
 }

@@ -18,7 +18,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     public ProfissionalMentor() {}
 
     public ProfissionalMentor(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
-        super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
+        super();
         this.areaAtuacao = areaAtuacao;
         this.nivelExperienciaEnum = nivelExperienciaEnum;
         this.carteiraDeTrabalho = carteiraDeTrabalho;
@@ -78,7 +78,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
                 "\n\tArea de Atuacao .......: " + this.areaAtuacao +
                 "\n\tNivel de Experiencia ..: " + this.nivelExperienciaEnum +
                 "\n\tCarteira de Trabalho ..: " + this.carteiraDeTrabalho +
-                "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "Sim" : "Não") +
+                "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "SIM" : "NÃO") +
                 "\n";
     }
 }
