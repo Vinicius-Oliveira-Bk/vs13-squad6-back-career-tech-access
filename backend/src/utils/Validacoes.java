@@ -1,18 +1,14 @@
 package utils;
 
+<<<<<<< HEAD
 import entidades.Contato;
+=======
+import java.time.LocalDate;
+>>>>>>> feature/feat-implementar-operacoes
 
 public class Validacoes {
-    public static boolean validarString(String input) {
-        return input != null && !input.isEmpty();
-    }
-
-    public static boolean validarInteiro(int input) {
-        return input >= 0;
-    }
-
-    public static boolean validarDouble(double input) {
-        return input >= 0;
+    public static boolean validarData(LocalDate data) {
+        return true;
     }
 
     public static boolean validarContato(Contato contato) {

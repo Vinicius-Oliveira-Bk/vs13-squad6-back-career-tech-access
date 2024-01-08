@@ -47,4 +47,39 @@ public class ProfissionalRealocacao extends Cliente {
                 "\n\tObjetivo Profissional .: " + this.objetivoProfissional +
                 "\n";
     }
+
+    @Override
+    public boolean validarCPF(String cpf) {
+        return false;
+    }
+
+    @Override
+    public boolean validarIdade(LocalDate dataNascimento, boolean cadastroResponsavel) {
+        return false;
+    }
+
+    @Override
+    public boolean validarPlano(String plano) {
+        return false;
+    }
+
+    @Override
+    public boolean validarInteresses(String interesses) {
+        return false;
+    }
+
+    @Override
+    public boolean validarImagemDocumento(String imagemDocumento) {
+        return false;
+    }
+
+    @Override
+    public boolean validarControleParental(boolean controleParental) {
+        return false;
+    }
+
+    @Override
+    public boolean validarAcessoPcd(boolean acessoPcd) {
+        return false;
+    }
 }

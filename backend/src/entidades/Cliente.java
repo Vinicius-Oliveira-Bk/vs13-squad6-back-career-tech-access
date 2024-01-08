@@ -26,7 +26,6 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
-
         this.plano = plano;
         this.interesses = interesses;
         this.imagemDocumento = imagemDocumento;
@@ -132,9 +131,9 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     public String toString() {
         return  super.toString() +
                 "\n\tPlano .................: " + this.plano +
-                "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + (this.controleParental ? "Sim" : "Nao")  +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "Sim" : "Nao");
+                "\n\tInteresses ............: " + this.interesses.toUpperCase() +
+                "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO")  +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "SIM" : "NÃO");
     }
 
 }

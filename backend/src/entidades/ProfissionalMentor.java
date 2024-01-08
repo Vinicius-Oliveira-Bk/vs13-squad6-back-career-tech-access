@@ -78,7 +78,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
                 "\n\tArea de Atuacao .......: " + this.areaAtuacao +
                 "\n\tNivel de Experiencia ..: " + this.nivelExperienciaEnum +
                 "\n\tCarteira de Trabalho ..: " + this.carteiraDeTrabalho +
-                "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "Sim" : "Não") +
+                "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "SIM" : "NÃO") +
                 "\n";
     }
 }
