@@ -190,6 +190,7 @@ public abstract class Utils {
     }
 
     public static void rotinaCadastroMentor(ProfissionalMentor mentor) {
+        // TODO: revisar futuramente
         mentor.setCarteiraDeTrabalho(scanner.nextLine("Digite sua carteira de trabalho: "));
 
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
