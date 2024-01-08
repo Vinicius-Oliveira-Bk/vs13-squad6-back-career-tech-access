@@ -7,7 +7,9 @@ import java.util.Scanner;
 
 import entidades.Cliente;
 import entidades.Estudante;
+import entidades.ProfissionalMentor;
 import entidades.Usuario;
+import enums.AreaAtuacaoEnum;
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
@@ -185,6 +187,25 @@ public abstract class Utils {
         String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
         LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
         estudante.setDataFim(dataFim);
+    }
+
+    public static void rotinaCadastroMentor(ProfissionalMentor mentor) {
+        mentor.setCarteiraDeTrabalho(scanner.nextLine("Digite sua carteira de trabalho: "));
+        mentor.set(scanner.nextLine("Digite a área de atuação: "));
+
+        TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
+        mentor.setTipoEstudante(tipoEstudante);
+
+        mentor.setCurso(scanner.nextLine("Digite o curso: "));
+        mentor.setInstituicao(scanner.nextLine("Digite a instituição: "));
+
+        String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
+        LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
+        mentor.setDataInicio(dataInicio);
+
+        String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
+        LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
+        mentor.setDataFim(dataFim);
     }
 
     public static String formatarData(LocalDate data) {

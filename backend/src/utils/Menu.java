@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import entidades.Estudante;
+import entidades.ProfissionalMentor;
 import entidades.Usuario;
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
@@ -170,6 +171,12 @@ public class Menu {
                     Utils.exibirEntidadeManipulada("Profissional Mentor");
                     Utils.exibirMenuOperacoes();
                     opcao = scanner.nextInt();
+
+                    ProfissionalMentor mentor = new ProfissionalMentor();
+                    Utils.rotinaCadastroUsuario(mentor, TipoUsuarioEnum.MENTOR);
+                    Utils.rotinaCadastroCliente(mentor);
+                    Utils.rotinaCadastroEstudante(mentor);
+                    usuarioServico.cadastrar(mentor);
 
                     switch (opcao) {
                         case 0:
