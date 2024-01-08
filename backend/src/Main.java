@@ -53,5 +53,15 @@ public class Main {
         enderecoListado = enderecoServico.listarUm(endereco.getId());
         System.out.println("Endereço listado após a atualização:");
         System.out.println("Logradouro: " + enderecoListado.getLogradouro());
+
+
+        contatoServico.listarTodos();
+        contatoServico.listarUm(1);
+        contatoServico.cadastrar(new Contato());
+        contatoServico.cadastrar(new Contato("descrição 01", "18988265902", TipoEnum.COMERCIAL));
+        contatoServico.listarUm(1);
+        contatoServico.atualizar(1, new Contato("abc", "3216549878", TipoEnum.RESIDENCIAL));
+        contatoServico.atualizar(4, new Contato("abc", "3216549878", TipoEnum.RESIDENCIAL));
+        contatoServico.deletar(1);
     }
 }
