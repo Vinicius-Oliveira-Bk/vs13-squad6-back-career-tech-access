@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import entidades.Cliente;
 import entidades.Estudante;
+import entidades.ProfissionalRealocacao;
 import entidades.Usuario;
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
@@ -186,6 +187,12 @@ public abstract class Utils {
         LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
         estudante.setDataFim(dataFim);
     }
+
+    public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
+        profissionalRealocacao.setProfissao(scanner.nextLine("Digite a sua profissão: "));
+        profissionalRealocacao.setObjetivoProfissional(scanner.nextLine("Digite o seu objetivo profissional: "));
+    }
+
 
     public static String formatarData(LocalDate data) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

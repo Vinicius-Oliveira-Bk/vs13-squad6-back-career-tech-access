@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import entidades.Estudante;
+import entidades.ProfissionalRealocacao;
 import entidades.Usuario;
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
@@ -137,19 +138,31 @@ public class Menu {
                                     System.out.println("\n👋 Até mais!\n");
                                     break;
                                 case 1:
-                                    System.out.println("\nCadastrar");
+                                    ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+                                    Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL);
+                                    Utils.rotinaCadastroCliente(profissionalRealocacao);
+                                    Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacao);
+                                    usuarioServico.cadastrar(profissionalRealocacao);
                                     break;
                                 case 2:
-                                    System.out.println("\nListar um");
+                                    int idUsuario = scanner.nextInt("Selecione o ID do profissional a ser consultado: ");
+                                    System.out.println(usuarioServico.listarUm((long) idUsuario));
+                                    sc.nextLine();
                                     break;
                                 case 3:
-                                    System.out.println("\nListar todos");
+                                    usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PROFISSIONAL);
+                                    sc.nextLine();
                                     break;
                                 case 4:
-                                    System.out.println("\nAtualizar");
+                                    int idProfissionalRealocacao = scanner.nextInt("Selecione o ID do Profissional a ser atualizado: ");
+                                    ProfissionalRealocacao profissionalRealocacaoASerAtualizado = (ProfissionalRealocacao) usuarioServico.listarUm((long) idProfissionalRealocacao);
+                                    Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoASerAtualizado);
+                                    sc.nextLine();
                                     break;
                                 case 5:
-                                    System.out.println("\nDeletar");
+                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do Profissional a ser excluído: ");
+                                    usuarioServico.deletar((long) idUsuarioExcluido);
+                                    sc.nextLine();
                                     break;
                                 case 6:
                                     break;
