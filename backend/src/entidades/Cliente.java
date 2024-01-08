@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     private PlanoEnum plano;
     private String interesses;
-    private String imagemDocummento;
+    private String imagemDocumento;
     private boolean controleParental;
     private boolean acessoPcd;
 
@@ -19,17 +19,17 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
         this.plano = plano;
         this.interesses = interesses;
-        this.imagemDocummento = imagemDocummento;
+        this.imagemDocumento = imagemDocummento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
     }
 
-    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo);
 
         this.plano = plano;
         this.interesses = interesses;
-        this.imagemDocummento = imagemDocummento;
+        this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
     }
@@ -50,15 +50,15 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.interesses = interesses;
     }
 
-    public String getImagemDocummento() {
-        return imagemDocummento;
+    public String getImagemDocumento() {
+        return imagemDocumento;
     }
 
-    public void setImagemDocummento(String imagemDocummento) {
-        this.imagemDocummento = imagemDocummento;
+    public void setImagemDocumento(String imagemDocumento) {
+        this.imagemDocumento = imagemDocumento;
     }
 
-    public boolean isControleParental() {
+    public boolean getControleParental() {
         return controleParental;
     }
 
@@ -66,7 +66,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.controleParental = controleParental;
     }
 
-    public boolean isAcessoPcd() {
+    public boolean getAcessoPcd() {
         return acessoPcd;
     }
 
