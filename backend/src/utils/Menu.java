@@ -68,7 +68,7 @@ public class Menu {
                                     break;
                                 case 2:
                                     int idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
-                                    usuarioServico.listarUm((long) idUsuario);
+                                    System.out.println(usuarioServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
                                 case 3:
