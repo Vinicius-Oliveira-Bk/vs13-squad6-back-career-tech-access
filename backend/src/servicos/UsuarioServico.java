@@ -53,29 +53,6 @@ public class UsuarioServico {
                 .forEach(System.out::println);
     }
 
-    public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
-        var tiposDeUsuarios = TipoUsuarioEnum.values();
-
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum usuário cadastrado!");
-            return;
-        }
-
-        if (tipoUsuario == null) {
-            System.err.println("🚫 Tipo de usuário não pode ser nulo!");
-            return;
-        }
-
-        if(!tiposDeUsuarios.equals(tipoUsuario)) {
-            System.err.println("🚫 Tipo de usuário não encontrado!");
-            return;
-        }
-
-        lista.stream()
-                .filter(usuario -> usuario.getTipo() == tipoUsuario)
-                .forEach(System.out::println);
-    }
-
     public void atualizar(long id, Usuario usuarioAtualiza) {
         for (int i = 0; i < lista.size(); i++) {
             Usuario usuario = lista.get(i);

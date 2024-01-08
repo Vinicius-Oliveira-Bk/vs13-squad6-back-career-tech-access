@@ -20,7 +20,7 @@ public class CustomScanner {
         while (!isInputValido) {
             try {
                 if (!mensagem.isEmpty())
-                    System.out.print("≫  " + mensagem + ": ");
+                    System.out.print("≫  " + mensagem + " ");
                 else
                     System.out.print("≫ ");
 
@@ -52,7 +52,7 @@ public class CustomScanner {
         while (!isInputValido) {
             try {
                 if (!mensagem.isEmpty())
-                    System.out.print("≫  " + mensagem + ": ");
+                    System.out.print("≫  " + mensagem + " ");
                 else
                     System.out.print("≫ ");
 
