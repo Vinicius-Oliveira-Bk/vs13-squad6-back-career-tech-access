@@ -1,96 +1,70 @@
 package servicos;
 
-import entidades.Estudante;
+import entidades.Endereco;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EstudanteServico {
-    private ArrayList<Estudante> lista = new ArrayList<>();
-    UsuarioServico usuarioServico = new UsuarioServico();
-    public void cadastrar(Estudante estudante) {
-        if (estudante == null) {
-            System.err.println("🚫 O usuário não pode ser nulo!");
-        } else {
-            lista.add(estudante);
-            usuarioServico.cadastrar(estudante);
-            System.out.println("✅ Estudante cadastrado!");
-        }
+public class EnderecoServico {
+    private final ArrayList<Endereco> enderecos = new ArrayList<>();
+
+    public EnderecoServico() {
     }
 
-    public void listarUm(long id) {
-        boolean estudanteEncontrado = false;
-
-        for (Estudante estudante : lista) {
-            if (estudante.getId() == id) {
-                System.out.println(estudante);
-                estudanteEncontrado = true;
-                break;
-            }
-        }
-        if (!estudanteEncontrado) {
-            System.err.println("🚫 Estudante não encontrado!");
-        }
-    }
-
-    public void listarTodos() {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum estudante cadastrado!");
+    public void cadastrar(Endereco endereco) {
+        if (endereco == null) {
+            System.err.println("🚫 O endereço não pode ser nulo!");
             return;
         }
 
-        for (Estudante estudante : lista) {
-            System.out.println(estudante);
-        }
+        enderecos.add(endereco);
+        System.out.println("✅ Endereço cadastrado!");
     }
 
-    public void atualizar(long id, Estudante estudanteAtualiza) {
+    public Endereco listarUm(Long id) {
+        if (enderecos.isEmpty()) {
+            System.err.println("🚫 A lista de endereços está vazia!");
+            return null;
+        }
 
-        for (int i = 0; i < lista.size(); i++) {
-            Estudante estudante = lista.get(i);
-
-            if (estudante.getId() == id) {
-                estudante.setNome(estudanteAtualiza.getNome());
-                estudante.setCpf(estudanteAtualiza.getCpf());
-                estudante.setDataDeNascimento(estudanteAtualiza.getDataDeNascimento());
-                estudante.setEnderecos(estudanteAtualiza.getEnderecos());
-                estudante.setContatos(estudanteAtualiza.getContatos());
-                estudante.setEmail(estudanteAtualiza.getEmail());
-                estudante.setTipo(estudanteAtualiza.getTipo());
-                estudante.setPlano(estudanteAtualiza.getPlano());
-                estudante.setInteresses(estudanteAtualiza.getInteresses());
-                estudante.setImagemDocumento(estudanteAtualiza.getImagemDocumento());
-                estudante.setControleParental(estudanteAtualiza.getControleParental());
-                estudante.setAcessoPcd(estudanteAtualiza.getAcessoPcd());
-                estudante.setMatricula(estudanteAtualiza.getMatricula());
-                estudante.setComprovanteMatricula(estudanteAtualiza.getComprovanteMatricula());
-                estudante.setTipoEstudante(estudanteAtualiza.getTipoEstudante());
-                estudante.setCurso(estudanteAtualiza.getCurso());
-                estudante.setInstituicao(estudanteAtualiza.getInstituicao());
-                estudante.setDataInicio(estudanteAtualiza.getDataInicio());
-                estudante.setDataFim(estudanteAtualiza.getDataFim());
-                System.out.println("✅ Estudante atualizado!");
-                return;
+        for (Endereco endereco : enderecos) {
+            if (endereco.getId().equals(id)) {
+                return endereco;
             }
         }
 
-        System.err.println("🚫 Usuário não encontrado!");
+        System.err.println("🚫 Endereço não encontrado!");
+        return null;
     }
 
-    public void deletar(long id) {
-        Estudante estudanteDeletar = null;
+    public List<Endereco> listarTodos() {
+        return enderecos;
+    }
 
-        for (Estudante estudante : lista) {
-            if (estudante.getId() == id) {
-                estudanteDeletar = estudante;
-            }
+    public void atualizar(Long id, Endereco endereco) {
+        Endereco enderecoExistente = listarUm(id);
+
+        if (enderecoExistente != null) {
+            enderecoExistente.setLogradouro(endereco.getLogradouro());
+            enderecoExistente.setNumero(endereco.getNumero());
+            enderecoExistente.setCep(endereco.getCep());
+            enderecoExistente.setCidade(endereco.getCidade());
+            enderecoExistente.setEstado(endereco.getEstado());
+            enderecoExistente.setPais(endereco.getPais());
+            enderecoExistente.setTipo(endereco.getTipo());
+            System.out.println("✅ Endereço atualizado!");
         }
 
-        if (estudanteDeletar != null) {
-            lista.remove(estudanteDeletar);
-            usuarioServico.deletar(estudanteDeletar.getId());
-            System.out.println("✅ Usuário removido!");
-        } else {
-            System.err.println("🚫 Usuário não encontrado!");
+        System.err.println("🚫 Endereço não encontrado!");
+    }
+
+    public void deletar(Long id) {
+        if (enderecos.isEmpty()) {
+            System.err.println("🚫 A lista de endereços está vazia!");
+            return;
         }
+
+        enderecos.removeIf(endereco -> endereco.getId().equals(id));
+        System.out.println("✅ Endereço deletado!");
     }
 }

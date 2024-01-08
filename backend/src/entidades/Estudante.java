@@ -1,11 +1,12 @@
 package entidades;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
+import utils.Utils;
 
 public class Estudante extends Cliente {
     private String matricula;
@@ -97,13 +98,16 @@ public class Estudante extends Cliente {
     }
 
     public String toString() {
+        String dataInicioFormatada = Utils.formatarData(dataFim);
+        String dataFimFormatada = Utils.formatarData(dataFim);
+
         return super.toString() +
                 "\n\tMatricula .............: " + this.matricula +
                 "\n\tTipo de Estudante .....: " + this.tipoEstudante +
                 "\n\tCurso .................: " + this.curso +
                 "\n\tInstituicao ...........: " + this.instituicao +
-                "\n\tData Inicio ...........: " + this.dataInicio +
-                "\n\tData Fim ..............: " + this.dataFim +
+                "\n\tData Inicio ...........: " + dataInicioFormatada +
+                "\n\tData Fim ..............: " + dataFimFormatada +
                 "\n";
     }
 }

@@ -63,7 +63,8 @@ public class ProfissionalRealocacaoServico {
                 profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());
                 profissionalRealocacao.setAcessoPcd(profissionalRealocacaoAtualiza.getAcessoPcd());
                 profissionalRealocacao.setProfissao(profissionalRealocacaoAtualiza.getProfissao());
-                profissionalRealocacao.setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
+                profissionalRealocacao
+                        .setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
                 System.out.println("✅ Profissional Realocação atualizado!");
                 return;
             }
