@@ -1,10 +1,9 @@
 package servicos;
 
+import java.util.ArrayList;
+
 import entidades.Contato;
 import utils.Validacoes;
-
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 public class ContatoServico {
     private static ArrayList<Contato> lista = new ArrayList<>();

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class ProfissionalMentorServico {
     private ArrayList<ProfissionalMentor> lista = new ArrayList<>();
     UsuarioServico usuarioServico = new UsuarioServico();
+
     public void cadastrar(ProfissionalMentor profissionalMentor) {
         if (profissionalMentor == null) {
             System.err.println("🚫 O profissional não pode ser nulo!");
@@ -59,7 +60,8 @@ public class ProfissionalMentorServico {
                 profissionalMentor.setAreaAtuacao(profissionalMentorAtualiza.getAreaAtuacao());
                 profissionalMentor.setNivelExperienciaEnum(profissionalMentorAtualiza.getNivelExperienciaEnum());
                 profissionalMentor.setCarteiraDeTrabalho(profissionalMentorAtualiza.getCarteiraDeTrabalho());
-                profissionalMentor.setCertificadosDeCapacitacao(profissionalMentorAtualiza.getCertificadosDeCapacitacao());
+                profissionalMentor
+                        .setCertificadosDeCapacitacao(profissionalMentorAtualiza.getCertificadosDeCapacitacao());
                 System.out.println("✅ Profissional Mentor atualizado!");
                 return;
             }

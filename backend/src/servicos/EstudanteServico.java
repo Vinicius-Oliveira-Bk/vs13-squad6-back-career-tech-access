@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class EstudanteServico {
     private ArrayList<Estudante> lista = new ArrayList<>();
     UsuarioServico usuarioServico = new UsuarioServico();
+
     public void cadastrar(Estudante estudante) {
         if (estudante == null) {
             System.err.println("🚫 O usuário não pode ser nulo!");

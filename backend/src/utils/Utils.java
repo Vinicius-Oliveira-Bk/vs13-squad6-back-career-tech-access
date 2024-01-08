@@ -112,8 +112,8 @@ public abstract class Utils {
     }
 
     /*
-     * Rotinas: funcoes que apresentam todos os atributos e regras 
-     * necessárias para o cadastro de uma entidade. 
+     * Rotinas: funcoes que apresentam todos os atributos e regras
+     * necessárias para o cadastro de uma entidade.
      */
     public static void rotinaCadastroContatosEenderecos() {
         /*
@@ -169,22 +169,22 @@ public abstract class Utils {
     }
 
     public static void rotinaCadastroEstudante(Estudante estudante) {
-                                            estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
-                                    estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
+        estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
+        estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
 
-                                    TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
-                                    estudante.setTipoEstudante(tipoEstudante);
+        TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
+        estudante.setTipoEstudante(tipoEstudante);
 
-                                    estudante.setCurso(scanner.nextLine("Digite o curso: "));
-                                    estudante.setInstituicao(scanner.nextLine("Digite a instituição: "));
+        estudante.setCurso(scanner.nextLine("Digite o curso: "));
+        estudante.setInstituicao(scanner.nextLine("Digite a instituição: "));
 
-                                    String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
-                                    LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
-                                    estudante.setDataInicio(dataInicio);
+        String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
+        LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
+        estudante.setDataInicio(dataInicio);
 
-                                    String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
-                                    LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
-                                    estudante.setDataFim(dataFim);
+        String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
+        LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
+        estudante.setDataFim(dataFim);
     }
 
     public static String formatarData(LocalDate data) {

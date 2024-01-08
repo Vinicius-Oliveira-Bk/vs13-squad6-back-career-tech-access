@@ -1,13 +1,12 @@
 package entidades;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
 import utils.Utils;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 public class Estudante extends Cliente {
     private String matricula;
