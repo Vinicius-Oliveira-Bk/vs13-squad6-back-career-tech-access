@@ -19,19 +19,13 @@ public class UsuarioServico {
         }
     }
 
-    public void listarUm(long id) {
-        boolean usuarioEncontrado = false;
-
+    public Usuario listarUm(long id) {
         for (Usuario usuario : lista) {
             if (usuario.getId() == id) {
-                System.out.println(usuario);
-                usuarioEncontrado = true;
-                break;
+                return usuario;
             }
         }
-        if (!usuarioEncontrado) {
-            System.err.println("🚫 Usuário não encontrado!");
-        }
+        return null;
     }
 
     public void listarTodos() {
@@ -46,7 +40,7 @@ public class UsuarioServico {
     }
 
     public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
-        var tiposDeUsuarios = TipoUsuarioEnum.values();
+        // var tiposDeUsuarios = TipoUsuarioEnum.values();
 
         if (lista.isEmpty()) {
             System.err.println("🚫 Nenhum usuário cadastrado!");
@@ -55,11 +49,6 @@ public class UsuarioServico {
 
         if (tipoUsuario == null) {
             System.err.println("🚫 Tipo de usuário não pode ser nulo!");
-            return;
-        }
-
-        if(!tiposDeUsuarios.equals(tipoUsuario)) {
-            System.err.println("🚫 Tipo de usuário não encontrado!");
             return;
         }
 

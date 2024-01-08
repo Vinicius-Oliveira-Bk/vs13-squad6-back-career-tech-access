@@ -5,7 +5,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import entidades.Cliente;
+import entidades.Estudante;
+import entidades.Usuario;
+import enums.PlanoEnum;
+import enums.TipoEstudanteEnum;
+import enums.TipoUsuarioEnum;
+
 public abstract class Utils {
+    private static CustomScanner scanner = new CustomScanner();
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     // https://www.invertexto.com/simbolos-para-copiar
     // https://www.simbolosparacopiar.com/p/simbolos-redondos-e-quadrados.html?m=1
     public static void telaInicial() {
@@ -101,6 +111,10 @@ public abstract class Utils {
         } while (true);
     }
 
+    /*
+     * Rotinas: funcoes que apresentam todos os atributos e regras
+     * necessárias para o cadastro de uma entidade.
+     */
     public static void rotinaCadastroContatosEenderecos() {
         /*
          * Atributos - Contato:
@@ -120,28 +134,57 @@ public abstract class Utils {
          */
     }
 
-    public static void rotinaCadastroUsuario() {
-        /*
-         * Atributos - Usuario:
-         * - nome : String
-         * - cpf : String
-         * - dataDeNascimento : LocalDate
-         * - rotinaCadastroContatosEenderecos() : void
-         * - email : String
-         * - tipo : TipoUsuarioEnum
-         */
+    public static void rotinaCadastroUsuario(Usuario usuario, TipoUsuarioEnum tipoUsuario) {
+        try {
+            usuario.setNome(scanner.nextLine("Digite o nome: "));
+            usuario.setCpf(scanner.nextLine("Digite o CPF: "));
+
+            String dataNascimentoString = scanner.nextLine("Digite a data de nascimento (dd/MM/yyyy): ");
+            LocalDate dataNascimento = LocalDate.parse(dataNascimentoString, formatter);
+            usuario.setDataDeNascimento(dataNascimento);
+
+            usuario.setEmail(scanner.nextLine("Digite o email: "));
+
+            usuario.setTipo(tipoUsuario);
+        } catch (Exception e) {
+            System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
+            scanner.nextLine();
+        }
     }
 
-    public static void rotinaCadastroCliente() {
-        /*
-         * Atributos - Cliente:
-         * - plano : PlanoEnum
-         * - interesses : String
-         * - imagemDocumento : String
-         * - controleParental: Boolean
-         * - acessoPcd: Boolean
-         */
+    public static void rotinaCadastroCliente(Cliente cliente) {
+        try {
+            PlanoEnum planoEscolhido = PlanoEnum.GRATUITO;
+            planoEscolhido = (PlanoEnum) Utils.exibirMenuEnumDinamico(planoEscolhido);
+            cliente.setPlano(planoEscolhido);
 
+            cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
+            cliente.setImagemDocummento(scanner.nextLine("Digite o link da imagem do seu documento: "));
+            cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - SIM / 2 - NÃO)? ").equals("1"));
+            cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - SIM / 2 - NÃO)? ").equals("1"));
+        } catch (Exception e) {
+            System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
+            scanner.nextLine();
+        }
+    }
+
+    public static void rotinaCadastroEstudante(Estudante estudante) {
+        estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
+        estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
+
+        TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
+        estudante.setTipoEstudante(tipoEstudante);
+
+        estudante.setCurso(scanner.nextLine("Digite o curso: "));
+        estudante.setInstituicao(scanner.nextLine("Digite a instituição: "));
+
+        String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
+        LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
+        estudante.setDataInicio(dataInicio);
+
+        String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
+        LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
+        estudante.setDataFim(dataFim);
     }
 
     public static String formatarData(LocalDate data) {

@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import entidades.Estudante;
+import entidades.Usuario;
 import enums.PlanoEnum;
 import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
@@ -60,54 +61,13 @@ public class Menu {
                                     break;
                                 case 1:
                                     Estudante estudante = new Estudante();
-                                    
-                                    estudante.setNome(scanner.nextLine("Digite o nome: "));
-                                    estudante.setCpf(scanner.nextLine("Digite o CPF: "));
-
-                                    String dataNascimentoString = scanner.nextLine("Digite a data de nascimento (dd/MM/yyyy): ");
-                                    LocalDate dataNascimento = LocalDate.parse(dataNascimentoString, formatter);
-                                    estudante.setDataDeNascimento(dataNascimento);
-
-                                    estudante.setEmail(scanner.nextLine("Digite o email: "));
-                                    estudante.setTipo(TipoUsuarioEnum.ESTUDANTE);
-
-                                    PlanoEnum planoEscolhido = PlanoEnum.GRATUITO;
-                                    planoEscolhido = (PlanoEnum) Utils.exibirMenuEnumDinamico(planoEscolhido);
-                                    estudante.setPlano(planoEscolhido);
-
-                                    estudante.setInteresses(scanner.nextLine("Digite um interesse: "));
-                                    estudante.setImagemDocummento(scanner.nextLine("Digite o link da imagem do seu documento: "));
-                                    estudante.setControleParental(scanner.nextLine("Tem controle parental (1 - SIM / 2 - NÃO)? ").equals("1"));
-                                    estudante.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - SIM / 2 - NÃO)? ").equals("1"));
-
-                                    estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
-                                    estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
-
-                                    TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
-                                    estudante.setTipoEstudante(tipoEstudante);
-
-                                    estudante.setCurso(scanner.nextLine("Digite o curso: "));
-                                    estudante.setInstituicao(scanner.nextLine("Digite a instituição: "));
-
-                                    String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
-                                    LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
-                                    estudante.setDataInicio(dataInicio);
-
-                                    String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
-                                    LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
-                                    estudante.setDataFim(dataFim);
-
+                                    Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
+                                    Utils.rotinaCadastroCliente(estudante);
+                                    Utils.rotinaCadastroEstudante(estudante);
                                     usuarioServico.cadastrar(estudante);
                                     break;
                                 case 2:
                                     int idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
-                                    var tipoEsperado = TipoUsuarioEnum.ESTUDANTE;
-
-                                    if(usuarioServico.getTipoUsuario(idUsuario) != tipoEsperado) {
-                                        System.err.println("🚫 Tipo de usuário inválido!");
-                                        break;
-                                    }
-
                                     usuarioServico.listarUm((long) idUsuario);
                                     sc.nextLine();
                                     break;
@@ -116,8 +76,9 @@ public class Menu {
                                     sc.nextLine();
                                     break;
                                 case 4:
-                                    int idUsuarioAtualizado = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
-                                    usuarioServico.atualizar((long) idUsuarioAtualizado, new Estudante());
+                                    int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
+                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
+                                    Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
