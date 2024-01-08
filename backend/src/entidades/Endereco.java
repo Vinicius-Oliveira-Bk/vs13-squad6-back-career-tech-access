@@ -20,8 +20,7 @@ public class Endereco {
         this.id = counter.incrementAndGet();
     }
 
-    public Endereco(String logradouro, String numero, String complemento, String cep, String cidade,
-            String estado, String pais, TipoEnum tipo) {
+    public Endereco(String logradouro, String numero, String complemento, String cep, String cidade, String estado, String pais, TipoEnum tipo) {
         this.id = counter.incrementAndGet();
         this.logradouro = logradouro;
         this.numero = numero;

@@ -118,4 +118,13 @@ public class UsuarioServico {
         return true;
     }
 
+    public TipoUsuarioEnum getTipoUsuario(long id) {
+        for (Usuario usuario : lista) {
+            if (usuario.getId() == id) {
+                return usuario.getTipo();
+            }
+        }
+
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import enums.TipoUsuarioEnum;
+import utils.Utils;
 
 public abstract class Usuario {
     private static final AtomicInteger counter = new AtomicInteger(0);
@@ -95,11 +96,13 @@ public abstract class Usuario {
 
     @Override
     public String toString() {
+        String dataDeNascimentoFormatada = Utils.formatarData(dataDeNascimento);
+
         return "\t******** Usuario ********* " +
                "\n\tId ....................: " + this.id +
                "\n\tNome ..................: " + this.nome +
                "\n\tCpf ...................: " + this.cpf +
-               "\n\tData de Nascimento ....: " + this.dataDeNascimento +
+               "\n\tData de Nascimento ....: " + dataDeNascimentoFormatada +
                "\n\tE-mail ................: " + this.email +
                "\n\tTipo de usuario .......: " + this.tipo;
     }

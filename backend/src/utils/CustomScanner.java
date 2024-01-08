@@ -2,7 +2,7 @@ package utils;
 
 import java.util.Scanner;
 
-public class CustomScanner { 
+public class CustomScanner {
     private Scanner scanner;
 
     public CustomScanner() {
@@ -12,21 +12,24 @@ public class CustomScanner {
     public int nextInt() {
         return nextInt("");
     }
- 
+
     public int nextInt(String mensagem) {
         int input = 0;
         boolean isInputValido = false;
-        
+
         while (!isInputValido) {
             try {
-                if(!mensagem.isEmpty()) System.out.print("≫  "+ mensagem + ": ");
-                else System.out.print("≫ ");
+                if (!mensagem.isEmpty())
+                    System.out.print("≫  " + mensagem + ": ");
+                else
+                    System.out.print("≫ ");
 
-                String entradaDoUsuario = scanner.nextLine().trim();
-                input = Integer.parseInt(entradaDoUsuario);
-                
-                if(input < 0) throw new Exception();
-                
+                input = Integer.parseInt(scanner.nextLine().trim());
+                scanner.nextLine();
+
+                if (input < 0 || input > 6)
+                    throw new Exception();
+
                 isInputValido = true;
             } catch (NumberFormatException e) {
                 System.err.println("\n🚫 Entrada inválida! Digite um número inteiro.");
@@ -34,13 +37,13 @@ public class CustomScanner {
                 System.err.println("\n🚫 Entrada inválida! Selecione uma opção listada.");
             }
         }
-        
+
         return input;
     }
 
     public String nextLine() {
-        return nextLine();
-    }  
+        return scanner.nextLine();
+    }
 
     public String nextLine(String mensagem) {
         String input = "";
@@ -48,12 +51,15 @@ public class CustomScanner {
 
         while (!isInputValido) {
             try {
-                if(!mensagem.isEmpty()) System.out.print("≫  "+ mensagem + ": ");
-                else System.out.print("≫ ");
+                if (!mensagem.isEmpty())
+                    System.out.print("≫  " + mensagem + ": ");
+                else
+                    System.out.print("≫ ");
 
                 input = scanner.nextLine().trim();
 
-                if (input.isEmpty()) throw new Exception();
+                if (input.isEmpty())
+                    throw new Exception();
 
                 isInputValido = true;
             } catch (Exception e) {
@@ -64,4 +70,3 @@ public class CustomScanner {
         return input;
     }
 }
-
