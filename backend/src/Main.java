@@ -179,10 +179,6 @@ public class Main {
 
         usuarioServico.listarTodos();
 
-
-
-
-
 //        listaEndereco.add(customScanner.nextLine());
 //
 //        System.out.print("Insira o contato: ");
@@ -206,33 +202,5 @@ public class Main {
 //        usuarioServico.vincularContato(pcd1, contato1);
 //        usuarioServico.vincularContato(pcd1, contato2);
 //
-
-
-
-
-
-
-
-//        // Cria o endereço - Testes Vinicius
-//        Endereco endereco = new Endereco("Rua das Flores", "123", "Casa", "12345-6789", "Atibaia", "SP", "Brasil",
-//                TipoEnum.RESIDENCIAL);
-//
-//        // Cadastra o endereço
-//        enderecoServico.cadastrar(endereco);
-//
-//        // Lista o endereço
-//        Endereco enderecoListado = enderecoServico.listarUm(endereco.getId());
-//        System.out.println("Endereço listado:");
-//        System.out.println("Logradouro: " + enderecoListado.getLogradouro());
-//        System.out.println("Número: " + enderecoListado.getNumero());
-//
-//        // Atualiza o endereço
-//        enderecoListado.setLogradouro("Rua Nova");
-//        enderecoServico.atualizar(enderecoListado.getId(), enderecoListado);
-//
-//        // Lista novamente o endereço
-//        enderecoListado = enderecoServico.listarUm(endereco.getId());
-//        System.out.println("Endereço listado após a atualização:");
-//        System.out.println("Logradouro: " + enderecoListado.getLogradouro());
     }
 }

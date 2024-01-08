@@ -3,6 +3,8 @@ package servicos;
 import entidades.Contato;
 import entidades.Endereco;
 import entidades.Usuario;
+import enums.TipoUsuarioEnum;
+import utils.Validacoes;
 
 import java.util.ArrayList;
 
@@ -11,10 +13,13 @@ public class UsuarioServico {
 
     public void cadastrar(Usuario usuario) {
         if (usuario == null) {
-            System.err.println("O usuário não pode ser nulo!");
+            System.err.println("🚫 O usuário não pode ser nulo!");
         } else {
-            lista.add(usuario);
-            System.out.println("Usuário cadastrado!");
+            // Validate email before adding the user
+            if (Validacoes.validarEmail(usuario.getEmail())) {
+                lista.add(usuario);
+                System.out.println("✅ Usuário cadastrado!");
+            }
         }
     }
 
@@ -29,14 +34,42 @@ public class UsuarioServico {
             }
         }
         if (!usuarioEncontrado) {
-            System.err.println("Usuário não encontrado!");
+            System.err.println("🚫 Usuário não encontrado!");
         }
     }
 
     public void listarTodos() {
+        if (lista.isEmpty()) {
+            System.err.println("🚫 Nenhum usuário cadastrado!");
+            return;
+        }
+
         for (Usuario usuario : lista) {
             System.out.println(usuario);
         }
+    }
+
+    public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
+        var tiposDeUsuarios = TipoUsuarioEnum.values();
+
+        if (lista.isEmpty()) {
+            System.err.println("🚫 Nenhum usuário cadastrado!");
+            return;
+        }
+
+        if (tipoUsuario == null) {
+            System.err.println("🚫 Tipo de usuário não pode ser nulo!");
+            return;
+        }
+
+        if(!tiposDeUsuarios.equals(tipoUsuario)) {
+            System.err.println("🚫 Tipo de usuário não encontrado!");
+            return;
+        }
+
+        lista.stream()
+            .filter(usuario -> usuario.getTipo() == tipoUsuario)
+            .forEach(System.out::println);
     }
 
     public void atualizar(long id, Usuario usuarioAtualiza) {
@@ -49,8 +82,11 @@ public class UsuarioServico {
                 usuario.setDataDeNascimento(usuarioAtualiza.getDataDeNascimento());
                 usuario.setEmail(usuarioAtualiza.getEmail());
                 usuario.setTipo(usuarioAtualiza.getTipo());
+                System.out.println("✅ Usuário atualizado!");
             }
         }
+
+        System.err.println("🚫 Usuário não encontrado!");
     }
 
     public void deletar(long id) {
@@ -64,9 +100,9 @@ public class UsuarioServico {
 
         if (usuarioDeletar != null) {
             lista.remove(usuarioDeletar);
-            System.out.println("Usuário removido!");
+            System.out.println("✅ Usuário removido!");
         } else {
-            System.err.println("Usuário não encontrado!");
+            System.err.println("🚫 Usuário não encontrado!");
         }
     }
 
@@ -74,6 +110,7 @@ public class UsuarioServico {
         ArrayList<Contato> contatos = usuario.getContatos() != null ? usuario.getContatos() : new ArrayList<>();
         contatos.add(contato);
         usuario.setContatos(contatos);
+        System.out.println("✅ Contato vinculado!");
         return true;
     }
 
@@ -81,6 +118,7 @@ public class UsuarioServico {
         ArrayList<Endereco> enderecos = usuario.getEnderecos() != null ? usuario.getEnderecos() : new ArrayList<>();
         enderecos.add(endereco);
         usuario.setEnderecos(enderecos);
+        System.out.println("✅ Endereço vinculado!");
         return true;
     }
 

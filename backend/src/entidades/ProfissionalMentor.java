@@ -67,6 +67,12 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     }
 
     @Override
+    public void adicionarCertificados(String certificados) {
+        certificadosDeCapacitacao.add(certificados);
+        System.out.println("Certificado adicionado com sucesso!");
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 "\n\tArea de Atuacao .......: " + this.areaAtuacao +

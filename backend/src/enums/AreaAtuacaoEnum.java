@@ -34,4 +34,5 @@ public enum AreaAtuacaoEnum {
                 System.err.println("Valor inválido: " + valor);
                 return null;
         }
+  
 }
