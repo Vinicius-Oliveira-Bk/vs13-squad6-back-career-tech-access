@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import entidades.Estudante;
+import entidades.ProfissionalMentor;
 import entidades.ProfissionalRealocacao;
 import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
@@ -206,6 +207,7 @@ public class Menu {
                     Utils.limparConsole();
                     Utils.exibirEntidadeManipulada("Profissional Mentor");
                     Utils.exibirMenuOperacoes();
+
                     opcao = scanner.nextInt();
 
                     switch (opcao) {
@@ -213,20 +215,39 @@ public class Menu {
                             System.out.println("\n👋 Até mais!\n");
                             break;
                         case 1:
-                            System.out.println("\nCadastrar");
+                            ProfissionalMentor mentorCadastro = new ProfissionalMentor();
+                            Utils.rotinaCadastroUsuario(mentorCadastro, TipoUsuarioEnum.MENTOR);
+                            Utils.rotinaCadastroMentor(mentorCadastro);
+                            usuarioServico.cadastrar(mentorCadastro);
+
                             break;
                         case 2:
                             System.out.println("\nListar um");
+                            int idMentor = scanner.nextInt("Selecione o ID do mentor a ser consultado: ");
+                            System.out.println(usuarioServico.listarUm((long) idMentor));
+                            sc.nextLine();
+
                             break;
                         case 3:
                             System.out.println("\nListar todos");
-                            sc.close();
+                            usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.MENTOR);
+                            scanner.nextLine();
+
                             break;
                         case 4:
                             System.out.println("\nAtualizar");
+
+                            int idMentorAtualizar = scanner.nextInt("Selecione o ID do Mentor a ser atualizado: ");
+                            ProfissionalMentor mentorASerAtualizado = (ProfissionalMentor) usuarioServico.listarUm((long) idMentor);
+                            Utils.rotinaCadastroMentor(mentorASerAtualizado);
+
                             break;
                         case 5:
                             System.out.println("\nDeletar");
+
+                            int idUsuarioExcluido = scanner.nextInt("Selecione o ID do Mentor a ser excluído: ");
+                            usuarioServico.deletar((long) idUsuarioExcluido);
+
                             break;
                         case 6:
                             break;
