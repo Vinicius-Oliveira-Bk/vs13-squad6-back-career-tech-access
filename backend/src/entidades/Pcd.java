@@ -3,6 +3,7 @@ package entidades;
 import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Pcd extends Cliente {
@@ -17,7 +18,7 @@ public class Pcd extends Cliente {
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;
     }
 
-    public Pcd(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String tipoDeficiencia, String certificadoDeficienciaGov) {
+    public Pcd(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String tipoDeficiencia, String certificadoDeficienciaGov) {
         super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
         this.tipoDeficiencia = tipoDeficiencia;
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;

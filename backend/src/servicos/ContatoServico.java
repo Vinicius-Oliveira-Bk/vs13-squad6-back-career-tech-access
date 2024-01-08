@@ -1,47 +1,44 @@
 package servicos;
 
-import entidades.Contato;
-
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
+
+import entidades.Contato;
+import utils.Validacoes;
 
 public class ContatoServico {
-    private static ArrayList<Contato> lista = new ArrayList<Contato>();
+    private static ArrayList<Contato> lista = new ArrayList<>();
 
     public void cadastrar(Contato contato) {
-        if (contato.getDescricao() == null) {
-            throw new IllegalArgumentException("🚫 A descrição do contato não pode ser nula!");
-        }
-        if (contato.getTelefone() == null) {
-            throw new IllegalArgumentException("🚫 O número de telefone não pode ser nula!");
-        }
-        if (contato.getTipo() == null) {
-            throw new IllegalArgumentException("🚫 O tipo do contato deve ser informado!");
+        if (!Validacoes.validarContato(contato)) {
+            return;
         }
         lista.add(contato);
         System.out.println("✅ Contato adicionado com sucesso!");
     }
 
-    public Contato listarUm(long id) {
+    public void listarUm(long id) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
-            throw new NoSuchElementException("🚫 Não há nenhum contato com o id informado!");
+            System.err.println("🚫 Não há nenhum contato com o id informado!");
+            return;
         }
-
         System.out.println("✅ Contato Encontrado.");
-        return lista.stream().filter(x -> x.getId() == id).findFirst().get();
+        System.out.println(lista.stream().filter(x -> x.getId() == id).findFirst().get());
     }
 
-    public ArrayList<Contato> listarTodos() {
+    public void listarTodos() {
         if (lista.isEmpty()) {
             System.out.println("🚫 A lista está vazia!");
-            return null;
+            return;
         }
-        return lista;
+        for (Contato contato : lista) {
+            System.out.println(contato);
+        }
     }
 
     public void atualizar(long id, Contato contatoNovo) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
-            throw new NoSuchElementException("🚫 Não há nenhum contato com o id informado!");
+            System.err.println("🚫 Não há nenhum contato com o id informado!");
+            return;
         }
 
         Contato contato = lista.stream().filter(x -> x.getId() == id).findFirst().get();
@@ -53,9 +50,9 @@ public class ContatoServico {
 
     public void deletar(long id) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
-            throw new NoSuchElementException("🚫 Não há nenhum contato com o id informado!");
+            System.err.println("🚫 Não há nenhum contato com o id informado!");
+            return;
         }
-
         lista.remove((int) id);
         System.out.println("✅ Contato removido com sucesso!");
     }

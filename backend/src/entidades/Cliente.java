@@ -10,25 +10,19 @@ import java.util.ArrayList;
 public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     private PlanoEnum plano;
     private String interesses;
-    private String imagemDocummento;
+    private String imagemDocumento;
     private boolean controleParental;
     private boolean acessoPcd;
 
     public Cliente() {}
 
-    public Cliente(PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
-        this.plano = plano;
-        this.interesses = interesses;
-        this.imagemDocummento = imagemDocummento;
-        this.controleParental = controleParental;
-        this.acessoPcd = acessoPcd;
-    }
-
-    public Cliente(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
+            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses,
+            String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         super();
         this.plano = plano;
         this.interesses = interesses;
-        this.imagemDocummento = imagemDocummento;
+        this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
     }
@@ -49,15 +43,15 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.interesses = interesses;
     }
 
-    public String getImagemDocummento() {
-        return imagemDocummento;
+    public String getImagemDocumento() {
+        return imagemDocumento;
     }
 
-    public void setImagemDocummento(String imagemDocummento) {
-        this.imagemDocummento = imagemDocummento;
+    public void setImagemDocumento(String imagemDocummento) {
+        this.imagemDocumento = imagemDocummento;
     }
 
-    public boolean isControleParental() {
+    public boolean getControleParental() {
         return controleParental;
     }
 
@@ -65,7 +59,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.controleParental = controleParental;
     }
 
-    public boolean isAcessoPcd() {
+    public boolean getAcessoPcd() {
         return acessoPcd;
     }
 
@@ -129,11 +123,11 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     @Override
     public String toString() {
-        return  super.toString() +
+        return super.toString() +
                 "\n\tPlano .................: " + this.plano +
                 "\n\tInteresses ............: " + this.interesses.toUpperCase() +
-                "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO")  +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd  ? "SIM" : "NÃO");
+                "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO") +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd ? "SIM" : "NÃO");
     }
 
 }

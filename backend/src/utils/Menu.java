@@ -1,30 +1,28 @@
 package utils;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import entidades.Estudante;
 import entidades.ProfissionalRealocacao;
-import entidades.Usuario;
 import enums.PlanoEnum;
-import enums.TipoEstudanteEnum;
 import enums.TipoUsuarioEnum;
 import servicos.ContatoServico;
 import servicos.EnderecoServico;
+import servicos.ProfissionalRealocacaoServico;
 import servicos.UsuarioServico;
 
 public class Menu {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CustomScanner scanner = new CustomScanner();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         UsuarioServico usuarioServico = new UsuarioServico();
         ContatoServico contatoServico = new ContatoServico();
         EnderecoServico enderecoServico = new EnderecoServico();
+        ProfissionalRealocacaoServico profissionalRealocacaoServico = new ProfissionalRealocacaoServico();
 
-        int opcao;
+        int opcao, idUsuario;
 
         do {
             Utils.limparConsole();
@@ -45,7 +43,7 @@ public class Menu {
                         case 0:
                             System.out.println("\n👋 Até mais!\n");
                             break;
-                        case 1: 
+                        case 1:
                             usuarioServico.listarTodos();
                             sc.nextLine();
                             break;
@@ -68,7 +66,7 @@ public class Menu {
                                     usuarioServico.cadastrar(estudante);
                                     break;
                                 case 2:
-                                    int idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
+                                    idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
                                     System.out.println(usuarioServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
@@ -78,12 +76,14 @@ public class Menu {
                                     break;
                                 case 4:
                                     int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
-                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
+                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico
+                                            .listarUm((long) idEstudante);
                                     Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
-                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
+                                    int idUsuarioExcluido = scanner
+                                            .nextInt("Selecione o ID do estudante a ser excluído: ");
                                     usuarioServico.deletar((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
@@ -145,22 +145,60 @@ public class Menu {
                                     usuarioServico.cadastrar(profissionalRealocacao);
                                     break;
                                 case 2:
-                                    int idUsuario = scanner.nextInt("Selecione o ID do profissional a ser consultado: ");
+                                    idUsuario = scanner
+                                            .nextInt("Selecione o ID do profissional a ser consultado: ");
                                     System.out.println(usuarioServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
                                 case 3:
                                     usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PROFISSIONAL);
                                     sc.nextLine();
+                                    profissionalRealocacaoServico.listarTodos();
                                     break;
                                 case 4:
-                                    int idProfissionalRealocacao = scanner.nextInt("Selecione o ID do Profissional a ser atualizado: ");
-                                    ProfissionalRealocacao profissionalRealocacaoASerAtualizado = (ProfissionalRealocacao) usuarioServico.listarUm((long) idProfissionalRealocacao);
+                                    int idProfissionalRealocacao = scanner
+                                            .nextInt("Selecione o ID do Profissional a ser atualizado: ");
+                                    ProfissionalRealocacao profissionalRealocacaoASerAtualizado = (ProfissionalRealocacao) usuarioServico
+                                            .listarUm((long) idProfissionalRealocacao);
                                     Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoASerAtualizado);
                                     sc.nextLine();
+                                    idUsuario = scanner
+                                            .nextInt("Informe o id do profissional em realocação que deseja atualizar");
+                                    profissionalRealocacaoServico.listarUm(idUsuario);
+                                    ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
+
+                                    profissionalRealocacaoAtualizar.setNome(scanner.nextLine("Informe seu nome"));
+                                    profissionalRealocacaoAtualizar.setCpf(scanner.nextLine("Informe seu Cpf"));
+                                    profissionalRealocacaoAtualizar.setDataDeNascimento(LocalDate
+                                            .parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
+                                    profissionalRealocacaoAtualizar.setEnderecos(null);
+                                    profissionalRealocacaoAtualizar.setContatos(null);
+                                    profissionalRealocacaoAtualizar.setEmail(scanner.nextLine("Informe seu email"));
+                                    profissionalRealocacaoAtualizar.setTipo(TipoUsuarioEnum.fromValor(2)); // chumbado
+                                    System.out.println("1 - Gratuito");
+                                    System.out.println("2 - Básico");
+                                    System.out.println("3 - Premium");
+                                    profissionalRealocacaoAtualizar.setPlano(PlanoEnum.fromValor(
+                                            scanner.nextInt("Informe o número correspondente ao seu plano")));
+                                    profissionalRealocacaoAtualizar
+                                            .setInteresses(scanner.nextLine("Informe seus interesses"));
+                                    profissionalRealocacaoAtualizar.setImagemDocumento(
+                                            scanner.nextLine("Informe o link da imagem do seu documento"));
+                                    profissionalRealocacaoAtualizar.setControleParental(false);
+                                    profissionalRealocacaoAtualizar.setAcessoPcd(false);
+                                    profissionalRealocacaoAtualizar
+                                            .setProfissao(scanner.nextLine("Informe sua profissão"));
+                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(
+                                            scanner.nextLine("Informe seu objetivo profissional"));
+                                    profissionalRealocacaoServico.atualizar(idUsuario, profissionalRealocacaoAtualizar);
                                     break;
                                 case 5:
-                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do Profissional a ser excluído: ");
+                                    System.out.println("\nDeletar");
+                                    int idUsuarioDeletar = scanner
+                                            .nextInt("Informe o id do profissional em realocação que deseja deletar");
+                                    profissionalRealocacaoServico.deletar(idUsuarioDeletar);
+                                    int idUsuarioExcluido = scanner
+                                            .nextInt("Selecione o ID do Profissional a ser excluído: ");
                                     usuarioServico.deletar((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
@@ -196,8 +234,6 @@ public class Menu {
                             break;
                         case 3:
                             System.out.println("\nListar todos");
-                            usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.MENTOR);
-                            sc.nextLine();
                             sc.close();
                             break;
                         case 4:

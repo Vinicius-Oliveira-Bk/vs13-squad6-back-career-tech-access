@@ -1,8 +1,6 @@
 package servicos;
 
-import entidades.Contato;
-import entidades.Endereco;
-import entidades.Usuario;
+import entidades.*;
 import enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
@@ -40,8 +38,6 @@ public class UsuarioServico {
     }
 
     public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
-        // var tiposDeUsuarios = TipoUsuarioEnum.values();
-
         if (lista.isEmpty()) {
             System.err.println("🚫 Nenhum usuário cadastrado!");
             return;
@@ -53,8 +49,8 @@ public class UsuarioServico {
         }
 
         lista.stream()
-            .filter(usuario -> usuario.getTipo() == tipoUsuario)
-            .forEach(System.out::println);
+                .filter(usuario -> usuario.getTipo() == tipoUsuario)
+                .forEach(System.out::println);
     }
 
     public void atualizar(long id, Usuario usuarioAtualiza) {

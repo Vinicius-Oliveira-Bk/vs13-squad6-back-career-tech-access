@@ -8,10 +8,11 @@ import java.util.List;
 public class EnderecoServico {
     private final ArrayList<Endereco> enderecos = new ArrayList<>();
 
-    public EnderecoServico() {}
+    public EnderecoServico() {
+    }
 
     public void cadastrar(Endereco endereco) {
-        if(endereco == null) {
+        if (endereco == null) {
             System.err.println("🚫 O endereço não pode ser nulo!");
             return;
         }
@@ -58,7 +59,7 @@ public class EnderecoServico {
     }
 
     public void deletar(Long id) {
-        if(enderecos.isEmpty()) {
+        if (enderecos.isEmpty()) {
             System.err.println("🚫 A lista de endereços está vazia!");
             return;
         }
@@ -67,4 +68,3 @@ public class EnderecoServico {
         System.out.println("✅ Endereço deletado!");
     }
 }
-    
