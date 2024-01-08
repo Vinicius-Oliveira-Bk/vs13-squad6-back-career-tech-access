@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class PcdServico {
     private ArrayList<Pcd> lista = new ArrayList<>();
     UsuarioServico usuarioServico = new UsuarioServico();
+
     public void cadastrar(Pcd pcd) {
         if (pcd == null) {
             System.err.println("🚫 O usuário não pode ser nulo!");
