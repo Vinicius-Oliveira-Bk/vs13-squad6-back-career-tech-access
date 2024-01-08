@@ -56,6 +56,11 @@ public class Menu {
                                     break;
                                 case 1:
                                     System.out.println("\nCadastrar");
+
+                                    // Exemplo de uso do CustomScanner
+                                    String nome = scanner.nextLine("Digite o nome do estudante");
+                                    System.out.println(nome);
+
                                     break;
                                 case 2:
                                     System.out.println("\nListar um");

@@ -21,10 +21,11 @@ public abstract class Utils {
     public static void selecionarTipoCliente() {
         System.out.println("┏━━━━━━━━━━━ SELECIONE O TIPO DE CLIENTE ━━━━━━━━━━━┓");
         System.out.println("┃ 0 - Sair                                          ┃");
-        System.out.println("┃ 1 - Estudante                                     ┃");
-        System.out.println("┃ 2 - PCD (Pessoa com Deficiência)                  ┃");
-        System.out.println("┃ 3 - Profissional em realocação                    ┃");
-        System.out.println("┃ 4 - Voltar ao menu principal                      ┃");
+        System.out.println("┃ 1 - Geral (todos)                                 ┃");    
+        System.out.println("┃ 2 - Estudante                                     ┃");
+        System.out.println("┃ 3 - PCD (Pessoa com Deficiência)                  ┃");
+        System.out.println("┃ 4 - Profissional em realocação                    ┃");
+        System.out.println("┃ 5 - Voltar ao menu principal                      ┃");
         System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     }
 

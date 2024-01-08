@@ -34,16 +34,38 @@ public class UsuarioServico {
         }
     }
 
-    // TODO: implementar mensagens de nulo/sucesso com emojis
     public void listarTodos() {
+        if (lista.isEmpty()) {
+            System.err.println("🚫 Nenhum usuário cadastrado!");
+            return;
+        }
+
         for (Usuario usuario : lista) {
             System.out.println(usuario);
         }
     }
 
-    // TODO: servirá para listar todo usuário por tipo
     public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
-        
+        var tiposDeUsuarios = TipoUsuarioEnum.values();
+
+        if (lista.isEmpty()) {
+            System.err.println("🚫 Nenhum usuário cadastrado!");
+            return;
+        }
+
+        if (tipoUsuario == null) {
+            System.err.println("🚫 Tipo de usuário não pode ser nulo!");
+            return;
+        }
+
+        if(!tiposDeUsuarios.equals(tipoUsuario)) {
+            System.err.println("🚫 Tipo de usuário não encontrado!");
+            return;
+        }
+
+        lista.stream()
+            .filter(usuario -> usuario.getTipo() == tipoUsuario)
+            .forEach(System.out::println);
     }
 
     public void atualizar(long id, Usuario usuarioAtualiza) {
