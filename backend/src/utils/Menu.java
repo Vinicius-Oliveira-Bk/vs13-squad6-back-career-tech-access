@@ -210,8 +210,8 @@ public class Menu {
                             System.out.println("\nAtualizar");
 
                             int idMentor = scanner.nextInt("Selecione o ID do Mentor a ser atualizado: ");
-                            ProfissionalRealocacao mentorASerAtualizado = (ProfissionalRealocacao) usuarioServico.listarUm((long) idMentor);
-                            Utils.rotinaCadastroProfissionalRealocacao(mentorASerAtualizado);
+                            ProfissionalMentor mentorASerAtualizado = (ProfissionalMentor) usuarioServico.listarUm((long) idMentor);
+                            Utils.rotinaCadastroMentor(mentorASerAtualizado);
 
                             break;
                         case 5:
