@@ -1,13 +1,7 @@
-import entidades.Cliente;
-import entidades.Contato;
-import entidades.Endereco;
+import entidades.*;
 
-import entidades.Pcd;
-import enums.AreaAtuacaoEnum;
-import enums.PlanoEnum;
-import enums.TipoEnum;
+import enums.*;
 
-import enums.TipoUsuarioEnum;
 import servicos.ContatoServico;
 import servicos.EnderecoServico;
 import servicos.UsuarioServico;
@@ -29,30 +23,17 @@ public class Main {
         ContatoServico contatoServico = new ContatoServico();
         EnderecoServico enderecoServico = new EnderecoServico();
 
-        ArrayList<Endereco> listaEndereco = new ArrayList<>();
-        ArrayList<Contato> listaContato = new ArrayList<>();
+        ArrayList<Endereco> enderecosList = new ArrayList<>();
+        ArrayList<Contato> contatosList = new ArrayList<>();
 
-        // Cadastrando PDC´s
-        Pcd pcd1 = new Pcd("Maria Joana Texeira", "06497895622", null, null, null, "mariatexeira@gmail.com", TipoUsuarioEnum.PCD, PlanoEnum.GRATUITO, "vazio", "vazio", true, true, "Amputação da perna", "vazio");
-        Pcd pcd2 = new Pcd("João Alves Neves", "06403502308", null, null, null, "joaoneves@gmail.com", TipoUsuarioEnum.PROFISSIONAL, PlanoEnum.PREMIUM, "vazio", "vazio", true, true, "Amputação da perna", "vazio");
-        Pcd pcd3 = new Pcd("Carlos Maria Lima", "12345688", null, null, null, "carloslima@hotmail.com", TipoUsuarioEnum.ESTUDANTE, PlanoEnum.GRATUITO, "vazio", "vazio", true, true, "Amputação da perna", "vazio");
-        Pcd pcd4 = new Pcd("Ana Carolina Almeida", "31565423176", null, null, null, "anaalmeida1@gmail.com", TipoUsuarioEnum.PROFISSIONAL, PlanoEnum.PREMIUM, "vazio", "vazio", true, true, "Amputação da perna", "vazio");
-        Pcd pcd5 = new Pcd("Geraldo Nobrega Sousa", "20345489733", null, null, null, "geraldosousa@gmail.com", TipoUsuarioEnum.PROFISSIONAL, PlanoEnum.PREMIUM, "vazio", "vazio", true, true, "Amputação da perna", "vazio");
-
-        usuarioServico.cadastrar(pcd1);
-        usuarioServico.cadastrar(pcd2);
-        usuarioServico.cadastrar(pcd3);
-        usuarioServico.cadastrar(pcd4);
-        usuarioServico.cadastrar(pcd5);
-
-        Pcd pcd = new Pcd();
+        ProfissionalMentor profissionalMentor = new ProfissionalMentor();
 
         System.out.println("\nDados do usuário:");
         System.out.print("Insira o nome do usuário: ");
-        pcd.setNome(customScanner.nextLine());
+        profissionalMentor.setNome(customScanner.nextLine());
 
         System.out.print("Insira o cpf: ");
-        pcd.setCpf(customScanner.nextLine());
+        profissionalMentor.setCpf(customScanner.nextLine());
 
         System.out.print("Insira a data de nascimento: ");
 
@@ -64,7 +45,7 @@ public class Main {
 
         if (matcher.matches()) {
             LocalDate dataNascimento = LocalDate.parse(dataNascimentoString, formatter);
-            pcd.setDataDeNascimento(dataNascimento);
+            profissionalMentor.setDataDeNascimento(dataNascimento);
         } else {
             System.err.println("Formato inválido. Use o formato dd-MM-yyyy.");
         }
@@ -131,73 +112,37 @@ public class Main {
         System.out.println();
         contatoServico.cadastrar(contato);
 
-        // Cadastrando um cliente pcd
-        System.out.println("\nDados do PCD:");
-        System.out.print("Insira um plano (1- Gratuito; 2- Básico; 3- Premium): ");
-        pcd.setPlano(PlanoEnum.fromValor(customScanner.nextInt()));
-        pcd.setInteresses("TI");
+        // Cadastrando um profissional mentor
+        System.out.println("Informe sua área de atuação (1 - TI, 2 - SAUDE, 3 - EDUCACAO, 4 - FINANCAS, 5 - MARKETING, 6 - JURIDICO, 7 - ENGENHARIA, 8 - DESIGN, 9 - COMERCIO, 10 - MEIO_AMBIENTE, 11 - CONSULTORIA, 12 - RH, 13 - OUTROS: ");
+        int areaAtuacao = customScanner.nextInt();
+        profissionalMentor.setAreaAtuacao(AreaAtuacaoEnum.fromValor(areaAtuacao));
 
-        System.out.print("Informe o link do documento: ");
-        pcd.setImagemDocummento(customScanner.nextLine());
+        System.out.println("Informe seu nível de experiência (1 - JUNIOR, 2 - PLENO, 3 - SENIOR: ");
+        int nivelExperiencia = customScanner.nextInt();
+        profissionalMentor.setNivelExperienciaEnum(NivelExperienciaEnum.fromValor(nivelExperiencia));
 
-        System.out.print("Maior de 18 anos (1- Sim; 2- Não): ");
-        opcao = customScanner.nextLine();
-        if (opcao.equals("1")) {
-            pcd.setControleParental(true);
-        } else if (opcao.equals("2")) {
-            pcd.setControleParental(false);
-        } else {
-            System.err.println("Opção inválida!");
+        System.out.println("Informe o nº da sua carteira de trabalho: ");
+        profissionalMentor.setCarteiraDeTrabalho(customScanner.nextLine());
+
+        System.out.println("Quantos certificados você vai informar? ");
+        int quantidadeCertificados = customScanner.nextInt();
+
+        ArrayList<String> certificadosList = new ArrayList<>();
+
+        for (int i = 0; i < quantidadeCertificados; i++) {
+            System.out.println("Informe o link do seu certificado: ");
+            String linkCertificado = customScanner.nextLine();
+            certificadosList.add(linkCertificado);
         }
 
-        System.out.print("Você é portador de deficiência (1- Sim; 2- Não): ");
-        opcao = customScanner.nextLine();
-        if (opcao.equals("1")) {
-            pcd.setAcessoPcd(true);
-        } else if (opcao.equals("2")) {
-            pcd.setAcessoPcd(false);
-        } else {
-            System.err.println("Opção inválida!");
-        }
-
-        System.out.print("Possui certificado de deficiência (1- Sim; 2- Não): ");
-        opcao = customScanner.nextLine();
-        if (opcao.equals("1")) {
-            pcd.setAcessoPcd(true);
-        } else if (opcao.equals("2")) {
-            pcd.setAcessoPcd(false);
-        } else {
-            System.err.println("Opção inválida!");
-        }
-
-        System.out.print("Informe o tipo de deficiência: ");
-        pcd.setTipoDeficiencia(customScanner.nextLine());
+        profissionalMentor.setCertificadosDeCapacitacao(certificadosList);
 
         System.out.println();
-        usuarioServico.cadastrar(pcd);
+        usuarioServico.cadastrar(profissionalMentor);
         System.out.println();
 
         usuarioServico.listarTodos();
 
-//        listaEndereco.add(customScanner.nextLine());
-//
-//        System.out.print("Insira o contato: ");
-//        listaContato.add();
-//
-//        System.out.print("Insira o email: ");
-//        pcd.setEmail(customScanner.nextLine());
-//
-//
-//
-//
-//
-//        usuarioServico.cadastrar(pcd1);
-//        usuarioServico.cadastrar(pcd2);
-//
-//        // Adicionando alguns contatos no usuário
-//        Contato contato1 = new Contato("teste1", "99999999999", null);
-//        Contato contato2 = new Contato("teste2", "22222222222", null);
-//
 //        // Vinculando o contato com o usuário
 //        usuarioServico.vincularContato(pcd1, contato1);
 //        usuarioServico.vincularContato(pcd1, contato2);
