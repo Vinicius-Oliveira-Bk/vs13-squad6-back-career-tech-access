@@ -118,25 +118,31 @@ public class Menu {
                                     System.out.println("\n👋 Até mais!\n");
                                     break;
                                 case 1:
-                                    System.out.println("\nCadastrar");
+                                    Estudante estudante = new Estudante();
+                                    Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.PCD);
+                                    Utils.rotinaCadastroCliente(estudante);
+                                    Utils.rotinaCadastroEstudante(estudante);
+                                    usuarioServico.cadastrar(estudante);
                                     break;
                                 case 2:
-                                    System.out.println("\nListar um");
-                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja alterar: ");
-                                    pcdServico.listarUm(idUsuario);
+                                    idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
+                                    System.out.println(usuarioServico.listarUm((long) idUsuario));
+                                    sc.nextLine();
                                     break;
                                 case 3:
-                                    System.out.println("\nListar todos");
                                     usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PCD);
+                                    sc.nextLine();
                                     break;
                                 case 4:
-                                    System.out.println("\nAtualizar");
-                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja alterar: ");
+                                    int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
+                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
+                                    Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
+                                    sc.nextLine();
                                     break;
                                 case 5:
-                                    System.out.println("\nDeletar");
-                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja excluir: ");
-                                    pcdServico.deletar(idUsuario);
+                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
+                                    usuarioServico.deletar((long) idUsuarioExcluido);
+                                    sc.nextLine();
                                     break;
                                 case 6:
                                     break;

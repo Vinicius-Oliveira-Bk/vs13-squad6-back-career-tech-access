@@ -159,7 +159,7 @@ public abstract class Utils {
             cliente.setPlano(planoEscolhido);
 
             cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
-            cliente.setImagemDocummento(scanner.nextLine("Digite o link da imagem do seu documento: "));
+            cliente.setImagemDocumento(scanner.nextLine("Digite o link da imagem do seu documento: "));
             cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - SIM / 2 - NÃO)? ").equals("1"));
             cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - SIM / 2 - NÃO)? ").equals("1"));
         } catch (Exception e) {

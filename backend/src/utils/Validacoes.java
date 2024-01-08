@@ -1,10 +1,8 @@
 package utils;
 
-<<<<<<< HEAD
+
 import entidades.Contato;
-=======
 import java.time.LocalDate;
->>>>>>> feature/feat-implementar-operacoes
 
 public class Validacoes {
     public static boolean validarData(LocalDate data) {
