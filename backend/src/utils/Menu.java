@@ -163,6 +163,7 @@ public class Menu {
                                     profissionalRealocacaoServico.listarUm(idUsuario);
                                     
                                     ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
+                                
                                     profissionalRealocacaoAtualizar.setNome(scanner.nextLine("Informe seu nome"));
                                     profissionalRealocacaoAtualizar.setCpf(scanner.nextLine("Informe seu Cpf"));
                                     profissionalRealocacaoAtualizar.setDataDeNascimento(LocalDate.parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
