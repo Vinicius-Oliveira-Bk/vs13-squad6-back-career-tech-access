@@ -4,6 +4,7 @@ import entidades.Contato;
 import entidades.Endereco;
 import entidades.Usuario;
 import enums.TipoUsuarioEnum;
+import utils.Validacoes;
 
 import java.util.ArrayList;
 
@@ -14,8 +15,11 @@ public class UsuarioServico {
         if (usuario == null) {
             System.err.println("🚫 O usuário não pode ser nulo!");
         } else {
-            lista.add(usuario);
-            System.out.println("✅ Usuário cadastrado!");
+            // Validate email before adding the user
+            if (Validacoes.validarEmail(usuario.getEmail())) {
+                lista.add(usuario);
+                System.out.println("✅ Usuário cadastrado!");
+            }
         }
     }
 

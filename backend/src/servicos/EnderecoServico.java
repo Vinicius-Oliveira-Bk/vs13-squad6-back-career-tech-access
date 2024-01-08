@@ -1,6 +1,7 @@
 package servicos;
 
 import entidades.Endereco;
+import utils.Validacoes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,7 @@ public class EnderecoServico {
     public EnderecoServico() {}
 
     public void cadastrar(Endereco endereco) {
-        if(endereco == null) {
-            System.err.println("🚫 O endereço não pode ser nulo!");
+        if (!Validacoes.validarEndereco(endereco)) {
             return;
         }
 
