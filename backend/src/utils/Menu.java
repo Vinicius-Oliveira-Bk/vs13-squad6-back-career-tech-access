@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import entidades.Estudante;
+import entidades.Pcd;
 import entidades.ProfissionalRealocacao;
 import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
 import servicos.ContatoServico;
 import servicos.EnderecoServico;
+import servicos.PcdServico;
 import servicos.ProfissionalRealocacaoServico;
 import servicos.UsuarioServico;
 
@@ -23,6 +25,8 @@ public class Menu {
         ProfissionalRealocacaoServico profissionalRealocacaoServico = new ProfissionalRealocacaoServico();
 
         int opcao, idUsuario;
+
+        PcdServico pcdServico = new PcdServico();
 
         do {
             Utils.limparConsole();
@@ -104,18 +108,71 @@ public class Menu {
                                     break;
                                 case 1:
                                     System.out.println("\nCadastrar");
+                                    Pcd pcd = new Pcd();
+
+                                    pcd.setNome(scanner.nextLine("Informe seu nome"));
+                                    pcd.setCpf(scanner.nextLine("Informe seu Cpf"));
+                                    pcd.setDataDeNascimento(LocalDate.parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
+                                    pcd.setEnderecos(null);
+                                    pcd.setContatos(null);
+                                    pcd.setEmail(scanner.nextLine("Informe seu email"));
+                                    pcd.setTipo(TipoUsuarioEnum.fromValor(3));//chumbado
+
+                                    System.out.println("1 - Gratuito");
+                                    System.out.println("2 - Básico");
+                                    System.out.println("3 - Premium");
+
+                                    pcd.setPlano(PlanoEnum.fromValor(scanner.nextInt("Informe o número correspondente ao seu plano")));
+                                    pcd.setInteresses(scanner.nextLine("Informe seus interesses"));
+                                    pcd.setImagemDocumento(scanner.nextLine("Informe o link da imagem do seu documento"));
+                                    pcd.setControleParental(false);
+                                    pcd.setAcessoPcd(false);
+                                    pcd.setCertificadoDeficienciaGov(scanner.nextLine("Informe o seu certificado"));
+                                    pcd.setTipoDeficiencia(scanner.nextLine("Informe o seu tipo de deficiência"));
+
+                                    pcdServico.cadastrar(pcd);
                                     break;
                                 case 2:
                                     System.out.println("\nListar um");
+                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja alterar: ");
+                                    pcdServico.listarUm(idUsuario);
                                     break;
                                 case 3:
                                     System.out.println("\nListar todos");
+                                    usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PCD);
                                     break;
                                 case 4:
                                     System.out.println("\nAtualizar");
+                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja alterar: ");
+
+                                    Pcd pcdAtualizado = new Pcd();
+
+                                    pcdAtualizado.setNome(scanner.nextLine("Informe seu nome"));
+                                    pcdAtualizado.setCpf(scanner.nextLine("Informe seu Cpf"));
+                                    pcdAtualizado.setDataDeNascimento(LocalDate.parse(scanner.nextLine("Informe sua data de nascimento (yyyy-mm-dd)")));
+                                    pcdAtualizado.setEnderecos(null);
+                                    pcdAtualizado.setContatos(null);
+                                    pcdAtualizado.setEmail(scanner.nextLine("Informe seu email"));
+                                    pcdAtualizado.setTipo(TipoUsuarioEnum.fromValor(3));//chumbado
+
+                                    System.out.println("1 - Gratuito");
+                                    System.out.println("2 - Básico");
+                                    System.out.println("3 - Premium");
+
+                                    pcdAtualizado.setPlano(PlanoEnum.fromValor(scanner.nextInt("Informe o número correspondente ao seu plano")));
+                                    pcdAtualizado.setInteresses(scanner.nextLine("Informe seus interesses"));
+                                    pcdAtualizado.setImagemDocumento(scanner.nextLine("Informe o link da imagem do seu documento"));
+                                    pcdAtualizado.setControleParental(false);
+                                    pcdAtualizado.setAcessoPcd(false);
+                                    pcdAtualizado.setCertificadoDeficienciaGov(scanner.nextLine("Informe o seu certificado"));
+                                    pcdAtualizado.setTipoDeficiencia(scanner.nextLine("Informe o seu tipo de deficiência"));
+
+                                    pcdServico.atualizar(idUsuario, pcdAtualizado);
                                     break;
                                 case 5:
                                     System.out.println("\nDeletar");
+                                    idUsuario = scanner.nextInt("Informe o ID do usuário que deseja excluir: ");
+                                    pcdServico.deletar(idUsuario);
                                     break;
                                 case 6:
                                     break;
