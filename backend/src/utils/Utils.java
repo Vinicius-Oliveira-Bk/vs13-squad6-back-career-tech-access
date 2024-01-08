@@ -2,16 +2,12 @@ package utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import entidades.Cliente;
-import entidades.Estudante;
-import entidades.ProfissionalRealocacao;
-import entidades.Usuario;
-import enums.PlanoEnum;
-import enums.TipoEstudanteEnum;
-import enums.TipoUsuarioEnum;
+import entidades.*;
+import enums.*;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();
@@ -191,6 +187,21 @@ public abstract class Utils {
     public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
         profissionalRealocacao.setProfissao(scanner.nextLine("Digite a sua profissão: "));
         profissionalRealocacao.setObjetivoProfissional(scanner.nextLine("Digite o seu objetivo profissional: "));
+    }
+
+    public static void rotinaCadastroMentor(ProfissionalMentor mentor) {
+        // TODO: revisar futuramente
+        mentor.setCarteiraDeTrabalho(scanner.nextLine("Digite sua carteira de trabalho: "));
+
+        AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
+        mentor.setAreaAtuacao(areaAtuacao);
+
+        ArrayList<String> certificadosDeCapacitacao = new ArrayList<String>();
+        mentor.setCertificadosDeCapacitacao(certificadosDeCapacitacao);
+
+        String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
+        NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
+        mentor.setNivelExperienciaEnum(nivelExperiencia);
     }
 
 
