@@ -1,6 +1,6 @@
-package servicos;
+package controller;
 
-import entidades.Endereco;
+import model.entidades.Endereco;
 
 import java.util.ArrayList;
 import java.util.List;

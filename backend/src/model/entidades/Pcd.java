@@ -1,7 +1,7 @@
-package entidades;
+package model.entidades;
 
-import enums.PlanoEnum;
-import enums.TipoUsuarioEnum;
+import model.enums.PlanoEnum;
+import model.enums.TipoUsuarioEnum;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

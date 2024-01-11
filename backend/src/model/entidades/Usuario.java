@@ -1,10 +1,10 @@
-package entidades;
+package model.entidades;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import enums.TipoUsuarioEnum;
+import model.enums.TipoUsuarioEnum;
 import utils.Utils;
 
 public abstract class Usuario {

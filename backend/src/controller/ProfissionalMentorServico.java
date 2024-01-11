@@ -1,6 +1,6 @@
-package servicos;
+package controller;
 
-import entidades.ProfissionalMentor;
+import model.entidades.ProfissionalMentor;
 
 import java.util.ArrayList;
 

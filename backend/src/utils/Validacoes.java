@@ -1,6 +1,6 @@
 package utils;
 
-import entidades.Contato;
+import model.entidades.Contato;
 
 public class Validacoes {
     public static boolean validarContato(Contato contato) {

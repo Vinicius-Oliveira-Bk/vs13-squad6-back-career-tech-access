@@ -1,7 +1,9 @@
-package servicos;
+package controller;
 
-import entidades.*;
-import enums.TipoUsuarioEnum;
+import model.enums.TipoUsuarioEnum;
+import model.entidades.Contato;
+import model.entidades.Endereco;
+import model.entidades.Usuario;
 
 import java.util.ArrayList;
 

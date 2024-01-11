@@ -1,8 +1,8 @@
-package servicos;
+package controller;
 
 import java.util.ArrayList;
 
-import entidades.Contato;
+import model.entidades.Contato;
 import utils.Validacoes;
 
 public class ContatoServico {

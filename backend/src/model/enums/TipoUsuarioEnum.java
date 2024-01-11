@@ -1,12 +1,14 @@
-package enums;
+package model.enums;
 
-public enum TipoEstudanteEnum {
-    ENSINO_FUNDAMENTAL (1),
-    ENSINO_MEDIO (2),
-    ENSINO_SUPERIOR (3);
+public enum TipoUsuarioEnum {
+    ESTUDANTE(1),
+    PROFISSIONAL(2),
+    PCD(3),
+    MENTOR(4);
+
     private final int valor;
 
-    TipoEstudanteEnum(int valor) {
+    TipoUsuarioEnum(int valor) {
         this.valor = valor;
     }
 
@@ -14,8 +16,8 @@ public enum TipoEstudanteEnum {
         return valor;
     }
 
-    public static TipoEstudanteEnum fromValor(int valor) {
-        for (TipoEstudanteEnum tipo : values()) {
+    public static TipoUsuarioEnum fromValor(int valor) {
+        for (TipoUsuarioEnum tipo : values()) {
             if (tipo.getValor() == valor) {
                 return tipo;
             }

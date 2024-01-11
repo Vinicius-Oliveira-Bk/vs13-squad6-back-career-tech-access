@@ -1,9 +1,9 @@
-package entidades;
+package model.entidades;
 
-import enums.AreaAtuacaoEnum;
-import enums.NivelExperienciaEnum;
-import enums.TipoUsuarioEnum;
-import interfaces.IDocumentacaoProfissional;
+import model.enums.AreaAtuacaoEnum;
+import model.enums.NivelExperienciaEnum;
+import model.enums.TipoUsuarioEnum;
+import model.interfaces.IDocumentacaoProfissional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

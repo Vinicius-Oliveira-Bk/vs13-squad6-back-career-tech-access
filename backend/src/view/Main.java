@@ -1,16 +1,16 @@
-
+package view;
 
 import java.util.Scanner;
 
-import entidades.Estudante;
-import entidades.ProfissionalMentor;
-import entidades.ProfissionalRealocacao;
-import enums.TipoUsuarioEnum;
-import servicos.ContatoServico;
-import servicos.EnderecoServico;
-import servicos.PcdServico;
-import servicos.ProfissionalRealocacaoServico;
-import servicos.UsuarioServico;
+import model.entidades.Estudante;
+import model.entidades.ProfissionalMentor;
+import model.entidades.ProfissionalRealocacao;
+import model.enums.TipoUsuarioEnum;
+import controller.ContatoServico;
+import controller.EnderecoServico;
+import controller.PcdServico;
+import controller.ProfissionalRealocacaoServico;
+import controller.UsuarioServico;
 import utils.CustomScanner;
 import utils.Utils;
 

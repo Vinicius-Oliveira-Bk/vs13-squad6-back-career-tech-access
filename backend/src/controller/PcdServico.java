@@ -1,6 +1,6 @@
-package servicos;
+package controller;
 
-import entidades.Pcd;
+import model.entidades.Pcd;
 
 import java.util.ArrayList;
 
