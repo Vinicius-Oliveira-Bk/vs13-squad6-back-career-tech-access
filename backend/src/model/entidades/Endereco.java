@@ -1,6 +1,6 @@
-package entidades;
+package model.entidades;
 
-import enums.TipoEnum;
+import model.enums.TipoEnum;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

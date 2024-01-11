@@ -1,6 +1,6 @@
-package servicos;
+package controller;
 
-import entidades.ProfissionalRealocacao;
+import model.entidades.ProfissionalRealocacao;
 
 import java.util.ArrayList;
 

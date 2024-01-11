@@ -1,11 +1,11 @@
-package entidades;
+package model.entidades;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import enums.PlanoEnum;
-import enums.TipoEstudanteEnum;
-import enums.TipoUsuarioEnum;
+import model.enums.PlanoEnum;
+import model.enums.TipoEstudanteEnum;
+import model.enums.TipoUsuarioEnum;
 import utils.Utils;
 
 public class Estudante extends Cliente {

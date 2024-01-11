@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import entidades.*;
-import enums.*;
+import model.entidades.*;
+import model.enums.*;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();

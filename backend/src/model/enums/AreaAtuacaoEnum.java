@@ -1,4 +1,4 @@
-package enums;
+package model.enums;
 
 public enum AreaAtuacaoEnum {
     TI (1),

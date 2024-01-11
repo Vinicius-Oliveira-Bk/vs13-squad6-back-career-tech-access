@@ -1,8 +1,8 @@
-package entidades;
+package model.entidades;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import enums.TipoEnum;
+import model.enums.TipoEnum;
 
 public class Contato {
     private static final AtomicInteger count = new AtomicInteger(0);

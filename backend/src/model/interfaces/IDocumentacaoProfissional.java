@@ -1,4 +1,4 @@
-package interfaces;
+package model.interfaces;
 
 public interface IDocumentacaoProfissional {
     boolean validarDocumentos();
