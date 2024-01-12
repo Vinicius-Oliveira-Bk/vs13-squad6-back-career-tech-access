@@ -8,8 +8,7 @@ import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.utils.Utils;
 
 public abstract class Usuario {
-    private static final AtomicInteger counter = new AtomicInteger(0);
-    private long id;
+    private Long id;
     private String nome;
     private String cpf;
     private LocalDate dataDeNascimento;
@@ -18,13 +17,10 @@ public abstract class Usuario {
     private String email;
     private TipoUsuarioEnum tipo;
 
-    public Usuario() {
-        this.id = counter.incrementAndGet();
-    }
+    public Usuario() {}
 
     public Usuario(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
             ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
-        this.id = counter.incrementAndGet();
         this.nome = nome;
         this.cpf = cpf;
         this.dataDeNascimento = dataDeNascimento;
@@ -34,7 +30,7 @@ public abstract class Usuario {
         this.tipo = tipo;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

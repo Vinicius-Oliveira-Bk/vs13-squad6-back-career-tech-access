@@ -5,7 +5,7 @@ import com.dbc.model.enums.StatusAgendaEnum;
 import java.time.LocalDateTime;
 
 public class Agenda {
-    private long id;
+    private Long id;
     private Cliente cliente;
     private ProfissionalMentor profissionalMentor;
     private LocalDateTime dataHoraInicio;
@@ -22,11 +22,11 @@ public class Agenda {
         this.statusAgendaEnum = statusAgendaEnum;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
