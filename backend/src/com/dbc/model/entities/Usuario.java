@@ -2,41 +2,27 @@ package com.dbc.model.entities;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.dbc.model.enums.TipoUsuarioEnum;
-import com.dbc.utils.Utils;
 
 public abstract class Usuario {
-    private static final AtomicInteger counter = new AtomicInteger(0);
     private long id;
     private String nome;
-    private String cpf;
     private LocalDate dataDeNascimento;
-    private ArrayList<Endereco> enderecos = new ArrayList<>();
-    private ArrayList<Contato> contatos = new ArrayList<>();
+    private String cpf;
     private String email;
-    private TipoUsuarioEnum tipo;
+    private String senha;
+    private Character acessoPcd;
+    private Long tipoUsuario;
+    private String interesses;
+    private String imagemDocumento;
 
-    public Usuario() {
-        this.id = counter.incrementAndGet();
-    }
-
-    public Usuario(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
-            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo) {
-        this.id = counter.incrementAndGet();
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataDeNascimento = dataDeNascimento;
-        this.enderecos = enderecos;
-        this.contatos = contatos;
-        this.email = email;
-        this.tipo = tipo;
-    }
+    private ArrayList<Usuario> usuarios;
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -47,14 +33,6 @@ public abstract class Usuario {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public LocalDate getDataDeNascimento() {
         return dataDeNascimento;
     }
@@ -63,20 +41,12 @@ public abstract class Usuario {
         this.dataDeNascimento = dataDeNascimento;
     }
 
-    public ArrayList<Endereco> getEnderecos() {
-        return enderecos;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setEnderecos(ArrayList<Endereco> enderecos) {
-        this.enderecos = enderecos;
-    }
-
-    public ArrayList<Contato> getContatos() {
-        return contatos;
-    }
-
-    public void setContatos(ArrayList<Contato> contatos) {
-        this.contatos = contatos;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -87,26 +57,69 @@ public abstract class Usuario {
         this.email = email;
     }
 
-    public TipoUsuarioEnum getTipo() {
-        return tipo;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setTipo(TipoUsuarioEnum tipo) {
-        this.tipo = tipo;
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Character getAcessoPcd() {
+        return acessoPcd;
+    }
+
+    public void setAcessoPcd(Character acessoPcd) {
+        this.acessoPcd = acessoPcd;
+    }
+
+    public Long getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(Long tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getInteresses() {
+        return interesses;
+    }
+
+    public void setInteresses(String interesses) {
+        this.interesses = interesses;
+    }
+
+    public String getImagemDocumento() {
+        return imagemDocumento;
+    }
+
+    public void setImagemDocumento(String imagemDocumento) {
+        this.imagemDocumento = imagemDocumento;
+    }
+
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(ArrayList<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override
     public String toString() {
-        String dataDeNascimentoFormatada = Utils.formatarData(dataDeNascimento);
-
-        return "\t******** Usuario ********* " +
-               "\n\tId ....................: " + this.id +
-               "\n\tNome ..................: " + this.nome +
-               "\n\tContatos ..............: " + Arrays.toString(this.contatos.toArray()) +
-               "\n\tEnderecos .............: " + Arrays.toString(this.enderecos.toArray()) +
-               "\n\tCpf ...................: " + this.cpf +
-               "\n\tData de Nascimento ....: " + dataDeNascimentoFormatada +
-               "\n\tE-mail ................: " + this.email +
-               "\n\tTipo de usuario .......: " + this.tipo;
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", dataDeNascimento=" + dataDeNascimento +
+                ", cpf='" + cpf + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", acessoPcd=" + acessoPcd +
+                ", tipoUsuario=" + tipoUsuario +
+                ", interesses='" + interesses + '\'' +
+                ", imagemDocumento='" + imagemDocumento + '\'' +
+                ", usuarios=" + usuarios +
+                '}';
     }
+
 }
