@@ -1,8 +1,8 @@
-package servicos;
+package controller;
 
 import java.util.ArrayList;
 
-import entidades.ProfissionalRealocacao;
+import entities.ProfissionalRealocacao;
 
 public class ProfissionalRealocacaoServico {
     private ArrayList<ProfissionalRealocacao> lista = new ArrayList<>();

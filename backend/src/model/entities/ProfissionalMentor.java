@@ -1,4 +1,4 @@
-package entidades;
+package entities;
 
 import enums.AreaAtuacaoEnum;
 import enums.NivelExperienciaEnum;

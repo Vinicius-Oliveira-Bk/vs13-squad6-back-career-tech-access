@@ -1,4 +1,4 @@
-package entidades;
+package entities;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

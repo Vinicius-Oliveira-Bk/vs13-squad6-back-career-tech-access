@@ -1,9 +1,10 @@
-package servicos;
+package controller;
 
-import entidades.*;
 import enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
+
+import entities.*;
 
 public class UsuarioServico {
     private ArrayList<Usuario> lista = new ArrayList<>();

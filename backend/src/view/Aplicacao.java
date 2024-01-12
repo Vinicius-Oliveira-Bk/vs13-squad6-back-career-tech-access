@@ -1,13 +1,14 @@
-package utils;
+package view;
 
 import java.util.Scanner;
 
-import entidades.Estudante;
-import entidades.ProfissionalMentor;
-import entidades.ProfissionalRealocacao;
+import controller.UsuarioServico;
+import entities.Estudante;
+import entities.ProfissionalMentor;
+import entities.ProfissionalRealocacao;
 import enums.TipoUsuarioEnum;
-
-import servicos.UsuarioServico;
+import utils.CustomScanner;
+import utils.Utils;
 
 public class Aplicacao {
     public static void iniciarAplicacao() {

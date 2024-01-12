@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import entidades.*;
+import controller.UsuarioServico;
+import entities.*;
 import enums.*;
 import exceptions.EntradaUsuarioException;
-import servicos.UsuarioServico;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();

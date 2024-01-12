@@ -1,9 +1,9 @@
-package servicos;
-
-import entidades.Endereco;
+package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import entities.Endereco;
 
 public class EnderecoServico {
     private final ArrayList<Endereco> enderecos = new ArrayList<>();
