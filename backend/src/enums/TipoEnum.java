@@ -1,7 +1,6 @@
 package enums;
 
 public enum TipoEnum {
-
     RESIDENCIAL(1),
     COMERCIAL(2);
 

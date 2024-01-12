@@ -2,6 +2,7 @@ package entidades;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import enums.TipoUsuarioEnum;
@@ -101,6 +102,8 @@ public abstract class Usuario {
         return "\t******** Usuario ********* " +
                "\n\tId ....................: " + this.id +
                "\n\tNome ..................: " + this.nome +
+               "\n\tContatos ..............: " + Arrays.toString(this.contatos.toArray()) +
+               "\n\tEnderecos .............: " + Arrays.toString(this.enderecos.toArray()) +
                "\n\tCpf ...................: " + this.cpf +
                "\n\tData de Nascimento ....: " + dataDeNascimentoFormatada +
                "\n\tE-mail ................: " + this.email +

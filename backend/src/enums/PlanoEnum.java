@@ -4,6 +4,7 @@ public enum PlanoEnum {
     GRATUITO(1),
     BASICO(2),
     PREMIUM(3);
+
     private final int valor;
 
     PlanoEnum(int valor) {

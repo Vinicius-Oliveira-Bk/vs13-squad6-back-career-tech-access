@@ -1,8 +1,8 @@
 package servicos;
 
-import entidades.ProfissionalRealocacao;
-
 import java.util.ArrayList;
+
+import entidades.ProfissionalRealocacao;
 
 public class ProfissionalRealocacaoServico {
     private ArrayList<ProfissionalRealocacao> lista = new ArrayList<>();
@@ -28,6 +28,7 @@ public class ProfissionalRealocacaoServico {
                 break;
             }
         }
+
         if (!profissionalRealocacaoEncontrado) {
             System.err.println("🚫 Profissional Realocacao não encontrado!");
         }
@@ -45,7 +46,6 @@ public class ProfissionalRealocacaoServico {
     }
 
     public void atualizar(long id, ProfissionalRealocacao profissionalRealocacaoAtualiza) {
-
         for (int i = 0; i < lista.size(); i++) {
             ProfissionalRealocacao profissionalRealocacao = lista.get(i);
 
@@ -63,8 +63,7 @@ public class ProfissionalRealocacaoServico {
                 profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());
                 profissionalRealocacao.setAcessoPcd(profissionalRealocacaoAtualiza.getAcessoPcd());
                 profissionalRealocacao.setProfissao(profissionalRealocacaoAtualiza.getProfissao());
-                profissionalRealocacao
-                        .setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
+                profissionalRealocacao.setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
                 System.out.println("✅ Profissional Realocação atualizado!");
                 return;
             }

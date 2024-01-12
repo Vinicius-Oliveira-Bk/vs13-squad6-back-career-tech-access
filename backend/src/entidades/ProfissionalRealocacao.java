@@ -10,8 +10,7 @@ public class ProfissionalRealocacao extends Cliente {
     private String profissao;
     private String objetivoProfissional;
 
-    public ProfissionalRealocacao() {
-    }
+    public ProfissionalRealocacao() {}
 
     public ProfissionalRealocacao(String profissao, String objetivoProfissional) {
         this.profissao = profissao;

@@ -3,15 +3,17 @@ package utils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import entidades.*;
 import enums.*;
+import exceptions.EntradaUsuarioException;
+import servicos.UsuarioServico;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static UsuarioServico usuarioServico = new UsuarioServico();
 
     // https://www.invertexto.com/simbolos-para-copiar
     // https://www.simbolosparacopiar.com/p/simbolos-redondos-e-quadrados.html?m=1
@@ -75,7 +77,7 @@ public abstract class Utils {
         System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     }
 
-    public static Enum exibirMenuEnumDinamico(Enum tipo) {
+    public static Enum exibirMenuEnumDinamico(Enum tipo) throws EntradaUsuarioException {
         int opcaoEscolhida;
         Scanner scanner = new Scanner(System.in);
         var opcoesDoEnum = tipo.getClass().getEnumConstants();
@@ -90,45 +92,60 @@ public abstract class Utils {
 
             System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 
-            try {
-                opcaoEscolhida = scanner.nextInt();
+            opcaoEscolhida = scanner.nextInt();
 
-                if (opcaoEscolhida == 0)
-                    return null;
+            if (opcaoEscolhida == 0)
+                break;
 
-                if (opcaoEscolhida < 0 || opcaoEscolhida > opcoesDoEnum.length) {
-                    System.err.println("🚫 Entrada inválida! Insira uma opção válida.");
-                } else {
-                    return opcoesDoEnum[opcaoEscolhida - 1];
-                }
-            } catch (InputMismatchException e) {
-                System.err.println("🚫 Entrada inválida! Insira uma opção das exibidas.");
-                scanner.nextLine();
-            }
-        } while (true);
+            if (opcaoEscolhida < 0 || opcaoEscolhida > opcoesDoEnum.length)
+                throw new EntradaUsuarioException("🚫 Opção inválida! Por favor informe os valores corretamente.");
+                
+            return opcoesDoEnum[opcaoEscolhida - 1];
+        } while (opcaoEscolhida != 0);
+
+        return null;
+    }
+
+    public static String formatarData(LocalDate data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return data.format(formatter);
     }
 
     /*
      * Rotinas: funcoes que apresentam todos os atributos e regras
      * necessárias para o cadastro de uma entidade.
      */
-    public static void rotinaCadastroContatosEenderecos() {
-        /*
-         * Atributos - Contato:
-         * - descricao : String
-         * - telefone : String
-         * - tipo : TipoEnum
-         * 
-         * Atributos - Endereco:
-         * - logradouro : String
-         * - numero : String
-         * - complemento : String
-         * - cep : String
-         * - cidade : String
-         * - estado : String
-         * - pais : String
-         * - tipo : TipoEnum
-         */
+    public static void rotinaCadastroContatosEenderecos(Usuario usuario) {
+        try {
+            Contato contato = new Contato();
+            contato.setDescricao(scanner.nextLine("Digite a descrição do contato: "));
+            contato.setTelefone(scanner.nextLine("Digite o telefone de contato: "));
+
+            TipoEnum tipoContato = TipoEnum.RESIDENCIAL;
+            tipoContato = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoContato);
+            contato.setTipo(tipoContato);
+
+            usuarioServico.vincularContato(usuario, contato);
+
+            Endereco endereco = new Endereco();
+
+            endereco.setLogradouro(scanner.nextLine("Digite o logradouro do endereço: "));
+            endereco.setNumero(scanner.nextLine("Digite o número do endereço: "));
+            endereco.setComplemento(scanner.nextLine("Digite o complemento do endereço: "));
+            endereco.setCep(scanner.nextLine("Digite o CEP do endereço: "));
+            endereco.setCidade(scanner.nextLine("Digite a cidade do endereço: "));
+            endereco.setEstado(scanner.nextLine("Digite o estado do endereço: "));
+            endereco.setPais(scanner.nextLine("Digite o país do endereço: "));
+
+            TipoEnum tipoEndereco = TipoEnum.RESIDENCIAL;
+            tipoEndereco = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoEndereco);
+            endereco.setTipo(tipoEndereco);
+
+            usuarioServico.vincularEndereco(usuario, endereco);
+        } catch (Exception e) {
+            System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
+            scanner.nextLine();
+        }
     }
 
     public static void rotinaCadastroUsuario(Usuario usuario, TipoUsuarioEnum tipoUsuario) {
@@ -143,6 +160,8 @@ public abstract class Utils {
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
             usuario.setTipo(tipoUsuario);
+
+            rotinaCadastroContatosEenderecos(usuario);
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
@@ -202,11 +221,5 @@ public abstract class Utils {
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
         mentor.setNivelExperienciaEnum(nivelExperiencia);
-    }
-
-
-    public static String formatarData(LocalDate data) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return data.format(formatter);
     }
 }

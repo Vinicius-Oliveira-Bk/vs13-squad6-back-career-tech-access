@@ -10,4 +10,4 @@ public interface IDocumentacaoPessoal {
     public boolean validarImagemDocumento(String imagemDocumento);
     public boolean validarControleParental(boolean controleParental);
     public boolean validarAcessoPcd(boolean acessoPcd);
-}
+}   
