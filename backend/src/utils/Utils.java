@@ -6,12 +6,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import entidades.Cliente;
-import entidades.Estudante;
-import entidades.ProfissionalMentor;
-import entidades.ProfissionalRealocacao;
-import entidades.Usuario;
-import enums.*;
+import model.entidades.*;
+import model.enums.*;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();
@@ -160,7 +156,7 @@ public abstract class Utils {
             cliente.setPlano(planoEscolhido);
 
             cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
-            cliente.setImagemDocummento(scanner.nextLine("Digite o link da imagem do seu documento: "));
+            cliente.setImagemDocumento(scanner.nextLine("Digite o link da imagem do seu documento: "));
             cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - SIM / 2 - NÃO)? ").equals("1"));
             cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - SIM / 2 - NÃO)? ").equals("1"));
         } catch (Exception e) {
@@ -188,7 +184,13 @@ public abstract class Utils {
         estudante.setDataFim(dataFim);
     }
 
+    public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
+        profissionalRealocacao.setProfissao(scanner.nextLine("Digite a sua profissão: "));
+        profissionalRealocacao.setObjetivoProfissional(scanner.nextLine("Digite o seu objetivo profissional: "));
+    }
+
     public static void rotinaCadastroMentor(ProfissionalMentor mentor) {
+        // TODO: revisar futuramente
         mentor.setCarteiraDeTrabalho(scanner.nextLine("Digite sua carteira de trabalho: "));
 
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
@@ -202,10 +204,6 @@ public abstract class Utils {
         mentor.setNivelExperienciaEnum(nivelExperiencia);
     }
 
-    public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
-        profissionalRealocacao.setProfissao(scanner.nextLine("Digite a sua profissão: "));
-        profissionalRealocacao.setObjetivoProfissional(scanner.nextLine("Digite o seu objetivo profissional: "));
-    }
 
     public static String formatarData(LocalDate data) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
