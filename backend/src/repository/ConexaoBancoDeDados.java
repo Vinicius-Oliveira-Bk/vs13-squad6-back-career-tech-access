@@ -19,7 +19,7 @@ public class ConexaoBancoDeDados {
         //fecharConexao(connection);
     }
 
-    private static Connection conectar() {
+    public static Connection conectar() {
         Connection connection = null;
 
         try {
@@ -43,7 +43,7 @@ public class ConexaoBancoDeDados {
         return connection;
     }
 
-    private static void fecharConexao(Connection connection) {
+    public static void fecharConexao(Connection connection) {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
