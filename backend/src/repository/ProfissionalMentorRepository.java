@@ -8,10 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfissionalMentorRepository implements IRepository {
+public class ProfissionalMentorRepository implements IRepository<Integer, ProfissionalMentor> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
-        String sql = "SELECT seq_pessoa2.nextval mysequence from DUAL";
+        String sql = "SELECT SEQ_PROFISSIONAL_MENTOR.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
@@ -23,28 +23,25 @@ public class ProfissionalMentorRepository implements IRepository {
         return null;
     }
     @Override
-    public void cadastrar(Object objeto) throws BancoDeDadosException {
+    public void cadastrar(ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             Integer proximoId = this.getProximoId(con);
-            ProfissionalMentor mentor = (ProfissionalMentor) objeto;
-            // mentor.setId(proximoId);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
-                    "(ID, NOME, DATA_NASCIMENTO, CPF)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                    "(CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
+                    "VALUES(?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, (int) mentor.getId());
-            stmt.setString(2, mentor.getNome());
-            stmt.setString(3, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setString(4, mentor.getCpf());
+            stmt.setString(1, mentor.getCarteiraDeTrabalho());
+            stmt.setString(2, mentor.getNivelExperienciaEnum().toString());
+            stmt.setString(3, mentor.getCertificadosDeCapacitacao().toString());
 
             int res = stmt.executeUpdate();
-            System.out.println("adicionarPessoa.res=" + res);
+            System.out.println("adicionarMentor.res=" + res);
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -57,31 +54,30 @@ public class ProfissionalMentorRepository implements IRepository {
             }
         }
     }
-
-    public boolean atualizar(Object id, ProfissionalMentor mentor) throws BancoDeDadosException {
+    @Override
+    public boolean atualizar(Integer id, ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE PESSOA SET ");
-            sql.append(" cpf = ?,");
-            sql.append(" nome = ?,");
-            sql.append(" data_nascimento = ? ");
-            sql.append(" WHERE id_pessoa = ? ");
+            sql.append("UPDATE SET PROFISSIONAL_MENTOR");
+            sql.append(" area_atuacao = ? ");
+            sql.append(" nivel_experiencia = ?,");
+            sql.append(" carteira_trabalho = ?,");
+            sql.append(" documentos_validados = ?,");
+            sql.append(" WHERE id = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setString(1, mentor.getCpf());
-            stmt.setString(2, mentor.getNome());
-            stmt.setString(3, mentor.getEmail());
-            stmt.setString(4, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setString(5, String.valueOf(mentor.getCarteiraDeTrabalho()));
-            stmt.setInt(6, (Integer) id);
+            stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
+            stmt.setString(2, mentor.getNivelExperienciaEnum().toString());
+            stmt.setString(3, mentor.getCarteiraDeTrabalho());
+            stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
+            stmt.setInt(5, (int) mentor.getId());
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("editarPessoa.res=" + res);
+            System.out.println("editarMentor.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -107,13 +103,13 @@ public class ProfissionalMentorRepository implements IRepository {
 
             String sql = "SELECT * FROM PROFICIONAL_MENTOR";
 
-            // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 ProfissionalMentor mentor = new ProfissionalMentor();
 
-                mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
+                mentor.getId();
+                mentor.setNome(res.getString("nome"));
                 mentor.setNome(res.getString("nome"));
                 mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
                 mentor.setCpf(res.getString("cpf"));
@@ -134,7 +130,7 @@ public class ProfissionalMentorRepository implements IRepository {
     }
 
     @Override
-    public boolean remover(Object id) throws BancoDeDadosException {
+    public boolean remover(Integer id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -143,7 +139,7 @@ public class ProfissionalMentorRepository implements IRepository {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, (Integer) id);
+            stmt.setInt(1, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
