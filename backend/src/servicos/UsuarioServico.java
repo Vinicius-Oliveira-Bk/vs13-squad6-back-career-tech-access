@@ -70,7 +70,7 @@ public class UsuarioServico {
         System.err.println("🚫 Usuário não encontrado!");
     }
 
-    public void deletar(long id) {
+    public void deletar(long id) {  
         Usuario usuarioDeletar = null;
 
         for (Usuario usuario : lista) {
@@ -91,7 +91,7 @@ public class UsuarioServico {
         ArrayList<Contato> contatos = usuario.getContatos() != null ? usuario.getContatos() : new ArrayList<>();
         contatos.add(contato);
         usuario.setContatos(contatos);
-        System.out.println("✅ Contato vinculado!");
+        System.out.println("\n✅ Contato vinculado!\n");
         return true;
     }
 
@@ -99,17 +99,7 @@ public class UsuarioServico {
         ArrayList<Endereco> enderecos = usuario.getEnderecos() != null ? usuario.getEnderecos() : new ArrayList<>();
         enderecos.add(endereco);
         usuario.setEnderecos(enderecos);
-        System.out.println("✅ Endereço vinculado!");
+        System.out.println("\n✅ Endereço vinculado!\n");
         return true;
-    }
-
-    public TipoUsuarioEnum getTipoUsuario(long id) {
-        for (Usuario usuario : lista) {
-            if (usuario.getId() == id) {
-                return usuario.getTipo();
-            }
-        }
-
-        return null;
     }
 }

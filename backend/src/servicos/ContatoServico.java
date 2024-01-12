@@ -3,15 +3,11 @@ package servicos;
 import java.util.ArrayList;
 
 import entidades.Contato;
-import utils.Validacoes;
 
 public class ContatoServico {
     private static ArrayList<Contato> lista = new ArrayList<>();
 
     public void cadastrar(Contato contato) {
-        if (!Validacoes.validarContato(contato)) {
-            return;
-        }
         lista.add(contato);
         System.out.println("✅ Contato adicionado com sucesso!");
     }
@@ -21,6 +17,7 @@ public class ContatoServico {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
             return;
         }
+
         System.out.println("✅ Contato Encontrado.");
         System.out.println(lista.stream().filter(x -> x.getId() == id).findFirst().get());
     }
@@ -30,6 +27,7 @@ public class ContatoServico {
             System.out.println("🚫 A lista está vazia!");
             return;
         }
+
         for (Contato contato : lista) {
             System.out.println(contato);
         }
@@ -53,6 +51,7 @@ public class ContatoServico {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
             return;
         }
+        
         lista.remove((int) id);
         System.out.println("✅ Contato removido com sucesso!");
     }

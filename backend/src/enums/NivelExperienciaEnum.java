@@ -1,9 +1,10 @@
 package enums;
 
 public enum NivelExperienciaEnum {
-    JUNIOR (1),
-    PLENO (2),
-    SENIOR (3);
+    JUNIOR(1),
+    PLENO(2),
+    SENIOR(3);
+
     private final int valor;
 
     NivelExperienciaEnum(int valor) {
