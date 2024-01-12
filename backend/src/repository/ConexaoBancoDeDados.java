@@ -11,11 +11,12 @@ public class ConexaoBancoDeDados {
     private static final String DB = "xe";
     private static final String USUARIO = "VS_13_EQUIPE_6";
     private static final String SENHA = "oracle";
+    private static final String SCHEMA = "VS_13_EQUIPE_6";
 
     public static void main(String[] args) {
         Connection connection = conectar();
 
-        fecharConexao(connection);
+        //fecharConexao(connection);
     }
 
     private static Connection conectar() {
@@ -27,7 +28,10 @@ public class ConexaoBancoDeDados {
 
             String url = "jdbc:oracle:thin:@" + HOST + ":" + PORTA + "/" + DB;
 
-            connection = DriverManager.getConnection(url, USUARIO, SENHA);
+            Connection con = DriverManager.getConnection(url, USUARIO, SENHA);
+
+            con.createStatement().execute("alter session set current_schema=" + SCHEMA);
+
             System.out.println("Conexão bem-sucedida!");
 
         } catch (ClassNotFoundException e) {
