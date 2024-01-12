@@ -1,19 +1,19 @@
 package enums;
 
 public enum AreaAtuacaoEnum {
-    TI (1),
-    SAUDE (2),
-    EDUCACAO (3),
-    FINANCAS (4),
-    MARKETING (5),
-    JURIDICO (6),
-    ENGENHARIA (7),
-    DESIGN (8),
-    COMERCIO (9),
-    MEIO_AMBIENTE (10),
-    CONSULTORIA (11),
-    RH (12),
-    OUTROS (13);
+    TI(1),
+    SAUDE(2),
+    EDUCACAO(3),
+    FINANCAS(4),
+    MARKETING(5),
+    JURIDICO(6),
+    ENGENHARIA(7),
+    DESIGN(8),
+    COMERCIO(9),
+    MEIO_AMBIENTE(10),
+    CONSULTORIA(11),
+    RH(12),
+    OUTROS(13);
 
     private final int valor;
 

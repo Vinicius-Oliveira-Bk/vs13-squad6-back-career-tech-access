@@ -10,8 +10,7 @@ public class Pcd extends Cliente {
     private String tipoDeficiencia;
     private String certificadoDeficienciaGov;
 
-    public Pcd() {
-    }
+    public Pcd() {}
 
     public Pcd(String tipoDeficiencia, String certificadoDeficienciaGov) {
         this.tipoDeficiencia = tipoDeficiencia;

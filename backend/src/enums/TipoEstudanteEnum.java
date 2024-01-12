@@ -1,9 +1,10 @@
 package enums;
 
 public enum TipoEstudanteEnum {
-    ENSINO_FUNDAMENTAL (1),
-    ENSINO_MEDIO (2),
-    ENSINO_SUPERIOR (3);
+    ENSINO_FUNDAMENTAL(1),
+    ENSINO_MEDIO(2),
+    ENSINO_SUPERIOR(3);
+
     private final int valor;
 
     TipoEstudanteEnum(int valor) {

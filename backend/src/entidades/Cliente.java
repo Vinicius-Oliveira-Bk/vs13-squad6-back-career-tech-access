@@ -1,11 +1,11 @@
 package entidades;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import enums.PlanoEnum;
 import enums.TipoUsuarioEnum;
 import interfaces.IDocumentacaoPessoal;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     private PlanoEnum plano;
@@ -16,9 +16,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     public Cliente() {}
 
-    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
-            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses,
-            String imagemDocumento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd) {
         super();
         this.plano = plano;
         this.interesses = interesses;
@@ -129,5 +127,4 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
                 "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO") +
                 "\n\tAcesso Pcd ............: " + (this.acessoPcd ? "SIM" : "NÃO");
     }
-
 }

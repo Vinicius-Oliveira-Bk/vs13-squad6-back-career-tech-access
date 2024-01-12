@@ -8,9 +8,6 @@ import java.util.List;
 public class EnderecoServico {
     private final ArrayList<Endereco> enderecos = new ArrayList<>();
 
-    public EnderecoServico() {
-    }
-
     public void cadastrar(Endereco endereco) {
         if (endereco == null) {
             System.err.println("🚫 O endereço não pode ser nulo!");
@@ -18,7 +15,7 @@ public class EnderecoServico {
         }
 
         enderecos.add(endereco);
-        System.out.println("✅ Endereço cadastrado!");
+        System.out.println("\n✅ Endereço cadastrado!\n");
     }
 
     public Endereco listarUm(Long id) {
