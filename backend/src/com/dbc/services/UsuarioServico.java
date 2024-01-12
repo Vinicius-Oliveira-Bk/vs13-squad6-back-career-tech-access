@@ -4,7 +4,6 @@ import com.dbc.model.entities.Contato;
 import com.dbc.model.entities.Endereco;
 import com.dbc.model.entities.Usuario;
 import com.dbc.model.enums.TipoUsuarioEnum;
-
 import java.util.ArrayList;
 
 public class UsuarioServico {

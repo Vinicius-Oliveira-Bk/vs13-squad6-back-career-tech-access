@@ -2,7 +2,6 @@ package com.dbc.model.entities;
 
 import com.dbc.model.enums.PlanoEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 

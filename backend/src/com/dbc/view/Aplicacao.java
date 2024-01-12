@@ -6,7 +6,6 @@ import com.dbc.model.entities.Estudante;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.entities.ProfissionalRealocacao;
 import com.dbc.model.enums.TipoUsuarioEnum;
-
 import com.dbc.services.UsuarioServico;
 import com.dbc.utils.CustomScanner;
 import com.dbc.utils.Utils;

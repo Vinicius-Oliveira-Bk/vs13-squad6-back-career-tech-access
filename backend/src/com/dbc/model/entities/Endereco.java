@@ -1,7 +1,6 @@
 package com.dbc.model.entities;
 
 import com.dbc.model.enums.TipoEnum;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Endereco {

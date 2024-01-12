@@ -1,7 +1,6 @@
 package com.dbc.services;
 
 import java.util.ArrayList;
-
 import com.dbc.model.entities.Contato;
 
 public class ContatoServico {
