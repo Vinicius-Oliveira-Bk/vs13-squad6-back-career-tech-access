@@ -8,6 +8,10 @@ public interface IDocumentacaoPessoal {
     public boolean validarPlano(String plano);
     public boolean validarInteresses(String interesses);
     public boolean validarImagemDocumento(String imagemDocumento);
-    public boolean validarControleParental(boolean controleParental);
-    public boolean validarAcessoPcd(boolean acessoPcd);
-}   
+    public Character validarControleParental(boolean controleParental);
+    public Character validarAcessoPcd(boolean acessoPcd);
+
+    Character validarControleParental(Character controleParental);
+
+    Character validarAcessoPcd(Character acessoPcd);
+}

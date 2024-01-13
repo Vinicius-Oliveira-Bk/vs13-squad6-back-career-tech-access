@@ -1,85 +1,59 @@
 package com.dbc.services;
 
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Cliente;
-import com.dbc.model.enums.PlanoEnum;
-import com.dbc.model.enums.TipoUsuarioEnum;
+import com.dbc.model.entities.Usuario;
+import com.dbc.repository.ClienteRepository;
+import com.dbc.repository.UsuarioRepository;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteServico {
-    private ArrayList<Cliente> lista = new ArrayList<>();
+    private ClienteRepository clienteRepository;
 
-    public void cadastrar(Cliente cliente) {
-        if (cliente == null) {
-            System.err.println("🚫 O usuário não pode ser nulo!");
-        } else {
-            lista.add(cliente);
-            System.out.println("✅ Cliente cadastrado!");
-        }
+    public ClienteServico() {
+        clienteRepository = new ClienteRepository();
     }
+    public void adicionarCliente(Cliente cliente) {
+        try {
 
-    public Cliente listarUm(long id) {
-        for (Cliente cliente : lista) {
-            if (cliente.getId() == id) {
-                return cliente;
+            if (cliente.getCpf().length() != 11) {
+                throw new Exception("CPF Invalido!");
             }
-        }
-        return null;
-    }
 
-    public void listarTodos() {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum usuário cadastrado!");
-            return;
-        }
-
-        for (Cliente cliente : lista) {
-            System.out.println(cliente);
+            Usuario clienteAdicionado = clienteRepository.adicionar(cliente);
+            System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);
+        } catch (BancoDeDadosException e) {
+            System.out.println("ERRO: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("ERRO: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-    public void listarTodosPorTipo(TipoUsuarioEnum tipoUsuario) {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum usuário cadastrado!");
-            return;
-        }
-
-        if (tipoUsuario == null) {
-            System.err.println("🚫 Tipo de usuário não pode ser nulo!");
-            return;
-        }
-
-        lista.stream()
-                .filter(cliente -> cliente.getTipo() == tipoUsuario)
-                .forEach(System.out::println);
-    }
-
-    public void atualizar(long id, Cliente clienteAtualiza) {
-        for (int i = 0; i < lista.size(); i++) {
-            Cliente cliente = lista.get(i);
-            if (cliente.getId() == id) {
-                cliente.setPlano(clienteAtualiza.getPlano());
-                cliente.setInteresses(clienteAtualiza.getInteresses());
-                System.out.println("✅ Cliente atualizado!");
-            }
-        }
-        System.err.println("🚫 Cliente não encontrado!");
-    }
-
-    public void deletar(long id) {  
-        Cliente clienteDeletar = null;
-
-        for (Cliente cliente : lista) {
-            if (cliente.getId() == id) {
-                clienteDeletar = cliente;
-            }
-        }
-
-        if (clienteDeletar != null) {
-            lista.remove(clienteDeletar);
-            System.out.println("✅ Cliente removido!");
-        } else {
-            System.err.println("🚫 Cliente não encontrado!");
+    public void removerCliente(Integer id) {
+        try {
+            boolean conseguiuRemover = clienteRepository.remover(id);
+            System.out.println("cliente removido? " + conseguiuRemover + "| com id=" + id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
+    public void editarCliente(Integer id, Cliente cliente) {
+        try {
+            boolean conseguiuEditar = clienteRepository.editar(id, cliente);
+            System.out.println("cliente editado? " + conseguiuEditar + "| com id=" + id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+    public void listarCliente() {
+        try {
+            List<Cliente> listar = clienteRepository.listar();
+            listar.forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
