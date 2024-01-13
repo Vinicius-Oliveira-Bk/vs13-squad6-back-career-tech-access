@@ -23,7 +23,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
+    public Usuario cadastrar(Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -95,7 +95,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public boolean editar(Long id, Usuario usuario) throws BancoDeDadosException {
+    public boolean atualizar(Long id, Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -184,12 +184,13 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
         return usuarios;
     }
 
-    public Usuario listarUmUsuario(Integer id) throws BancoDeDadosException {
+    @Override
+    public Usuario listarUm(Long id) throws BancoDeDadosException {
         Usuario usuario = null;
         try (Connection con = ConexaoBancoDeDados.conectar()) {
             String sql = "SELECT * FROM USUARIO WHERE ID = ?";
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, id);
+                stmt.setLong(1, id);
                 try (ResultSet res = stmt.executeQuery()) {
                     if (res.next()) {
                         usuario = new Usuario();

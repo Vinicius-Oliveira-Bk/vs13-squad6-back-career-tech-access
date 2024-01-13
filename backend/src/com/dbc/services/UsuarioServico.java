@@ -20,7 +20,7 @@ public class UsuarioServico {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario usuarioAdicionado = usuarioRepository.adicionar(usuario);
+            Usuario usuarioAdicionado = usuarioRepository.cadastrar(usuario);
             System.out.println("usuário adicinado com sucesso! " + usuarioAdicionado);
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -44,7 +44,7 @@ public class UsuarioServico {
     // atualização de um objeto
     public void atualizar(Long id, Usuario usuario) {
         try {
-            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
+            boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
             System.out.println("usuário editado? " + conseguiuEditar + "| com id=" + id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();

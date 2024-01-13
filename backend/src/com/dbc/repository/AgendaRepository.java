@@ -76,7 +76,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             while (!result.next()) {
                 Agenda agenda = new Agenda();
                 agenda.setId(result.getLong("ID_PESSOA"));
-                agenda.setCliente(cs.listarUmCliente(result.getLong("ID_CLIENTE")));
+                agenda.setCliente(cs.listarUm(result.getLong("ID_CLIENTE")));
                 agenda.setProfissionalMentor(ps.listarUm(result.getLong("ID_PROFISSIONAL")));
                 agenda.setDataHoraInicio(result.getTimestamp("DATA_HORA_INICIO").toLocalDateTime());
                 agenda.setDataHoraFim(result.getTimestamp("DATA_HORA_FIM").toLocalDateTime());
@@ -108,7 +108,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             if (result.next()) {
                 Agenda agendamento = new Agenda();
                 agendamento.setId(result.getLong("ID_PESSOA"));
-                agendamento.setCliente(cs.listarUmCliente(result.getLong("ID_CLIENTE")));
+                agendamento.setCliente(cs.listarUm(result.getLong("ID_CLIENTE")));
                 agendamento.setProfissionalMentor(ps.listarUm(result.getLong("ID_PROFISSIONAL")));
                 agendamento.setDataHoraInicio(result.getTimestamp("DATA_HORA_INICIO").toLocalDateTime());
                 agendamento.setDataHoraFim(result.getTimestamp("DATA_HORA_FIM").toLocalDateTime());
