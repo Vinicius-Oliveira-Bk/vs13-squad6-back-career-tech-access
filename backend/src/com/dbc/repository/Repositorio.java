@@ -1,6 +1,7 @@
 package com.dbc.repository;
 
 import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.Cliente;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +13,8 @@ public interface Repositorio<CHAVE, OBJETO> {
     OBJETO adicionar(OBJETO object) throws BancoDeDadosException;
 
     boolean remover(CHAVE id) throws BancoDeDadosException;
+
+    Cliente listarUm(Integer id) throws BancoDeDadosException;
 
     boolean editar(CHAVE id, OBJETO objeto) throws BancoDeDadosException;
 

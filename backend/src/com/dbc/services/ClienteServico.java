@@ -2,9 +2,7 @@ package com.dbc.services;
 
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Cliente;
-import com.dbc.model.entities.Usuario;
 import com.dbc.repository.ClienteRepository;
-import com.dbc.repository.UsuarioRepository;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class ClienteServico {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario clienteAdicionado = clienteRepository.adicionar(cliente);
+            Cliente clienteAdicionado = clienteRepository.adicionar(cliente);
             System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -47,7 +45,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
-    public void listarCliente() {
+    public void listarClientes() {
         try {
             List<Cliente> listar = clienteRepository.listar();
             listar.forEach(System.out::println);
@@ -56,4 +54,12 @@ public class ClienteServico {
         }
     }
 
+    public Cliente listarUmCliente(long idCliente) {
+        try {
+            return clienteRepository.listarUm((int) idCliente);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
