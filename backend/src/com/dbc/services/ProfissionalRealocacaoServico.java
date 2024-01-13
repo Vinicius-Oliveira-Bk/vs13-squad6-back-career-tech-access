@@ -17,20 +17,20 @@ public class ProfissionalRealocacaoServico {
         }
     }
 
-    public void listarUm(long id) {
+    public ProfissionalRealocacao listarUm(Long id) {
         boolean profissionalRealocacaoEncontrado = false;
 
         for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id) {
-                System.out.println(profissionalRealocacao);
+            if (profissionalRealocacao.getId() == id.intValue()) {
                 profissionalRealocacaoEncontrado = true;
-                break;
+                return profissionalRealocacao;
             }
         }
 
         if (!profissionalRealocacaoEncontrado) {
             System.err.println("🚫 Profissional Realocacao não encontrado!");
         }
+        return null;
     }
 
     public void listarTodos() {
@@ -44,7 +44,7 @@ public class ProfissionalRealocacaoServico {
         }
     }
 
-    public void atualizar(long id, ProfissionalRealocacao profissionalRealocacaoAtualiza) {
+    public void atualizar(Long id, ProfissionalRealocacao profissionalRealocacaoAtualiza) {
         for (int i = 0; i < lista.size(); i++) {
             ProfissionalRealocacao profissionalRealocacao = lista.get(i);
 
@@ -52,10 +52,7 @@ public class ProfissionalRealocacaoServico {
                 profissionalRealocacao.setNome(profissionalRealocacaoAtualiza.getNome());
                 profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
                 profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
-                profissionalRealocacao.setEnderecos(profissionalRealocacaoAtualiza.getEnderecos());
-                profissionalRealocacao.setContatos(profissionalRealocacaoAtualiza.getContatos());
                 profissionalRealocacao.setEmail(profissionalRealocacaoAtualiza.getEmail());
-                profissionalRealocacao.setTipo(profissionalRealocacaoAtualiza.getTipo());
                 profissionalRealocacao.setPlano(profissionalRealocacaoAtualiza.getPlano());
                 profissionalRealocacao.setInteresses(profissionalRealocacaoAtualiza.getInteresses());
                 profissionalRealocacao.setImagemDocumento(profissionalRealocacaoAtualiza.getImagemDocumento());
@@ -71,7 +68,7 @@ public class ProfissionalRealocacaoServico {
         System.err.println("🚫 Usuário não encontrado!");
     }
 
-    public void deletar(long id) {
+    public void remover(Long id) {
         ProfissionalRealocacao profissionalRealocacaoDeletar = null;
 
         for (ProfissionalRealocacao profissionalRealocacao : lista) {
@@ -82,7 +79,7 @@ public class ProfissionalRealocacaoServico {
 
         if (profissionalRealocacaoDeletar != null) {
             lista.remove(profissionalRealocacaoDeletar);
-            usuarioServico.deletar(profissionalRealocacaoDeletar.getId());
+            usuarioServico.remover(profissionalRealocacaoDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } else {
             System.err.println("🚫 Usuário não encontrado!");

@@ -12,7 +12,7 @@ public class ClienteServico {
     public ClienteServico() {
         clienteRepository = new ClienteRepository();
     }
-    public void adicionarCliente(Cliente cliente) {
+    public void adicionar(Cliente cliente) {
         try {
 
             if (cliente.getCpf().length() != 11) {
@@ -29,7 +29,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
-    public void removerCliente(Long id) {
+    public void remover(Long id) {
         try {
             boolean conseguiuRemover = clienteRepository.remover(id);
             System.out.println("cliente removido? " + conseguiuRemover + "| com id=" + id);
@@ -37,7 +37,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
-    public void Cliente(Long id, Cliente cliente) {
+    public void atualizar(Long id, Cliente cliente) {
         try {
             boolean conseguiuEditar = clienteRepository.atualizar(id, cliente);
             System.out.println("cliente editado? " + conseguiuEditar + "| com id=" + id);
@@ -45,7 +45,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
-    public void listarClientes() {
+    public void listarTodos() {
         try {
             List<Cliente> listar = clienteRepository.listar();
             listar.forEach(System.out::println);
@@ -54,7 +54,7 @@ public class ClienteServico {
         }
     }
 
-    public Cliente listarUmCliente(Long idCliente) {
+    public Cliente listarUm(Long idCliente) {
         try {
             return clienteRepository.listarUm(idCliente);
         } catch (BancoDeDadosException e) {

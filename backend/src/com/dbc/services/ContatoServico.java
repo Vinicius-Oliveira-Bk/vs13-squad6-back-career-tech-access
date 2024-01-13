@@ -11,14 +11,13 @@ public class ContatoServico {
         System.out.println("✅ Contato adicionado com sucesso!");
     }
 
-    public void listarUm(long id) {
+    public Contato listarUm(Long id) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
-            return;
+            return null;
         }
-
         System.out.println("✅ Contato Encontrado.");
-        System.out.println(lista.stream().filter(x -> x.getId() == id).findFirst().get());
+        return lista.stream().filter(x -> x.getId() == id).findFirst().get();
     }
 
     public void listarTodos() {
@@ -32,7 +31,7 @@ public class ContatoServico {
         }
     }
 
-    public void atualizar(long id, Contato contatoNovo) {
+    public void atualizar(Long id, Contato contatoNovo) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
             return;
@@ -45,13 +44,13 @@ public class ContatoServico {
         System.out.println("✅ Contato editado com sucesso!");
     }
 
-    public void deletar(long id) {
+    public void remover(Long id) {
         if (lista.stream().filter(x -> x.getId() == id).findFirst().isEmpty()) {
             System.err.println("🚫 Não há nenhum contato com o id informado!");
             return;
         }
         
-        lista.remove((int) id);
+        lista.remove(id.intValue());
         System.out.println("✅ Contato removido com sucesso!");
     }
 }
