@@ -172,7 +172,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {

@@ -52,7 +52,7 @@ public class ProfissionalRealocacaoServico {
             if (profissionalRealocacao.getId() == id) {
                 profissionalRealocacao.setNome(profissionalRealocacaoAtualiza.getNome());
                 profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
-                profissionalRealocacao.setDataDeNascimento(profissionalRealocacaoAtualiza.getDataDeNascimento());
+                profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
                 profissionalRealocacao.setEnderecos(profissionalRealocacaoAtualiza.getEnderecos());
                 profissionalRealocacao.setContatos(profissionalRealocacaoAtualiza.getContatos());
                 profissionalRealocacao.setEmail(profissionalRealocacaoAtualiza.getEmail());

@@ -3,10 +3,10 @@ package com.dbc.model.entities;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class Usuario {
-    private long id;
+public class Usuario {
+    private Integer id;
     private String nome;
-    private LocalDate dataDeNascimento;
+    private LocalDate dataNascimento;
     private String cpf;
     private String email;
     private String senha;
@@ -17,11 +17,11 @@ public abstract class Usuario {
 
     private ArrayList<Usuario> usuarios;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -33,12 +33,12 @@ public abstract class Usuario {
         this.nome = nome;
     }
 
-    public LocalDate getDataDeNascimento() {
-        return dataDeNascimento;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {
-        this.dataDeNascimento = dataDeNascimento;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getCpf() {
@@ -110,7 +110,7 @@ public abstract class Usuario {
         return "Usuario{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
-                ", dataDeNascimento=" + dataDeNascimento +
+                ", dataDeNascimento=" + dataNascimento +
                 ", cpf='" + cpf + '\'' +
                 ", email='" + email + '\'' +
                 ", senha='" + senha + '\'' +

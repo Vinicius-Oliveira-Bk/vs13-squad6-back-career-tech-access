@@ -155,7 +155,7 @@ public abstract class Utils {
 
             String dataNascimentoString = scanner.nextLine("Digite a data de nascimento (dd/MM/yyyy): ");
             LocalDate dataNascimento = LocalDate.parse(dataNascimentoString, formatter);
-            usuario.setDataDeNascimento(dataNascimento);
+            usuario.setDataNascimento(dataNascimento);
 
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
