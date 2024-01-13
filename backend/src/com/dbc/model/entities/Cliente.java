@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.dbc.model.enums.PlanoEnum;
+import com.dbc.model.enums.TipoClienteEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.interfaces.IDocumentacaoPessoal;
 

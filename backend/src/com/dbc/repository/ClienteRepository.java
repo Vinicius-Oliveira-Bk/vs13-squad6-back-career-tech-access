@@ -3,6 +3,7 @@ package com.dbc.repository;
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Cliente;
 import com.dbc.model.enums.PlanoEnum;
+import com.dbc.model.enums.TipoClienteEnum;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
         ResultSet res = stmt.executeQuery(sql);
 
         if (res.next()) {
-            return res.getInt("SEQUENCE_CLIENTE");
+            return res.getInt("mysequence");
         }
         return null;
     }
@@ -29,12 +30,12 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            Long novoId = Long.valueOf(this.getProximoId(con));
-            cliente.setId((int) novoId.longValue());
+            Integer novoId = this.getProximoId(con);
+            cliente.setId(novoId);
 
-            String sql = "INSERT INTO USUARIO\n" +
+            String sql = "INSERT INTO CLIENTE\n" +
                     "(ID, NOME, DATANASCIMENTO, CPF, EMAIL, SENHA, INTERESSES, IMAGEMDOCUMENTO, TIPOCLIENTE, PLANO, CONTROLEPARENTAL, ACESSOPCD)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -44,15 +45,14 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
             stmt.setString(4, cliente.getCpf());
             stmt.setString(5, cliente.getEmail());
             stmt.setString(6, cliente.getSenha());
-            stmt.setString(8, cliente.getInteresses());
-            stmt.setString(9, cliente.getImagemDocumento());
-            stmt.setString(10, cliente.getTipoCliente().name());
-            stmt.setString(10, cliente.getPlano().name());
-            stmt.setString(11, String.valueOf(cliente.getControleParental()));
-            stmt.setString(12, String.valueOf(cliente.getAcessoPcd()));
+            stmt.setString(7, cliente.getInteresses());
+            stmt.setString(8, cliente.getImagemDocumento());
+            stmt.setString(9, cliente.getPlano().name());
+            stmt.setString(10, String.valueOf(cliente.getControleParental()));
+            stmt.setString(11, String.valueOf(cliente.getAcessoPcd()));
 
             int res = stmt.executeUpdate();
-            System.out.println("adicionarMentor.res=" + res);
+            System.out.println("adicionarCliente.res=" + res);
 
             return cliente;
         } catch (SQLException e) {
@@ -69,15 +69,16 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
     }
 
     @Override
-    public boolean remover(Object id) throws BancoDeDadosException {
+    public boolean remover(Integer id) throws BancoDeDadosException {
         Connection con = null;
         try {
+            con = ConexaoBancoDeDados.conectar();
 
-            String sql = "DELETE FROM PESSOA WHERE id_cliente = ?";
+            String sql = "DELETE FROM CLIENTE WHERE ID = ?";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, (Integer) id);
+            stmt.setInt(1, id);
 
             int res = stmt.executeUpdate();
             System.out.println("removerClientePorId.res=" + res);
@@ -189,18 +190,18 @@ public class ClienteRepository implements Repositorio<Integer, Cliente> {
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE CLIENTE SET ");
-            sql.append(" nome = ?,");
-            sql.append(" datanascimento = ? ");
-            sql.append(" cpf = ? ");
-            sql.append(" email = ? ");
-            sql.append(" senha = ? ");
-            sql.append(" interesses = ? ");
-            sql.append(" imagemdocumento = ? ");
-            sql.append(" tipoCliente = ? ");
-            sql.append(" plano = ? ");
-            sql.append(" controleParental = ? ");
-            sql.append(" acessoPcd = ? ");
-            sql.append(" WHERE id = ?");
+            sql.append(" NOME = ?,");
+            sql.append(" DATANASCIMENTO = ?, ");
+            sql.append(" CPF = ?, ");
+            sql.append(" EMAIL = ?, ");
+            sql.append(" SENHA = ?, ");
+            sql.append(" INTERESSES = ?, ");
+            sql.append(" IMAGEMDOCUMENTO = ?, ");
+            sql.append(" TIPOCLIENTE = ?, ");
+            sql.append(" PLANO = ?, ");
+            sql.append(" CONTROLEPARENTAL = ?, ");
+            sql.append(" ACESSOPCD = ? ");
+            sql.append(" WHERE ID = ?");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
