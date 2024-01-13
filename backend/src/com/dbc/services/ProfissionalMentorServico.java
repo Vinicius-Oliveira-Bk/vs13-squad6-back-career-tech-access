@@ -1,8 +1,8 @@
-package controller;
+package com.dbc.services;
 
-import exceptions.BancoDeDadosException;
-import model.entidades.ProfissionalMentor;
-import repository.ProfissionalMentorRepository;
+import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.ProfissionalMentor;
+import com.dbc.repository.ProfissionalMentorRepository;
 
 public class ProfissionalMentorServico {
 
@@ -37,7 +37,7 @@ public class ProfissionalMentorServico {
         }
     }
 
-    public void atualizar(Integer id, ProfissionalMentor mentor) {
+    public void atualizar(Long id, ProfissionalMentor mentor) {
         try {
             mentorRepository.atualizar(id, mentor);
             System.out.println("✅ Profissional Mentor atualizado!");
@@ -46,7 +46,7 @@ public class ProfissionalMentorServico {
         }
     }
 
-    public void remover(Integer id) {
+    public void remover(Long id) {
         try {
             mentorRepository.remover(id);
             System.out.println("✅ Profissional Mentor deletado!");
