@@ -3,6 +3,8 @@ package repository;
 import exceptions.BancoDeDadosException;
 import model.entidades.ProfissionalMentor;
 import model.enums.AreaAtuacaoEnum;
+import model.enums.NivelExperienciaEnum;
+import model.enums.TipoUsuarioEnum;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,14 +33,15 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
             Integer proximoId = this.getProximoId(con);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
-                    "(CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
-                    "VALUES(?, ?, ?)\n";
+                    "(ID, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
+                    "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setString(1, mentor.getCarteiraDeTrabalho());
-            stmt.setString(2, mentor.getNivelExperienciaEnum().toString());
-            stmt.setString(3, mentor.getCertificadosDeCapacitacao().toString());
+            stmt.setInt(1, proximoId);
+            stmt.setString(2, mentor.getCarteiraDeTrabalho());
+            stmt.setInt(3, mentor.getNivelExperienciaEnum().getValor());
+            stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarMentor.res=" + res);
@@ -71,7 +74,7 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setString(2, mentor.getNivelExperienciaEnum().toString());
+            stmt.setInt(2, mentor.getNivelExperienciaEnum().getValor());
             stmt.setString(3, mentor.getCarteiraDeTrabalho());
             stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
             stmt.setInt(5, (int) mentor.getId());
@@ -94,26 +97,20 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
     }
 
     @Override
-    public List listar() throws BancoDeDadosException {
-        List mentores = new ArrayList<>();
+    public List<ProfissionalMentor> listar() throws BancoDeDadosException {
+        List<ProfissionalMentor> mentores = new ArrayList<>();
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFICIONAL_MENTOR";
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                ProfissionalMentor mentor = new ProfissionalMentor();
-
-                mentor.getId();
-                mentor.setNome(res.getString("nome"));
-                mentor.setNome(res.getString("nome"));
-                mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
-                mentor.setCpf(res.getString("cpf"));
-                mentores.add(mentor);
+                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
+                boolean add = mentores.add(mentor);
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
@@ -127,6 +124,19 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
             }
         }
         return mentores;
+    }
+
+    private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
+        ProfissionalMentor mentor = new ProfissionalMentor();
+        mentor.setId(res.getLong("id"));
+        mentor.setNome(res.getString("nome"));
+        mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
+        mentor.setTipo(TipoUsuarioEnum.valueOf(res.getString("tipo")));
+        mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
+        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
+        mentor.setCertificadosDeCapacitacao(res.getString("certificados_de_capacitacao"));
+
+        return mentor;
     }
 
     @Override

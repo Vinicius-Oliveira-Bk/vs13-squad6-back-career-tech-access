@@ -15,7 +15,8 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     private ArrayList<String> certificadosDeCapacitacao;
     private boolean documentosValidados = false;
 
-    public ProfissionalMentor() {}
+    public ProfissionalMentor() {
+    }
 
     public ProfissionalMentor(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
         super();
@@ -53,7 +54,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
         return certificadosDeCapacitacao;
     }
 
-    public void setCertificadosDeCapacitacao(ArrayList<String> certificadosDeCapacitacao) {
+    public void setCertificadosDeCapacitacao(String certificadosDeCapacitacao) {
         this.certificadosDeCapacitacao = certificadosDeCapacitacao;
     }
 
@@ -80,5 +81,8 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
                 "\n\tCarteira de Trabalho ..: " + this.carteiraDeTrabalho +
                 "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "SIM" : "NÃO") +
                 "\n";
+    }
+
+    public void setId(long id) {
     }
 }
