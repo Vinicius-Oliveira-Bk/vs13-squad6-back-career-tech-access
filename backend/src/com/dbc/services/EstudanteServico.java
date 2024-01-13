@@ -51,7 +51,7 @@ public class EstudanteServico {
             if (estudante.getId() == id) {
                 estudante.setNome(estudanteAtualiza.getNome());
                 estudante.setCpf(estudanteAtualiza.getCpf());
-                estudante.setDataDeNascimento(estudanteAtualiza.getDataDeNascimento());
+                estudante.setDataNascimento(estudanteAtualiza.getDataNascimento());
                 estudante.setEnderecos(estudanteAtualiza.getEnderecos());
                 estudante.setContatos(estudanteAtualiza.getContatos());
                 estudante.setEmail(estudanteAtualiza.getEmail());
