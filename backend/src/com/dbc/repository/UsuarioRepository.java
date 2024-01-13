@@ -52,7 +52,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             System.out.println("adicionarUsuario.res=" + res);
             return usuario;
         } catch (SQLException e) {
-            throw new BancoDeDadosException("Erro ao executar a operação de adicionar de um usuário", e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -82,7 +82,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             return res > 0;
         } catch (SQLException e) {
-            throw new BancoDeDadosException("Erro ao executar a operação de remover de um usuário", e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -132,7 +132,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             return res > 0;
         } catch (SQLException e) {
-            throw new BancoDeDadosException("Erro ao executar a operação de editar de um usuário", e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -172,7 +172,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
-            throw new BancoDeDadosException("Erro ao executar a operação de listar todos os usuários", e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -207,10 +207,10 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                     }
                 }
             } catch (SQLException e) {
-                throw new BancoDeDadosException("Erro ao executar a operação de listagem de um usuário", e);
+                throw new BancoDeDadosException(e.getCause());
             }
         } catch (SQLException e) {
-            throw new BancoDeDadosException("Erro ao conectar ao banco de dados", e);
+            throw new BancoDeDadosException(e.getCause());
         }
 
         return usuario;
