@@ -2,11 +2,8 @@ package com.dbc.model.entities;
 
 import com.dbc.model.enums.TipoEnum;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Endereco {
-    private static final AtomicInteger counter = new AtomicInteger(0);
-    private long id;
+    private Long id;
     private String logradouro;
     private String numero;
     private String complemento;
@@ -16,12 +13,9 @@ public class Endereco {
     private String pais;
     private TipoEnum tipo;
 
-    public Endereco() {
-        this.id = counter.incrementAndGet();
-    }
+    public Endereco() {    }
 
     public Endereco(String logradouro, String numero, String complemento, String cep, String cidade, String estado, String pais, TipoEnum tipo) {
-        this.id = counter.incrementAndGet();
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;

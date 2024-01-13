@@ -1,7 +1,6 @@
 package com.dbc.model.entities;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.dbc.model.enums.TipoEnum;
 
 public class Contato {

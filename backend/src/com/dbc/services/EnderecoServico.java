@@ -1,67 +1,56 @@
 package com.dbc.services;
 
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Endereco;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.dbc.repository.EnderecoRepository;
 
 public class EnderecoServico {
-    private final ArrayList<Endereco> enderecos = new ArrayList<>();
+
+    private EnderecoRepository enderecoRepository;
+
+    public EnderecoServico(EnderecoRepository enderecoRepository) {
+        this.enderecoRepository = enderecoRepository;
+    }
 
     public void cadastrar(Endereco endereco) {
-        if (endereco == null) {
-            System.err.println("🚫 O endereço não pode ser nulo!");
-            return;
+        try {
+            enderecoRepository.cadastrar(endereco);
+            System.out.println("✅ Endereço cadastrado!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        enderecos.add(endereco);
-        System.out.println("\n✅ Endereço cadastrado!\n");
     }
 
-    public Endereco listarUm(Long id) {
-        if (enderecos.isEmpty()) {
-            System.err.println("🚫 A lista de endereços está vazia!");
-            return null;
+    public void listar() {
+        try {
+            enderecoRepository.listar().forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        for (Endereco endereco : enderecos) {
-            if (endereco.getId().equals(id)) {
-                return endereco;
-            }
+    }
+    public void listarUm(Long id) {
+        try {
+            enderecoRepository.listarUm(id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        System.err.println("🚫 Endereço não encontrado!");
-        return null;
     }
 
-    public List<Endereco> listarTodos() {
-        return enderecos;
-    }
-
-    public void atualizar(Long id, Endereco endereco) {
-        Endereco enderecoExistente = listarUm(id);
-
-        if (enderecoExistente != null) {
-            enderecoExistente.setLogradouro(endereco.getLogradouro());
-            enderecoExistente.setNumero(endereco.getNumero());
-            enderecoExistente.setCep(endereco.getCep());
-            enderecoExistente.setCidade(endereco.getCidade());
-            enderecoExistente.setEstado(endereco.getEstado());
-            enderecoExistente.setPais(endereco.getPais());
-            enderecoExistente.setTipo(endereco.getTipo());
+    public void editar(Long id, Endereco endereco) {
+        try {
+            enderecoRepository.atualizar(id, endereco);
             System.out.println("✅ Endereço atualizado!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        System.err.println("🚫 Endereço não encontrado!");
     }
 
-    public void deletar(Long id) {
-        if (enderecos.isEmpty()) {
-            System.err.println("🚫 A lista de endereços está vazia!");
-            return;
+    public void remover(Long id) {
+        try {
+            enderecoRepository.remover(id);
+            System.out.println("✅ Endereço deletado!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        enderecos.removeIf(endereco -> endereco.getId().equals(id));
-        System.out.println("✅ Endereço deletado!");
     }
 }
