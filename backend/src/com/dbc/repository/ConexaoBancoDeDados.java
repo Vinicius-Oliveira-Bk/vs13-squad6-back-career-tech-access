@@ -6,12 +6,18 @@ import java.sql.SQLException;
 
 public class ConexaoBancoDeDados {
 
-    private static final String HOST = "vemser-dbc.dbccompany.com.br";
-    private static final int PORTA = 25000;
+//    private static final String HOST = "vemser-dbc.dbccompany.com.br";
+//    private static final int PORTA = 25000;
+//    private static final String DB = "xe";
+//    private static final String USUARIO = "VS_13_EQUIPE_6";
+//    private static final String SENHA = "oracle";
+//    private static final String SCHEMA = "VS_13_EQUIPE_6";
+    private static final String HOST = "localhost";
+    private static final int PORTA = 1521;
     private static final String DB = "xe";
-    private static final String USUARIO = "VS_13_EQUIPE_6";
+    private static final String USUARIO = "system";
     private static final String SENHA = "oracle";
-    private static final String SCHEMA = "VS_13_EQUIPE_6";
+    private static final String SCHEMA = "APP";
 
     public static void main(String[] args) {
         Connection connection = conectar();
@@ -20,7 +26,7 @@ public class ConexaoBancoDeDados {
     }
 
     public static Connection conectar() {
-        Connection connection = null;
+        Connection con = null;
 
         try {
             // Carregar o driver JDBC do Oracle
@@ -28,7 +34,7 @@ public class ConexaoBancoDeDados {
 
             String url = "jdbc:oracle:thin:@" + HOST + ":" + PORTA + "/" + DB;
 
-            Connection con = DriverManager.getConnection(url, USUARIO, SENHA);
+            con = DriverManager.getConnection(url, USUARIO, SENHA);
 
             con.createStatement().execute("alter session set current_schema=" + SCHEMA);
 
@@ -40,7 +46,7 @@ public class ConexaoBancoDeDados {
             System.err.println("Erro ao conectar ao banco de dados Oracle: " + e.getMessage());
         }
 
-        return connection;
+        return con;
     }
 
     public static void fecharConexao(Connection connection) {

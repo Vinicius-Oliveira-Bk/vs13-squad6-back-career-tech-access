@@ -6,17 +6,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioRepository implements Repositorio<Integer, Usuario> {
+public class UsuarioRepository implements IRepository<Long, Usuario> {
 
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
+    public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT seq_cliente.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
 
         if (res.next()) {
-            return res.getInt("mysequence");
+            return res.getLong("mysequence");
         }
 
         return null;
@@ -28,7 +28,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            Integer proximoId = this.getProximoId(con);
+            Long proximoId = this.getProximoId(con);
             usuario.setId(proximoId);
 
             String sql = "INSERT INTO USUARIO\n" +
@@ -37,7 +37,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, usuario.getId());
+            stmt.setLong(1, usuario.getId());
             stmt.setString(2, usuario.getNome());
             stmt.setDate(3, java.sql.Date.valueOf(usuario.getDataNascimento()));
             stmt.setString(4, usuario.getCpf());
@@ -65,7 +65,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException {
+    public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -74,7 +74,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
@@ -95,7 +95,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException {
+    public boolean editar(Long id, Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -115,7 +115,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setInt(1, usuario.getId());
+            stmt.setLong(1, usuario.getId());
             stmt.setString(2, usuario.getNome());
             stmt.setObject(3, java.sql.Date.valueOf(usuario.getDataNascimento()));
             stmt.setString(4, usuario.getCpf());
@@ -159,7 +159,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             while (res.next()) {
                 Usuario usuario = new Usuario();
-                usuario.setId(res.getInt("id"));
+                usuario.setId(res.getLong("id"));
                 usuario.setNome(res.getString("nome"));
                 usuario.setDataNascimento(res.getDate("dataNascimento").toLocalDate());
                 usuario.setCpf(res.getString("cpf"));
@@ -193,7 +193,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 try (ResultSet res = stmt.executeQuery()) {
                     if (res.next()) {
                         usuario = new Usuario();
-                        usuario.setId(res.getInt("id"));
+                        usuario.setId(res.getLong("id"));
                         usuario.setNome(res.getString("nome"));
                         usuario.setDataNascimento(res.getDate("dataNascimento").toLocalDate());
                         usuario.setCpf(res.getString("cpf"));

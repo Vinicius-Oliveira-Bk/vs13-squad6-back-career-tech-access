@@ -15,12 +15,12 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     ClienteServico cs = new ClienteServico();
 
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
+    public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_AGENDA.NEXTVAL SEQUENCE_AGENDA FROM DUAL";
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
         if (result.next()) {
-            return result.getInt("SEQUENCE_AGENDA");
+            return result.getLong("SEQUENCE_AGENDA");
         }
         return null;
     }
@@ -30,8 +30,8 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            Integer novoId = this.getProximoId(con);
-            agenda.setId(novoId.longValue());
+            Long novoId = this.getProximoId(con);
+            agenda.setId(novoId);
 
             String sql = "INSERT INTO AGENDA\n" +
                     "(ID, ID_CLIENTE, ID_MENTOR, DATA_HORA_INICIO, DATA_HORA_FIM, STATUS)\n" +
@@ -76,7 +76,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             while (!result.next()) {
                 Agenda agenda = new Agenda();
                 agenda.setId(result.getLong("ID_PESSOA"));
-                agenda.setCliente(cs.listarUm(result.getLong("ID_CLIENTE")));
+                agenda.setCliente(cs.listarUmCliente(result.getLong("ID_CLIENTE")));
                 agenda.setProfissionalMentor(ps.listarUm(result.getLong("ID_PROFISSIONAL")));
                 agenda.setDataHoraInicio(result.getTimestamp("DATA_HORA_INICIO").toLocalDateTime());
                 agenda.setDataHoraFim(result.getTimestamp("DATA_HORA_FIM").toLocalDateTime());
@@ -108,7 +108,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             if (result.next()) {
                 Agenda agendamento = new Agenda();
                 agendamento.setId(result.getLong("ID_PESSOA"));
-                agendamento.setCliente(cs.listarUm(result.getLong("ID_CLIENTE")));
+                agendamento.setCliente(cs.listarUmCliente(result.getLong("ID_CLIENTE")));
                 agendamento.setProfissionalMentor(ps.listarUm(result.getLong("ID_PROFISSIONAL")));
                 agendamento.setDataHoraInicio(result.getTimestamp("DATA_HORA_INICIO").toLocalDateTime());
                 agendamento.setDataHoraFim(result.getTimestamp("DATA_HORA_FIM").toLocalDateTime());

@@ -7,28 +7,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PcdRepository implements Repositorio<Integer, Pcd> {
+public class PcdRepository implements IRepository<Long, Pcd> {
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
+    public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_PCD.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
 
         if (res.next()) {
-            return res.getInt("mysequence");
+            return res.getLong("mysequence");
         }
         return null;
     }
 
     @Override
-    public Pcd adicionar(Pcd pcd) throws BancoDeDadosException {
+    public Pcd cadastrar(Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            Integer novoId = this.getProximoId(con);
+            Long novoId = this.getProximoId(con);
             pcd.setId(novoId);
 
             String sql = "INSERT INTO PCD\n" +
@@ -37,7 +37,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, pcd.getId());
+            stmt.setLong(1, pcd.getId());
             stmt.setString(2, pcd.getTipoDeficiencia());
             stmt.setString(3, pcd.getCertificadoDeficienciaGov());
 
@@ -59,7 +59,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException {
+    public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -68,7 +68,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
 
             int res = stmt.executeUpdate();
             System.out.println("removerPcdPorId.res=" + res);
@@ -101,7 +101,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
 
             while (res.next()) {
                 Pcd pcd = new Pcd();
-                pcd.setId(res.getInt("ID"));
+                pcd.setId(res.getLong("ID"));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
 
@@ -121,20 +121,20 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
     }
 
     @Override
-    public Pcd listarUm(Integer id) throws BancoDeDadosException {
+    public Pcd listarUm(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             String sql = "SELECT * FROM PCD WHERE ID = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
 
             ResultSet res = stmt.executeQuery();
 
             if (res.next()) {
                 Pcd pcd = new Pcd();
-                pcd.setId(res.getInt("ID"));
+                pcd.setId(res.getLong("ID"));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
 
@@ -155,7 +155,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
     }
 
     @Override
-    public boolean editar(Integer id, Pcd pcd) throws BancoDeDadosException {
+    public boolean atualizar(Long id, Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -170,7 +170,7 @@ public class PcdRepository implements Repositorio<Integer, Pcd> {
 
             stmt.setString(1, pcd.getTipoDeficiencia());
             stmt.setString(2, pcd.getCertificadoDeficienciaGov());
-            stmt.setInt(3, id);
+            stmt.setLong(3, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();

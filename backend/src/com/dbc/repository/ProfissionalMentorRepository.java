@@ -18,7 +18,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         ResultSet res = stmt.executeQuery(sql);
 
         if (res.next()) {
-            return Long.valueOf(res.getInt("mysequence"));
+            return res.getLong("mysequence");
         }
 
         return null;
