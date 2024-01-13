@@ -19,12 +19,6 @@ public class ConexaoBancoDeDados {
     private static final String SENHA = "oracle";
     private static final String SCHEMA = "APP";
 
-    public static void main(String[] args) {
-        Connection connection = conectar();
-
-        //fecharConexao(connection);
-    }
-
     public static Connection conectar() {
         Connection con = null;
 
@@ -45,18 +39,6 @@ public class ConexaoBancoDeDados {
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados Oracle: " + e.getMessage());
         }
-
         return con;
-    }
-
-    public static void fecharConexao(Connection connection) {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Conexão fechada!");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao fechar a conexão: " + e.getMessage());
-        }
     }
 }

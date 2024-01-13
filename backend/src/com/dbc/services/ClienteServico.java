@@ -12,6 +12,7 @@ public class ClienteServico {
     public ClienteServico() {
         clienteRepository = new ClienteRepository();
     }
+
     public void adicionar(Cliente cliente) {
         try {
 
@@ -29,6 +30,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
+
     public void remover(Long id) {
         try {
             boolean conseguiuRemover = clienteRepository.remover(id);
@@ -37,6 +39,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
+
     public void atualizar(Long id, Cliente cliente) {
         try {
             boolean conseguiuEditar = clienteRepository.atualizar(id, cliente);
@@ -45,6 +48,7 @@ public class ClienteServico {
             e.printStackTrace();
         }
     }
+
     public void listarTodos() {
         try {
             List<Cliente> listar = clienteRepository.listar();
@@ -62,6 +66,7 @@ public class ClienteServico {
         }
         return null;
     }
+
     public boolean validarCliente(Cliente cliente) {
         return true;
     }
