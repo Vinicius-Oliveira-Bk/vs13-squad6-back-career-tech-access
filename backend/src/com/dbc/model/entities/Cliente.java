@@ -7,16 +7,19 @@ import com.dbc.model.enums.PlanoEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.interfaces.IDocumentacaoPessoal;
 
-public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
+public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private PlanoEnum plano;
+
+    private TipoClienteEnum tipoCliente;
+
     private String interesses;
     private String imagemDocumento;
-    private boolean controleParental;
-    private boolean acessoPcd;
+    private Character controleParental;
+    private Character acessoPcd;
 
     public Cliente() {}
 
-    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, boolean controleParental, boolean acessoPcd) {
+    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
         super();
         this.plano = plano;
         this.interesses = interesses;
@@ -31,6 +34,14 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     public void setPlano(PlanoEnum plano) {
         this.plano = plano;
+    }
+
+    public TipoClienteEnum getTipoCliente() {
+        return tipoCliente;
+    }
+
+    public void setTipoCliente(TipoClienteEnum tipoCliente) {
+        this.tipoCliente = tipoCliente;
     }
 
     public String getInteresses() {
@@ -49,19 +60,19 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.imagemDocumento = imagemDocummento;
     }
 
-    public boolean getControleParental() {
+    public Character getControleParental() {
         return controleParental;
     }
 
-    public void setControleParental(boolean controleParental) {
+    public void setControleParental(Character controleParental) {
         this.controleParental = controleParental;
     }
 
-    public boolean getAcessoPcd() {
+    public Character getAcessoPcd() {
         return acessoPcd;
     }
 
-    public void setAcessoPcd(boolean acessoPcd) {
+    public void setAcessoPcd(Character acessoPcd) {
         this.acessoPcd = acessoPcd;
     }
 
@@ -110,13 +121,23 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
     }
 
     @Override
-    public boolean validarControleParental(boolean controleParental) {
-        return true;
+    public Character validarControleParental(boolean controleParental) {
+        return null;
     }
 
     @Override
-    public boolean validarAcessoPcd(boolean acessoPcd) {
-        return true;
+    public Character validarAcessoPcd(boolean acessoPcd) {
+        return null;
+    }
+
+    @Override
+    public Character validarControleParental(Character controleParental) {
+        return controleParental;
+    }
+
+    @Override
+    public Character validarAcessoPcd(Character acessoPcd) {
+        return acessoPcd;
     }
 
     @Override
@@ -124,7 +145,7 @@ public abstract class Cliente extends Usuario implements IDocumentacaoPessoal {
         return super.toString() +
                 "\n\tPlano .................: " + this.plano +
                 "\n\tInteresses ............: " + this.interesses.toUpperCase() +
-                "\n\tControle Parental .....: " + (this.controleParental ? "SIM" : "NÃO") +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd ? "SIM" : "NÃO");
+                "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO") +
+                "\n\tAcesso Pcd ............: " + (this.acessoPcd.equals('S') ? "SIM" : "NÃO");
     }
 }
