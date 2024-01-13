@@ -17,11 +17,11 @@ public class EstudanteServico {
         }
     }
 
-    public void listarUm(long id) {
+    public void listarUm(Long id) {
         boolean estudanteEncontrado = false;
 
         for (Estudante estudante : lista) {
-            if (estudante.getId() == id) {
+            if (estudante.getId() == id.intValue()) {
                 System.out.println(estudante);
                 estudanteEncontrado = true;
                 break;
@@ -43,19 +43,16 @@ public class EstudanteServico {
         }
     }
 
-    public void atualizar(long id, Estudante estudanteAtualiza) {
+    public void atualizar(Long id, Estudante estudanteAtualiza) {
 
         for (int i = 0; i < lista.size(); i++) {
             Estudante estudante = lista.get(i);
 
-            if (estudante.getId() == id) {
+            if (estudante.getId() == id.intValue()) {
                 estudante.setNome(estudanteAtualiza.getNome());
                 estudante.setCpf(estudanteAtualiza.getCpf());
                 estudante.setDataNascimento(estudanteAtualiza.getDataNascimento());
-                estudante.setEnderecos(estudanteAtualiza.getEnderecos());
-                estudante.setContatos(estudanteAtualiza.getContatos());
                 estudante.setEmail(estudanteAtualiza.getEmail());
-                estudante.setTipo(estudanteAtualiza.getTipo());
                 estudante.setPlano(estudanteAtualiza.getPlano());
                 estudante.setInteresses(estudanteAtualiza.getInteresses());
                 estudante.setImagemDocumento(estudanteAtualiza.getImagemDocumento());
@@ -76,18 +73,18 @@ public class EstudanteServico {
         System.err.println("🚫 Usuário não encontrado!");
     }
 
-    public void deletar(long id) {
+    public void remover(Long id) {
         Estudante estudanteDeletar = null;
 
         for (Estudante estudante : lista) {
-            if (estudante.getId() == id) {
+            if (estudante.getId() == id.intValue()) {
                 estudanteDeletar = estudante;
             }
         }
 
         if (estudanteDeletar != null) {
             lista.remove(estudanteDeletar);
-            usuarioServico.deletar(estudanteDeletar.getId());
+            usuarioServico.remover(estudanteDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } else {
             System.err.println("🚫 Usuário não encontrado!");
