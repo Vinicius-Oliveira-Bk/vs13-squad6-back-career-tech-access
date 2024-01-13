@@ -18,7 +18,8 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     public ProfissionalMentor() {
     }
 
-    public ProfissionalMentor(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
+    public ProfissionalMentor(TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum,
+                              String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
         super();
         this.areaAtuacao = areaAtuacao;
         this.nivelExperienciaEnum = nivelExperienciaEnum;
@@ -55,7 +56,7 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
     }
 
     public void setCertificadosDeCapacitacao(String certificadosDeCapacitacao) {
-        this.certificadosDeCapacitacao = certificadosDeCapacitacao;
+        this.certificadosDeCapacitacao.add(certificadosDeCapacitacao);
     }
 
     public boolean isDocumentosValidados() {
@@ -83,6 +84,6 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
                 "\n";
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
     }
 }

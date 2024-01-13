@@ -4,7 +4,6 @@ import exceptions.BancoDeDadosException;
 import model.entidades.ProfissionalMentor;
 import model.enums.AreaAtuacaoEnum;
 import model.enums.NivelExperienciaEnum;
-import model.enums.TipoUsuarioEnum;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,15 +32,16 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
             Integer proximoId = this.getProximoId(con);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
-                    "(ID, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                    "(ID, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
+                    "VALUES(?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, proximoId);
-            stmt.setString(2, mentor.getCarteiraDeTrabalho());
-            stmt.setInt(3, mentor.getNivelExperienciaEnum().getValor());
-            stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
+            stmt.setString(2, String.valueOf(mentor.getAreaAtuacao()));
+            stmt.setString(3, mentor.getCarteiraDeTrabalho());
+            stmt.setInt(4, mentor.getNivelExperienciaEnum().getValor());
+            stmt.setString(5, mentor.getCertificadosDeCapacitacao().toString());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarMentor.res=" + res);
@@ -126,12 +126,41 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
         return mentores;
     }
 
+    public void listarUm(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE id = ?";
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+
+            ResultSet res = preparedStatement.executeQuery();
+
+            while (res.next()) {
+                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
+                System.out.println(mentor);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
         ProfissionalMentor mentor = new ProfissionalMentor();
         mentor.setId(res.getLong("id"));
-        mentor.setNome(res.getString("nome"));
         mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
-        mentor.setTipo(TipoUsuarioEnum.valueOf(res.getString("tipo")));
         mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
         mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
         mentor.setCertificadosDeCapacitacao(res.getString("certificados_de_capacitacao"));
@@ -151,7 +180,6 @@ public class ProfissionalMentorRepository implements IRepository<Integer, Profis
 
             stmt.setInt(1, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("removerMentorPorId.res=" + res);
 
