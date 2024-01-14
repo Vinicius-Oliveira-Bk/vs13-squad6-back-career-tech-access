@@ -155,7 +155,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         return super.toString() +
                 "\n\tCliente Id .............: " + this.id +
                 "\n\tPlano .................: " + this.plano +
-                "\n\tInteresses ............: " + this.interesses.toUpperCase() +
+                "\n\tInteresses ............: " + this.interesses +
                 "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO") +
                 "\n\tAcesso Pcd ............: " + (this.acessoPcd.equals('S') ? "SIM" : "NÃO");
     }
