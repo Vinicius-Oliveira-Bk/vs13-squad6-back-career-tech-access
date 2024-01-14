@@ -75,11 +75,11 @@ public class Usuario implements IVinculosUsuario {
         this.acessoPcd = acessoPcd;
     }
 
-    public TipoUsuarioEnum getTipoUsuario() {
+    public TipoUsuarioEnum getTipo() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(TipoUsuarioEnum tipoUsuario) {
+    public void setTipo(TipoUsuarioEnum tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 
