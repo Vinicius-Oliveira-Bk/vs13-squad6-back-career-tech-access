@@ -99,25 +99,17 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM CLIENTE";
+            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdCliente(res.getLong("ID_CLIENTE"));
-                cliente.setNome(res.getString("NOME"));
-                cliente.setDataNascimento(res.getDate("DATA_NASCIMENTO").toLocalDate());
-                cliente.setCpf(res.getString("CPF"));
-                cliente.setEmail(res.getString("EMAIL"));
-                cliente.setSenha(res.getString("SENHA"));
-                cliente.setInteresses(res.getString("INTERESSES"));
-                cliente.setImagemDocumento(res.getString("IMAGEM_DOCUMENTO"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
                 cliente.setTipoCliente(TipoClienteEnum.valueOf(res.getString("TIPO_CLIENTE")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("PLANO")));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                cliente.setAcessoPcd(res.getString("ACESSO_PCD").charAt(0));
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
@@ -140,7 +132,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
+            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE WHERE ID = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setLong(1, id);
 
@@ -149,18 +141,10 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             if (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdCliente(res.getLong("ID_CLIENTE"));
-                cliente.setNome(res.getString("NOME"));
-                cliente.setDataNascimento(res.getDate("DATA_NASCIMENTO").toLocalDate());
-                cliente.setCpf(res.getString("CPF"));
-                cliente.setEmail(res.getString("EMAIL"));
-                cliente.setSenha(res.getString("SENHA"));
-                cliente.setInteresses(res.getString("INTERESSES"));
-                cliente.setImagemDocumento(res.getString("IMAGEM_DOCUMENTO"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
                 cliente.setTipoCliente(TipoClienteEnum.valueOf(res.getString("TIPO_CLIENTE")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("PLANO")));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                cliente.setAcessoPcd(res.getString("ACESSO_PCD").charAt(0));
 
                 return cliente;
             }
