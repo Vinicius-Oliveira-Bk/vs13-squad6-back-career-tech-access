@@ -9,16 +9,17 @@ import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.interfaces.IDocumentacaoPessoal;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
+
+    private Long id;
     private PlanoEnum plano;
-
     private TipoClienteEnum tipoCliente;
-
     private String interesses;
     private String imagemDocumento;
     private Character controleParental;
     private Character acessoPcd;
 
-    public Cliente() {}
+    public Cliente() {
+    }
 
     public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
         super();
@@ -27,6 +28,14 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
         this.acessoPcd = acessoPcd;
+    }
+
+    public Long getIdCliente() {
+        return id;
+    }
+
+    public void setIdCliente(Long id) {
+        this.id = id;
     }
 
     public PlanoEnum getPlano() {
@@ -144,8 +153,9 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     @Override
     public String toString() {
         return super.toString() +
+                "\n\tCliente Id .............: " + this.id +
                 "\n\tPlano .................: " + this.plano +
-                "\n\tInteresses ............: " + this.interesses.toUpperCase() +
+                "\n\tInteresses ............: " + this.interesses +
                 "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO") +
                 "\n\tAcesso Pcd ............: " + (this.acessoPcd.equals('S') ? "SIM" : "NÃO");
     }

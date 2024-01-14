@@ -16,30 +16,6 @@ public class Estudante extends Cliente {
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
-    public Estudante() {}
-
-    public Estudante(String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
-        this.matricula = matricula;
-        this.comprovanteMatricula = comprovanteMatricula;
-        this.tipoEstudante = tipoEstudante;
-        this.curso = curso;
-        this.instituicao = instituicao;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-    }
-
-    public Estudante(String nome, String cpf, String dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String matricula, String comprovanteMatricula, TipoEstudanteEnum tipoEstudante, String curso, String instituicao, LocalDate dataInicio, LocalDate dataFim) {
-
-        super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento, controleParental, acessoPcd);
-        this.matricula = matricula;
-        this.comprovanteMatricula = comprovanteMatricula;
-        this.tipoEstudante = tipoEstudante;
-        this.curso = curso;
-        this.instituicao = instituicao;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-    }
-
     public String getMatricula() {
         return matricula;
     }
