@@ -13,7 +13,7 @@ public class UsuarioServico {
         usuarioRepository = new UsuarioRepository();
     }
 
-    public void adicionarUsuario(Usuario usuario) {
+    public void cadastrar(Usuario usuario) {
         try {
 
             if (usuario.getCpf().length() != 11) {
@@ -32,7 +32,7 @@ public class UsuarioServico {
     }
 
     // remoção
-    public void removerUsuario(Long id) {
+    public void remover(Long id) {
         try {
             boolean conseguiuRemover = usuarioRepository.remover(id);
             System.out.println("\nUsuário removido com sucesso!");
@@ -42,7 +42,7 @@ public class UsuarioServico {
     }
 
     // atualização de um objeto
-    public void editarUsuario(Long id, Usuario usuario) {
+    public void atualizar(Long id, Usuario usuario) {
         try {
             boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
             System.out.println("\nUsuário editado com sucesso!");
@@ -52,7 +52,7 @@ public class UsuarioServico {
     }
 
     // leitura
-    public void listarTodosUsuarios() {
+    public void listarTodos() {
         try {
             List<Usuario> listar = usuarioRepository.listar();
             for (Usuario usuario : listar) {
@@ -63,20 +63,19 @@ public class UsuarioServico {
         }
     }
 
-    public void obterUsuarioPorId(Long idUsuario) {
+    public Usuario obterPorId(Long idUsuario) {
         try {
             Usuario usuario = usuarioRepository.listarUm(idUsuario);
 
             if (usuario != null) {
                 System.out.println("\nUsuário encontrado!\n");
-                System.out.println(usuario.toString());
+                return usuario;
             } else {
                 System.err.println("\nUsuário não encontrado com o ID: " + idUsuario + "\n");
             }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
+        return null;
     }
-
-
 }

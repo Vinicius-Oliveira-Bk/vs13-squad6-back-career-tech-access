@@ -12,7 +12,7 @@ public class ProfissionalRealocacaoServico {
             System.err.println("🚫 O usuário não pode ser nulo!");
         } else {
             lista.add(profissionalRealocacao);
-            usuarioServico.adicionarUsuario(profissionalRealocacao);
+            usuarioServico.cadastrar(profissionalRealocacao);
             System.out.println("✅ Profissional Realocacao cadastrado!");
         }
     }
@@ -79,7 +79,7 @@ public class ProfissionalRealocacaoServico {
 
         if (profissionalRealocacaoDeletar != null) {
             lista.remove(profissionalRealocacaoDeletar);
-            usuarioServico.removerUsuario(profissionalRealocacaoDeletar.getId());
+            usuarioServico.remover(profissionalRealocacaoDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } else {
             System.err.println("🚫 Usuário não encontrado!");
