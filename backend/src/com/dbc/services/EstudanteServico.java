@@ -2,15 +2,12 @@ package com.dbc.services;
 
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Estudante;
+import com.dbc.repository.EstudanteRepository;
 
 import java.util.List;
 
 public class EstudanteServico {
-    private EstudanteRepository estudanteRepository;
-
-    public EstudanteServico() {
-        estudanteRepository = new EstudanteRepository();
-    }
+    private EstudanteRepository estudanteRepository = new EstudanteRepository();
 
     public void adicionarEstudante(Estudante estudante) {
         try {
@@ -19,7 +16,7 @@ public class EstudanteServico {
                 throw new Exception("É preciso anexar o comprovante de matrícula!");
             }
 
-            Estudante estudanteAdicionado = estudanteRepository.cadastrar(estudante);
+            estudanteRepository.cadastrar(estudante);
             System.out.println("\nEstudante adicinado com sucesso!\n");
         } catch (Exception e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -30,7 +27,7 @@ public class EstudanteServico {
     // remoção
     public void removerEstudante(Long id) {
         try {
-            boolean conseguiuRemover = estudanteRepository.remover(id);
+            estudanteRepository.remover(id);
             System.out.println("\nEstudante removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -40,7 +37,7 @@ public class EstudanteServico {
     // atualização de um objeto
     public void editarEstudante(Long id, Estudante estudante) {
         try {
-            boolean conseguiuEditar = estudanteRepository.atualizar(id, estudante);
+            estudanteRepository.atualizar(id, estudante);
             System.out.println("\nEstudante editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();

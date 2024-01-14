@@ -1,13 +1,16 @@
 package com.dbc.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Cliente;
 import com.dbc.model.enums.PlanoEnum;
-import com.dbc.model.enums.TipoClienteEnum;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClienteRepository implements IRepository<Long, Cliente> {
     @Override
@@ -111,7 +114,6 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setIdCliente(res.getLong("ID_USUARIO"));
-                cliente.setTipoCliente(TipoClienteEnum.valueOf(res.getString("TIPO_CLIENTE")));
                 cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
@@ -146,7 +148,6 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setIdCliente(res.getLong("ID_USUARIO"));
-                cliente.setTipoCliente(TipoClienteEnum.valueOf(res.getString("TIPO_CLIENTE")));
                 cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
 

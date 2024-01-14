@@ -3,16 +3,15 @@ package com.dbc.model.entities;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.dbc.model.enums.PlanoEnum;
-import com.dbc.model.enums.TipoClienteEnum;
-import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.interfaces.IDocumentacaoPessoal;
+import com.dbc.model.enums.PlanoEnum;
+import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
 
     private Long id;
     private PlanoEnum plano;
-    private TipoClienteEnum tipoCliente;
+    private TipoUsuarioEnum tipoCliente;
     private String interesses;
     private String imagemDocumento;
     private Character controleParental;
@@ -56,11 +55,11 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.plano = plano;
     }
 
-    public TipoClienteEnum getTipoCliente() {
+    public TipoUsuarioEnum getTipoCliente() {
         return tipoCliente;
     }
 
-    public void setTipoCliente(TipoClienteEnum tipoCliente) {
+    public void setTipoCliente(TipoUsuarioEnum tipoCliente) {
         this.tipoCliente = tipoCliente;
     }
 
