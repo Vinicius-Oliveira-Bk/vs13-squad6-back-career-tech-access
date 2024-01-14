@@ -47,7 +47,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setString(5, usuario.getEmail());
             stmt.setString(6, usuario.getSenha());
             stmt.setString(7, String.valueOf(usuario.getAcessoPcd()));
-            stmt.setLong(8, usuario.getTipoUsuario().ordinal());
+            stmt.setLong(8, usuario.getTipo().ordinal());
             stmt.setString(9, usuario.getInteresses());
             stmt.setString(10, usuario.getImagemDocumento());
 
@@ -124,7 +124,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != 999) {
                 sql.append(" acesso_pcd = ?,");
             }
-            if (usuario.getTipoUsuario() != null) {
+            if (usuario.getTipo() != null) {
                 sql.append(" tipo_usuario = ?,");
             }
             if (usuario.getInteresses() != null) {
@@ -158,8 +158,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != null) {
                 stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
             }
-            if (usuario.getTipoUsuario() != null) {
-                stmt.setLong(index++, usuario.getTipoUsuario().ordinal());
+            if (usuario.getTipo() != null) {
+                stmt.setLong(index++, usuario.getTipo().ordinal());
             }
             if (usuario.getInteresses() != null) {
                 stmt.setString(index++, usuario.getInteresses());
@@ -209,7 +209,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setEmail(res.getString("email"));
                 usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -248,7 +248,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                     usuario.setEmail(res.getString("email"));
                     usuario.setSenha(res.getString("senha"));
                     usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                    usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                    usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                     usuario.setInteresses(res.getString("interesses"));
                     usuario.setImagemDocumento(res.getString("imagem_documento"));
                 }
@@ -291,7 +291,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setEmail(res.getString("email"));
                 usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -332,7 +332,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setEmail(res.getString("email"));
                 usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);

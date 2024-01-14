@@ -94,6 +94,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         List<Pcd> pcds = new ArrayList<>();
         Connection con = null;
         try {
+            con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM PCD";
