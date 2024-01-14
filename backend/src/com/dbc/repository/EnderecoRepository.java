@@ -38,7 +38,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
 
             String sql = "INSERT INTO ENDERECO\n" +
                     "(ID, LOGRADOURO, NUMERO, COMPLEMENTO, CEP, CIDADE, ESTADO, PAIS, TIPO)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?)\n";
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -211,20 +211,30 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         }
     }
 
+    @Override
     public Endereco listarUm(Long id) throws BancoDeDadosException {
+        Endereco endereco = null;
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
+            String sql = "SELECT * FROM ENDERECO WHERE ID = ?";
 
-            String sql = "SELECT * FROM ENDERECO WHERE ID = ? ";
+            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+                pstmt.setLong(1, id);
 
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setLong(1, id);
+                try (ResultSet res = pstmt.executeQuery()) {
+                    if (res.next()) {
+                        endereco = getEnderecoFromResultSet(res);
+                        System.out.println(endereco);
+                    } else {
+                        System.out.println("Nenhum endereço encontrado para o Id: " + id);
+                    }
+                }
+            }
+            return endereco;
 
-            ResultSet res = stmt.executeQuery();
-
-            return getEnderecoFromResultSet(res);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
