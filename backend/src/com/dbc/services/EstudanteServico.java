@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class EstudanteServico {
     private ArrayList<Estudante> lista = new ArrayList<>();
-    UsuarioServico usuarioServico = new UsuarioServico();
+    EstudanteServico estudanteServico = new EstudanteServico();
+
     public void cadastrar(Estudante estudante) {
         if (estudante == null) {
             System.err.println("🚫 O usuário não pode ser nulo!");
         } else {
-            lista.add(estudante);
-            usuarioServico.cadastrar(estudante);
+            estudanteServico.cadastrar(estudante);
             System.out.println("✅ Estudante cadastrado!");
         }
     }
@@ -84,7 +84,7 @@ public class EstudanteServico {
 
         if (estudanteDeletar != null) {
             lista.remove(estudanteDeletar);
-            usuarioServico.remover(estudanteDeletar.getId());
+            estudanteServico.remover(estudanteDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } else {
             System.err.println("🚫 Usuário não encontrado!");

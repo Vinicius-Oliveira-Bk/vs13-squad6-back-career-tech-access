@@ -1,11 +1,11 @@
 package com.dbc.model.entities;
 
+import java.util.ArrayList;
+
+import com.dbc.interfaces.IDocumentacaoProfissional;
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
-import com.dbc.interfaces.IDocumentacaoProfissional;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissional {
     private AreaAtuacaoEnum areaAtuacao;

@@ -1,9 +1,9 @@
 package com.dbc.model.enums;
 
 public enum TipoUsuarioEnum {
-    ESTUDANTE(1),
-    PROFISSIONAL(2),
-    PCD(3),
+    ESTUDANTE (1),
+    PCD (2),
+    PROFISSIONAL_REALOCACAO (3),
     MENTOR(4);
 
     private final int valor;

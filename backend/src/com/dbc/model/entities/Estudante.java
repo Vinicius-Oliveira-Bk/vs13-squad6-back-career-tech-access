@@ -1,10 +1,8 @@
 package com.dbc.model.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import com.dbc.model.enums.PlanoEnum;
+
 import com.dbc.model.enums.TipoEstudanteEnum;
-import com.dbc.model.enums.TipoUsuarioEnum;
 import com.dbc.utils.Utils;
 
 public class Estudante extends Cliente {
