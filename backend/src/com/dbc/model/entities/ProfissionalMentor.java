@@ -1,7 +1,5 @@
 package com.dbc.model.entities;
 
-import java.util.ArrayList;
-
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
