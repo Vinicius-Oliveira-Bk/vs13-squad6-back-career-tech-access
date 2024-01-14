@@ -20,7 +20,7 @@ public class UsuarioServico {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario usuarioAdicionado = usuarioRepository.adicionar(usuario);
+            Usuario usuarioAdicionado = usuarioRepository.cadastrar(usuario);
             System.out.println("\nUsuário adicinado com sucesso!\n");
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -32,7 +32,7 @@ public class UsuarioServico {
     }
 
     // remoção
-    public void removerUsuario(Integer id) {
+    public void removerUsuario(Long id) {
         try {
             boolean conseguiuRemover = usuarioRepository.remover(id);
             System.out.println("\nUsuário removido com sucesso!");
@@ -42,9 +42,9 @@ public class UsuarioServico {
     }
 
     // atualização de um objeto
-    public void editarUsuario(Integer id, Usuario usuario) {
+    public void editarUsuario(Long id, Usuario usuario) {
         try {
-            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
+            boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
             System.out.println("\nUsuário editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -63,9 +63,9 @@ public class UsuarioServico {
         }
     }
 
-    public void obterUsuarioPorId(Integer idUsuario) {
+    public void obterUsuarioPorId(Long idUsuario) {
         try {
-            Usuario usuario = usuarioRepository.obterPorId(idUsuario);
+            Usuario usuario = usuarioRepository.listarUm(idUsuario);
 
             if (usuario != null) {
                 System.out.println("\nUsuário encontrado!\n");
