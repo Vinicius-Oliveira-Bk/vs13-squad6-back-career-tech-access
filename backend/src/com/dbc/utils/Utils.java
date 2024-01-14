@@ -159,7 +159,7 @@ public abstract class Utils {
 
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
-            usuario.setTipo(tipoUsuario);
+            usuario.setTipoUsuario(tipoUsuario);
 
             rotinaCadastroContatosEenderecos(usuario);
         } catch (Exception e) {
@@ -169,6 +169,8 @@ public abstract class Utils {
     }
 
     public static void rotinaCadastroCliente(Cliente cliente) {
+        int controleParental, acessoPcd;
+
         try {
             PlanoEnum planoEscolhido = PlanoEnum.GRATUITO;
             planoEscolhido = (PlanoEnum) Utils.exibirMenuEnumDinamico(planoEscolhido);
@@ -176,8 +178,10 @@ public abstract class Utils {
 
             cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
             cliente.setImagemDocumento(scanner.nextLine("Digite o link da imagem do seu documento: "));
-            cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - SIM / 2 - NÃO)? ").equals("1"));
-            cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - SIM / 2 - NÃO)? ").equals("1"));
+            controleParental = scanner.nextInt("Tem controle parental (1- SIM / 2 - NÃO)? ");
+            cliente.setControleParental(controleParental == 1 ? 'S' : 'N');
+            acessoPcd = scanner.nextInt("Tem acesso PCD (1 - SIM / 2 - NÃO)? ");
+            cliente.setAcessoPcd(acessoPcd == 1 ? 'S' : 'N');
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
@@ -188,9 +192,6 @@ public abstract class Utils {
         estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
         estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
 
-        TipoEstudanteEnum tipoEstudante = TipoEstudanteEnum.ENSINO_FUNDAMENTAL;
-        estudante.setTipoEstudante(tipoEstudante);
-
         estudante.setCurso(scanner.nextLine("Digite o curso: "));
         estudante.setInstituicao(scanner.nextLine("Digite a instituição: "));
 
@@ -200,7 +201,7 @@ public abstract class Utils {
 
         String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
         LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
-        estudante.setDataFim(dataFim);
+        estudante.setDataTermino(dataFim);
     }
 
     public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
@@ -215,7 +216,7 @@ public abstract class Utils {
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
         mentor.setAreaAtuacao(areaAtuacao);
 
-        ArrayList<String> certificadosDeCapacitacao = new ArrayList<String>();
+        String certificadosDeCapacitacao = new String();
         mentor.setCertificadosDeCapacitacao(certificadosDeCapacitacao);
 
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");

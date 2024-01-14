@@ -1,7 +1,7 @@
 package com.dbc.model.entities;
 
 import com.dbc.interfaces.IVinculosUsuario;
-
+import com.dbc.model.enums.TipoUsuarioEnum;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class Usuario implements IVinculosUsuario {
     private String email;
     private String senha;
     private Character acessoPcd;
-    private Long tipoUsuario;
+    private TipoUsuarioEnum tipoUsuario;
     private String interesses;
     private ArrayList<Contato> contatos;
     private ArrayList<Endereco> enderecos;
@@ -75,11 +75,11 @@ public class Usuario implements IVinculosUsuario {
         this.acessoPcd = acessoPcd;
     }
 
-    public Long getTipoUsuario() {
+    public TipoUsuarioEnum getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(Long tipoUsuario) {
+    public void setTipoUsuario(TipoUsuarioEnum tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstudanteRepository implements IRepositorio<Long, Estudante> {
+public class EstudanteRepository implements IRepository<Long, Estudante> {
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
