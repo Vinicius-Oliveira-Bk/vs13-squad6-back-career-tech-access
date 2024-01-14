@@ -48,7 +48,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             stmt.setLong(1, cliente.getIdCliente());
             stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
-            stmt.setInt(3, cliente.getTipoCliente().getTipoCliente());
+            stmt.setInt(3, cliente.getTipoCliente().ordinal());
             stmt.setInt(4, cliente.getPlano().getValor());
             stmt.setString(5, String.valueOf(cliente.getControleParental()));
 
@@ -204,5 +204,109 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 e.printStackTrace();
             }
         }
+    }
+    public List<Cliente> getClientesNaoPcd() throws BancoDeDadosException {
+        List<Cliente> clientes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM CLIENTE C "+
+                            "LEFT JOIN PCD P ON (P.ID_CLIENTE = C.ID) " +
+                            "WHERE P.ID_CLIENTE IS NULL";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(res.getLong("ID"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+                clientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return clientes;
+    }
+
+    public List<Cliente> getClientesNaoEstudante() throws BancoDeDadosException {
+        List<Cliente> clientes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM CLIENTE C "+
+                    "LEFT JOIN ESTUDANTE E ON (E.ID_CLIENTE = C.ID) " +
+                    "WHERE E.ID_CLIENTE IS NULL";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(res.getLong("ID"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+                clientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return clientes;
+    }
+
+    public List<Cliente> getClientesNaoProfissionalRealocacao() throws BancoDeDadosException {
+        List<Cliente> clientes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM CLIENTE C "+
+                    "LEFT JOIN PROFISSIONAL_REALOCACAO PR ON (PR.ID_CLIENTE = C.ID) " +
+                    "WHERE PR.ID_CLIENTE IS NULL";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(res.getLong("ID"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+                clientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return clientes;
     }
 }
