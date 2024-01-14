@@ -217,7 +217,6 @@ public abstract class Utils {
         mentor.setAreaAtuacao(areaAtuacao);
 
         String certificadosDeCapacitacao = new String();
-        mentor.setCertificadosDeCapacitacao(certificadosDeCapacitacao);
 
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
