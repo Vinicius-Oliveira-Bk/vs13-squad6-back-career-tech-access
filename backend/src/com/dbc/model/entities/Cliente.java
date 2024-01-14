@@ -29,6 +29,16 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
+    public Cliente(Long id, PlanoEnum plano, TipoClienteEnum tipoCliente, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
+        this.id = id;
+        this.plano = plano;
+        this.tipoCliente = tipoCliente;
+        this.interesses = interesses;
+        this.imagemDocumento = imagemDocumento;
+        this.controleParental = controleParental;
+        this.acessoPcd = acessoPcd;
+    }
+
     public Long getIdCliente() {
         return id;
     }

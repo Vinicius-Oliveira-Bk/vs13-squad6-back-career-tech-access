@@ -1,28 +1,27 @@
 package com.dbc.model.entities;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import com.dbc.model.enums.TipoEnum;
 
 public class Contato {
-    private static final AtomicInteger count = new AtomicInteger(0);
-    private long id;
+    private Long id;
     private String descricao;
     private String telefone;
     private TipoEnum tipo;
 
-    public Contato() {
-        this.id = count.incrementAndGet();
-    }
+    public Contato() { }
 
     public Contato(String descricao, String telefone, TipoEnum tipo) {
-        this.id = count.incrementAndGet();
         this.descricao = descricao;
         this.telefone = telefone;
         this.tipo = tipo;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescricao() {
