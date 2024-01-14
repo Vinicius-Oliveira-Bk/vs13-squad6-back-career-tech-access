@@ -20,7 +20,7 @@ public class ContatoServico {
         }
     }
 
-    public void listar() {
+    public void listarTodos() {
         try {
             contatoRepository.listar().forEach(System.out::println);
         } catch (BancoDeDadosException e) {
@@ -35,7 +35,7 @@ public class ContatoServico {
         }
     }
 
-    public void editar(Long id, Contato contato) {
+    public void atualizar(Long id, Contato contato) {
         try {
             contatoRepository.atualizar(id, contato);
         } catch (BancoDeDadosException e) {
