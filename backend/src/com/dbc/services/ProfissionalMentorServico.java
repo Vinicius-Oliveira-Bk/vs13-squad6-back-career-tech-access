@@ -1,85 +1,58 @@
 package com.dbc.services;
 
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalMentor;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import com.dbc.repository.ProfissionalMentorRepository;
 
 public class ProfissionalMentorServico {
-    private ArrayList<ProfissionalMentor> lista = new ArrayList<>();
-    UsuarioServico usuarioServico = new UsuarioServico();
 
-    public void cadastrar(ProfissionalMentor profissionalMentor) {
-        if (profissionalMentor == null) {
-            System.err.println("🚫 O profissional não pode ser nulo!");
-        } else {
-            lista.add(profissionalMentor);
-            usuarioServico.cadastrar(profissionalMentor);
-            System.out.println("✅ Profissional Mentor cadastrado!");
-        }
+    private ProfissionalMentorRepository mentorRepository;
+
+    public ProfissionalMentorServico() {
+        mentorRepository = new ProfissionalMentorRepository();
     }
 
-    public ProfissionalMentor listarUm(long id) {
-        for (ProfissionalMentor profissionalMentor : lista) {
-            if (profissionalMentor.getId() == id) {
-                System.out.println(profissionalMentor);
-                return profissionalMentor;
-            }
+    public void cadastrar(ProfissionalMentor mentor) {
+        try {
+            mentorRepository.cadastrar(mentor);
+            System.out.println("✅ Profissional Mentor cadastrado!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-        throw new NoSuchElementException("🚫 Profissional Mentor não encontrado!");
     }
 
     public void listarTodos() {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum Profissional Mentor cadastrado!");
-            return;
-        }
-
-        for (ProfissionalMentor profissionalMentor : lista) {
-            System.out.println(profissionalMentor);
+       try {
+            mentorRepository.listar().forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
 
-    public void atualizar(long id, ProfissionalMentor profissionalMentorAtualiza) {
-
-        for (int i = 0; i < lista.size(); i++) {
-            ProfissionalMentor profissionalMentor = lista.get(i);
-
-            if (profissionalMentor.getId() == id) {
-                profissionalMentor.setNome(profissionalMentorAtualiza.getNome());
-                profissionalMentor.setCpf(profissionalMentorAtualiza.getCpf());
-                profissionalMentor.setDataDeNascimento(profissionalMentorAtualiza.getDataDeNascimento());
-                profissionalMentor.setEnderecos(profissionalMentorAtualiza.getEnderecos());
-                profissionalMentor.setContatos(profissionalMentorAtualiza.getContatos());
-                profissionalMentor.setEmail(profissionalMentorAtualiza.getEmail());
-                profissionalMentor.setTipo(profissionalMentorAtualiza.getTipo());
-                profissionalMentor.setAreaAtuacao(profissionalMentorAtualiza.getAreaAtuacao());
-                profissionalMentor.setNivelExperienciaEnum(profissionalMentorAtualiza.getNivelExperienciaEnum());
-                profissionalMentor.setCarteiraDeTrabalho(profissionalMentorAtualiza.getCarteiraDeTrabalho());
-                profissionalMentor
-                        .setCertificadosDeCapacitacao(profissionalMentorAtualiza.getCertificadosDeCapacitacao());
-                System.out.println("✅ Profissional Mentor atualizado!");
-                return;
-            }
+    public ProfissionalMentor listarUm(Long id) {
+        try {
+            return mentorRepository.listarUm(id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        System.err.println("🚫 Profissional Mentor não encontrado!");
+        return null;
     }
 
-    public void deletar(long id) {
-        ProfissionalMentor profissionalMentorDeletar = null;
-
-        for (ProfissionalMentor profissionalMentor : lista) {
-            if (profissionalMentor.getId() == id) {
-                profissionalMentorDeletar = profissionalMentor;
-            }
+    public void atualizar(Long id, ProfissionalMentor mentor) {
+        try {
+            mentorRepository.atualizar(id, mentor);
+            System.out.println("✅ Profissional Mentor atualizado!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        if (profissionalMentorDeletar != null) {
-            lista.remove(profissionalMentorDeletar);
-            usuarioServico.deletar(profissionalMentorDeletar.getId());
-            System.out.println("✅ Profissional Mentor removido!");
-        } else {
-            System.err.println("🚫 Usuário não encontrado!");
+    public void remover(Long id) {
+        try {
+            mentorRepository.remover(id);
+            System.out.println("✅ Profissional Mentor deletado!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
