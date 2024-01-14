@@ -13,14 +13,9 @@ public class ClienteServico {
         clienteRepository = new ClienteRepository();
     }
 
-    public void adicionar(Cliente cliente) {
+    public void adicionar(Cliente cliente, Long idUsuario) {
         try {
-
-            if (cliente.getCpf().length() != 11) {
-                throw new Exception("CPF Invalido!");
-            }
-
-            Cliente clienteAdicionado = clienteRepository.cadastrar(cliente);
+            Cliente clienteAdicionado = clienteRepository.cadastrar(cliente, idUsuario);
             System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
