@@ -1,93 +1,77 @@
 package com.dbc.services;
 
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Estudante;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class EstudanteServico {
-    private ArrayList<Estudante> lista = new ArrayList<>();
-    UsuarioServico usuarioServico = new UsuarioServico();
-    public void cadastrar(Estudante estudante) {
-        if (estudante == null) {
-            System.err.println("🚫 O usuário não pode ser nulo!");
-        } else {
-            lista.add(estudante);
-            usuarioServico.cadastrar(estudante);
-            System.out.println("✅ Estudante cadastrado!");
-        }
+    private EstudanteRepository estudanteRepository;
+
+    public EstudanteServico() {
+        estudanteRepository = new EstudanteRepository();
     }
 
-    public void listarUm(Long id) {
-        boolean estudanteEncontrado = false;
+    public void adicionarEstudante(Estudante estudante) {
+        try {
 
-        for (Estudante estudante : lista) {
-            if (estudante.getId() == id.intValue()) {
-                System.out.println(estudante);
-                estudanteEncontrado = true;
-                break;
+            if (estudante.getComprovanteMatricula() == null) {
+                throw new Exception("É preciso anexar o comprovante de matrícula!");
             }
-        }
-        if (!estudanteEncontrado) {
-            System.err.println("🚫 Estudante não encontrado!");
-        }
-    }
 
-    public void listarTodos() {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum estudante cadastrado!");
-            return;
-        }
-
-        for (Estudante estudante : lista) {
-            System.out.println(estudante);
+            Estudante estudanteAdicionado = estudanteRepository.cadastrar(estudante);
+            System.out.println("\nEstudante adicinado com sucesso!\n");
+        } catch (Exception e) {
+            System.out.println("ERRO: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void atualizar(Long id, Estudante estudanteAtualiza) {
+    // remoção
+    public void removerEstudante(Long id) {
+        try {
+            boolean conseguiuRemover = estudanteRepository.remover(id);
+            System.out.println("\nEstudante removido com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 
-        for (int i = 0; i < lista.size(); i++) {
-            Estudante estudante = lista.get(i);
+    // atualização de um objeto
+    public void editarEstudante(Long id, Estudante estudante) {
+        try {
+            boolean conseguiuEditar = estudanteRepository.atualizar(id, estudante);
+            System.out.println("\nEstudante editado com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 
-            if (estudante.getId() == id.intValue()) {
-                estudante.setNome(estudanteAtualiza.getNome());
-                estudante.setCpf(estudanteAtualiza.getCpf());
-                estudante.setDataNascimento(estudanteAtualiza.getDataNascimento());
-                estudante.setEmail(estudanteAtualiza.getEmail());
-                estudante.setPlano(estudanteAtualiza.getPlano());
-                estudante.setInteresses(estudanteAtualiza.getInteresses());
-                estudante.setImagemDocumento(estudanteAtualiza.getImagemDocumento());
-                estudante.setControleParental(estudanteAtualiza.getControleParental());
-                estudante.setAcessoPcd(estudanteAtualiza.getAcessoPcd());
-                estudante.setMatricula(estudanteAtualiza.getMatricula());
-                estudante.setComprovanteMatricula(estudanteAtualiza.getComprovanteMatricula());
-                estudante.setTipoEstudante(estudanteAtualiza.getTipoEstudante());
-                estudante.setCurso(estudanteAtualiza.getCurso());
-                estudante.setInstituicao(estudanteAtualiza.getInstituicao());
-                estudante.setDataInicio(estudanteAtualiza.getDataInicio());
-                estudante.setDataFim(estudanteAtualiza.getDataFim());
-                System.out.println("✅ Estudante atualizado!");
-                return;
+    // leitura
+    public void listarTodosEstudantes() {
+        try {
+            List<Estudante> listar = estudanteRepository.listar();
+            for (Estudante estudante : listar) {
+                System.out.println(estudante.toString());
             }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        System.err.println("🚫 Usuário não encontrado!");
     }
 
-    public void remover(Long id) {
-        Estudante estudanteDeletar = null;
+    public void obterEstudantePorId(Long idEstudante) {
+        try {
+            Estudante estudante = estudanteRepository.listarUm(idEstudante);
 
-        for (Estudante estudante : lista) {
-            if (estudante.getId() == id.intValue()) {
-                estudanteDeletar = estudante;
+            if (estudante != null) {
+                System.out.println("\nEstudante encontrado!\n");
+                System.out.println(estudante.toString());
+            } else {
+                System.err.println("\nEstudante não encontrado com o ID: " + idEstudante + "\n");
             }
-        }
-
-        if (estudanteDeletar != null) {
-            lista.remove(estudanteDeletar);
-            usuarioServico.remover(estudanteDeletar.getId());
-            System.out.println("✅ Usuário removido!");
-        } else {
-            System.err.println("🚫 Usuário não encontrado!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
+
 }
