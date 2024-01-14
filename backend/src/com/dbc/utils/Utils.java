@@ -125,7 +125,7 @@ public abstract class Utils {
             tipoContato = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoContato);
             contato.setTipo(tipoContato);
 
-            usuarioServico.vincularContato(usuario, contato);
+            usuario.vincularContato(usuario, contato);
 
             Endereco endereco = new Endereco();
 
@@ -141,7 +141,7 @@ public abstract class Utils {
             tipoEndereco = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoEndereco);
             endereco.setTipo(tipoEndereco);
 
-            usuarioServico.vincularEndereco(usuario, endereco);
+            usuario.vincularEndereco(usuario, endereco);
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
@@ -159,7 +159,7 @@ public abstract class Utils {
 
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
-            usuario.setTipoUsuario(tipoUsuario);
+            usuario.setTipo(tipoUsuario);
 
             rotinaCadastroContatosEenderecos(usuario);
         } catch (Exception e) {
@@ -222,5 +222,11 @@ public abstract class Utils {
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
         mentor.setNivelExperienciaEnum(nivelExperiencia);
+    }
+
+    public static void rotinaCadastroPcd(Pcd pcd) {
+        pcd.setTipoDeficiencia(scanner.nextLine("Informe seu tipo de deficiência: "));
+        pcd.setCertificadoDeficienciaGov(scanner.nextLine("Informe seu certificado de deficiência: "));
+
     }
 }
