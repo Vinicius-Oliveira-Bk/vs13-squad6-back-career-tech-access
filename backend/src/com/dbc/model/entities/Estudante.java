@@ -1,20 +1,23 @@
 package com.dbc.model.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import com.dbc.model.enums.PlanoEnum;
-import com.dbc.model.enums.TipoEstudanteEnum;
-import com.dbc.model.enums.TipoUsuarioEnum;
-import com.dbc.utils.Utils;
 
 public class Estudante extends Cliente {
+    private Long id;
     private String matricula;
     private String comprovanteMatricula;
-    private TipoEstudanteEnum tipoEstudante;
-    private String curso;
     private String instituicao;
+    private String curso;
     private LocalDate dataInicio;
-    private LocalDate dataFim;
+    private LocalDate dataTermino;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMatricula() {
         return matricula;
@@ -32,12 +35,12 @@ public class Estudante extends Cliente {
         this.comprovanteMatricula = comprovanteMatricula;
     }
 
-    public TipoEstudanteEnum getTipoEstudante() {
-        return tipoEstudante;
+    public String getInstituicao() {
+        return instituicao;
     }
 
-    public void setTipoEstudante(TipoEstudanteEnum tipoEstudante) {
-        this.tipoEstudante = tipoEstudante;
+    public void setInstituicao(String instituicao) {
+        this.instituicao = instituicao;
     }
 
     public String getCurso() {
@@ -48,14 +51,6 @@ public class Estudante extends Cliente {
         this.curso = curso;
     }
 
-    public String getInstituicao() {
-        return instituicao;
-    }
-
-    public void setInstituicao(String instituicao) {
-        this.instituicao = instituicao;
-    }
-
     public LocalDate getDataInicio() {
         return dataInicio;
     }
@@ -64,25 +59,25 @@ public class Estudante extends Cliente {
         this.dataInicio = dataInicio;
     }
 
-    public LocalDate getDataFim() {
-        return dataFim;
+    public LocalDate getDataTermino() {
+        return dataTermino;
     }
 
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
+    public void setDataTermino(LocalDate dataTermino) {
+        this.dataTermino = dataTermino;
     }
 
+    @Override
     public String toString() {
-        String dataInicioFormatada = Utils.formatarData(dataFim);
-        String dataFimFormatada = Utils.formatarData(dataFim);
-
-        return super.toString() +
-                "\n\tMatricula .............: " + this.matricula +
-                "\n\tTipo de Estudante .....: " + this.tipoEstudante +
-                "\n\tCurso .................: " + this.curso +
-                "\n\tInstituicao ...........: " + this.instituicao +
-                "\n\tData Inicio ...........: " + dataInicioFormatada +
-                "\n\tData Fim ..............: " + dataFimFormatada +
-                "\n";
+        return "Cliente{" +
+                "id=" + id +
+                ", matricula='" + matricula + '\'' +
+                ", comprovanteMatricula='" + comprovanteMatricula + '\'' +
+                ", instituicao='" + instituicao + '\'' +
+                ", curso='" + curso + '\'' +
+                ", dataInicio=" + dataInicio +
+                ", dataTermino=" + dataTermino +
+                '}';
     }
+
 }
