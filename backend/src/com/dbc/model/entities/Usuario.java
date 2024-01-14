@@ -3,7 +3,7 @@ package com.dbc.model.entities;
 import java.time.LocalDate;
 
 public class Usuario {
-    private Integer id;
+    private Long id;
     private String nome;
     private LocalDate dataNascimento;
     private String cpf;
@@ -14,11 +14,11 @@ public class Usuario {
     private String interesses;
     private String imagemDocumento;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
