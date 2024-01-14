@@ -48,7 +48,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             stmt.setLong(1, cliente.getIdCliente());
             stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
-            stmt.setInt(3, cliente.getTipoCliente().getTipoCliente());
+            stmt.setInt(3, cliente.getTipoCliente().ordinal());
             stmt.setInt(4, cliente.getPlano().getValor());
             stmt.setString(5, String.valueOf(cliente.getControleParental()));
 
