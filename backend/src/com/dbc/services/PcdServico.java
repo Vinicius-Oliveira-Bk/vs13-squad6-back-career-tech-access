@@ -12,6 +12,7 @@ public class PcdServico {
     public PcdServico() {
         pcdRepository = new PcdRepository();
     }
+
     public void cadastrar(Pcd pcd) {
         try {
             if (pcd.getCpf().length() != 11) {
@@ -27,6 +28,7 @@ public class PcdServico {
             e.printStackTrace();
         }
     }
+
     public void remover(Long id) {
         try {
             boolean conseguiuRemover = pcdRepository.remover(id);
@@ -35,6 +37,7 @@ public class PcdServico {
             e.printStackTrace();
         }
     }
+
     public void atualizar(Long id, Pcd pcd) {
         try {
             boolean conseguiuEditar = pcdRepository.atualizar(id, pcd);
@@ -43,6 +46,7 @@ public class PcdServico {
             e.printStackTrace();
         }
     }
+
     public void listarTodos() {
         try {
             List<Pcd> listar = pcdRepository.listar();
