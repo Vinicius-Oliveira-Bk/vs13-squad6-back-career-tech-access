@@ -1,9 +1,7 @@
 package com.dbc.services;
 
 import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.Cliente;
 import com.dbc.model.entities.Pcd;
-import com.dbc.repository.ClienteRepository;
 import com.dbc.repository.PcdRepository;
 
 import java.util.List;
@@ -14,14 +12,12 @@ public class PcdServico {
     public PcdServico() {
         pcdRepository = new PcdRepository();
     }
-    public void adicionarPcd(Pcd pcd) {
+    public void cadastrar(Pcd pcd) {
         try {
-
             if (pcd.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
-
-            Pcd pcdAdicionado = pcdRepository.adicionar(pcd);
+            Pcd pcdAdicionado = pcdRepository.cadastrar(pcd);
             System.out.println("pcd adicinado com sucesso! " + pcdAdicionado);
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -31,7 +27,7 @@ public class PcdServico {
             e.printStackTrace();
         }
     }
-    public void removerPcd(Integer id) {
+    public void remover(Long id) {
         try {
             boolean conseguiuRemover = pcdRepository.remover(id);
             System.out.println("pcd removido? " + conseguiuRemover + "| com id=" + id);
@@ -39,15 +35,15 @@ public class PcdServico {
             e.printStackTrace();
         }
     }
-    public void editarPcd(Integer id, Pcd pcd) {
+    public void atualizar(Long id, Pcd pcd) {
         try {
-            boolean conseguiuEditar = pcdRepository.editar(id, pcd);
+            boolean conseguiuEditar = pcdRepository.atualizar(id, pcd);
             System.out.println("pcd editado? " + conseguiuEditar + "| com id=" + id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
-    public void listarPcds() {
+    public void listarTodos() {
         try {
             List<Pcd> listar = pcdRepository.listar();
             listar.forEach(System.out::println);
@@ -56,9 +52,9 @@ public class PcdServico {
         }
     }
 
-    public Cliente listarUmPcd(long idPcd) {
+    public Pcd listarUm(Long idPcd) {
         try {
-            return pcdRepository.listarUm((int) idPcd);
+            return pcdRepository.listarUm(idPcd);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

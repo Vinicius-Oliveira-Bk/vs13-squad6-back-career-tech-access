@@ -1,6 +1,7 @@
 package com.dbc.repository;
 
 import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.Cliente;
 
 import java.sql.Connection;
 import java.sql.SQLException;

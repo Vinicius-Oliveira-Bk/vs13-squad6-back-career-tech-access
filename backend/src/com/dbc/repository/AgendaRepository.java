@@ -15,12 +15,12 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     ClienteServico cs = new ClienteServico();
 
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
+    public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_AGENDA.NEXTVAL SEQUENCE_AGENDA FROM DUAL";
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
         if (result.next()) {
-            return result.getInt("SEQUENCE_AGENDA");
+            return result.getLong("SEQUENCE_AGENDA");
         }
         return null;
     }
@@ -30,8 +30,8 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            Integer novoId = this.getProximoId(con);
-            agenda.setId(novoId.longValue());
+            Long novoId = this.getProximoId(con);
+            agenda.setId(novoId);
 
             String sql = "INSERT INTO AGENDA\n" +
                     "(ID, ID_CLIENTE, ID_MENTOR, DATA_HORA_INICIO, DATA_HORA_FIM, STATUS)\n" +
