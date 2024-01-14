@@ -76,8 +76,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
             stmt.setInt(2, mentor.getNivelExperienciaEnum().getValor());
             stmt.setString(3, mentor.getCarteiraDeTrabalho());
-            stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
-            stmt.setLong(5, mentor.getId());
+            stmt.setLong(4, mentor.getId());
 
             int res = stmt.executeUpdate();
             System.out.println("editarMentor.res=" + res);

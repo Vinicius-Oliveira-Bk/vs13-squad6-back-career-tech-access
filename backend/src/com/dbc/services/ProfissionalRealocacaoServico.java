@@ -48,7 +48,7 @@ public class ProfissionalRealocacaoServico {
         for (int i = 0; i < lista.size(); i++) {
             ProfissionalRealocacao profissionalRealocacao = lista.get(i);
 
-            if (profissionalRealocacao.getId() == id) {
+            if (profissionalRealocacao.getId() == id.intValue()) {
                 profissionalRealocacao.setNome(profissionalRealocacaoAtualiza.getNome());
                 profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
                 profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
@@ -72,7 +72,7 @@ public class ProfissionalRealocacaoServico {
         ProfissionalRealocacao profissionalRealocacaoDeletar = null;
 
         for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id) {
+            if (profissionalRealocacao.getId() == id.intValue()) {
                 profissionalRealocacaoDeletar = profissionalRealocacao;
             }
         }

@@ -9,7 +9,7 @@ import java.util.List;
 public class EstudanteServico {
     private EstudanteRepository estudanteRepository = new EstudanteRepository();
 
-    public void adicionarEstudante(Estudante estudante) {
+    public void cadastrar(Estudante estudante) {
         try {
 
             if (estudante.getComprovanteMatricula() == null) {
@@ -25,7 +25,7 @@ public class EstudanteServico {
     }
 
     // remoção
-    public void removerEstudante(Long id) {
+    public void remover(Long id) {
         try {
             estudanteRepository.remover(id);
             System.out.println("\nEstudante removido com sucesso!");
@@ -35,7 +35,7 @@ public class EstudanteServico {
     }
 
     // atualização de um objeto
-    public void editarEstudante(Long id, Estudante estudante) {
+    public void atualizar(Long id, Estudante estudante) {
         try {
             estudanteRepository.atualizar(id, estudante);
             System.out.println("\nEstudante editado com sucesso!");
@@ -45,7 +45,7 @@ public class EstudanteServico {
     }
 
     // leitura
-    public void listarTodosEstudantes() {
+    public void listarTodos() {
         try {
             List<Estudante> listar = estudanteRepository.listar();
             for (Estudante estudante : listar) {
@@ -56,19 +56,19 @@ public class EstudanteServico {
         }
     }
 
-    public void obterEstudantePorId(Long idEstudante) {
+    public Estudante obterPorId(Long idEstudante) {
         try {
             Estudante estudante = estudanteRepository.listarUm(idEstudante);
 
             if (estudante != null) {
                 System.out.println("\nEstudante encontrado!\n");
-                System.out.println(estudante.toString());
+                return estudante;
             } else {
                 System.err.println("\nEstudante não encontrado com o ID: " + idEstudante + "\n");
             }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
+        return null;
     }
-
 }
