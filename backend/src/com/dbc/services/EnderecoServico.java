@@ -8,20 +8,19 @@ public class EnderecoServico {
 
     private EnderecoRepository enderecoRepository;
 
-    public EnderecoServico(EnderecoRepository enderecoRepository) {
-        this.enderecoRepository = enderecoRepository;
+    public EnderecoServico() {
+        enderecoRepository = new EnderecoRepository();
     }
 
     public void cadastrar(Endereco endereco) {
         try {
             enderecoRepository.cadastrar(endereco);
-            System.out.println("✅ Endereço cadastrado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
 
-    public void listarTodos() {
+    public void listar() {
         try {
             enderecoRepository.listar().forEach(System.out::println);
         } catch (BancoDeDadosException e) {
@@ -36,10 +35,9 @@ public class EnderecoServico {
         }
     }
 
-    public void atualizar(Long id, Endereco endereco) {
+    public void editar(Long id, Endereco endereco) {
         try {
             enderecoRepository.atualizar(id, endereco);
-            System.out.println("✅ Endereço atualizado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -48,7 +46,6 @@ public class EnderecoServico {
     public void remover(Long id) {
         try {
             enderecoRepository.remover(id);
-            System.out.println("✅ Endereço deletado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
