@@ -25,13 +25,17 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
     @Override
     public Cliente cadastrar(Cliente cliente) throws BancoDeDadosException {
+        return null;
+    }
+
+    public Cliente cadastrar(Cliente cliente, Long idUsuario) throws BancoDeDadosException {
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.conectar();
 
             Long novoId = this.getProximoId(con);
-            cliente.setId(novoId);
+            cliente.setIdCliente(novoId);
 
             String sql = "INSERT INTO VS_13_EQUIPE_6.CLIENTE\n" +
                     "(ID, ID_USUARIO, TIPO_CLIENTE, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
@@ -39,10 +43,10 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setLong(1, cliente.getId());
-            stmt.setLong(2, cliente.getIdCliente());
-            stmt.setString(3, cliente.getTipoCliente().name());
-            stmt.setString(4, cliente.getPlano().name());
+            stmt.setLong(1, cliente.getIdCliente());
+            stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
+            stmt.setInt(3, cliente.getTipoCliente().getTipoCliente());
+            stmt.setInt(4, cliente.getPlano().getValor());
             stmt.setString(5, String.valueOf(cliente.getControleParental()));
 
             int res = stmt.executeUpdate();
