@@ -13,15 +13,15 @@ public class UsuarioServico {
         usuarioRepository = new UsuarioRepository();
     }
 
-    public void cadastrar(Usuario usuario) {
+    public void adicionarUsuario(Usuario usuario) {
         try {
 
             if (usuario.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario usuarioAdicionado = usuarioRepository.cadastrar(usuario);
-            System.out.println("usuário adicinado com sucesso! " + usuarioAdicionado);
+            Usuario usuarioAdicionado = usuarioRepository.adicionar(usuario);
+            System.out.println("\nUsuário adicinado com sucesso!\n");
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
             e.printStackTrace();
@@ -32,30 +32,47 @@ public class UsuarioServico {
     }
 
     // remoção
-    public void remover(Long id) {
+    public void removerUsuario(Integer id) {
         try {
             boolean conseguiuRemover = usuarioRepository.remover(id);
-            System.out.println("usuário removido? " + conseguiuRemover + "| com id=" + id);
+            System.out.println("\nUsuário removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
 
     // atualização de um objeto
-    public void atualizar(Long id, Usuario usuario) {
+    public void editarUsuario(Integer id, Usuario usuario) {
         try {
-            boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
-            System.out.println("usuário editado? " + conseguiuEditar + "| com id=" + id);
+            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
+            System.out.println("\nUsuário editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
 
     // leitura
-    public void listarTodos() {
+    public void listarTodosUsuarios() {
         try {
             List<Usuario> listar = usuarioRepository.listar();
-            listar.forEach(System.out::println);
+            for (Usuario usuario : listar) {
+                System.out.println(usuario.toString());
+            }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void obterUsuarioPorId(Integer idUsuario) {
+        try {
+            Usuario usuario = usuarioRepository.obterPorId(idUsuario);
+
+            if (usuario != null) {
+                System.out.println("\nUsuário encontrado!\n");
+                System.out.println(usuario.toString());
+            } else {
+                System.err.println("\nUsuário não encontrado com o ID: " + idUsuario + "\n");
+            }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

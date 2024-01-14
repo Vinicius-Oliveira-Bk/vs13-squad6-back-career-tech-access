@@ -6,24 +6,19 @@ import java.sql.SQLException;
 
 public class ConexaoBancoDeDados {
 
-//    private static final String HOST = "vemser-dbc.dbccompany.com.br";
-//    private static final int PORTA = 25000;
-//    private static final String DB = "xe";
-//    private static final String USUARIO = "VS_13_EQUIPE_6";
-//    private static final String SENHA = "oracle";
-//    private static final String SCHEMA = "VS_13_EQUIPE_6";
-    private static final String HOST = "localhost";
-    private static final int PORTA = 1521;
+    private static final String HOST = "vemser-dbc.dbccompany.com.br";
+    private static final int PORTA = 25000;
     private static final String DB = "xe";
-    private static final String USUARIO = "system";
+    private static final String USUARIO = "VS_13_EQUIPE_6";
     private static final String SENHA = "oracle";
-    private static final String SCHEMA = "APP";
+    private static final String SCHEMA = "VS_13_EQUIPE_6";
 
-    public static void main(String[] args) {
-        Connection connection = conectar();
-
-        //fecharConexao(connection);
-    }
+//    private static final String HOST = "localhost";
+//    private static final int PORTA = 1521;
+//    private static final String DB = "xe";
+//    private static final String USUARIO = "system";
+//    private static final String SENHA = "oracle";
+//    private static final String SCHEMA = "APP";
 
     public static Connection conectar() {
         Connection con = null;
@@ -45,18 +40,6 @@ public class ConexaoBancoDeDados {
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados Oracle: " + e.getMessage());
         }
-
         return con;
-    }
-
-    public static void fecharConexao(Connection connection) {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Conexão fechada!");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao fechar a conexão: " + e.getMessage());
-        }
     }
 }
