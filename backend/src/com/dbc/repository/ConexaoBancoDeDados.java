@@ -6,18 +6,19 @@ import java.sql.SQLException;
 
 public class ConexaoBancoDeDados {
 
-//    private static final String HOST = "vemser-dbc.dbccompany.com.br";
-//    private static final int PORTA = 25000;
-//    private static final String DB = "xe";
-//    private static final String USUARIO = "VS_13_EQUIPE_6";
-//    private static final String SENHA = "oracle";
-//    private static final String SCHEMA = "VS_13_EQUIPE_6";
-    private static final String HOST = "localhost";
-    private static final int PORTA = 1521;
+    private static final String HOST = "vemser-dbc.dbccompany.com.br";
+    private static final int PORTA = 25000;
     private static final String DB = "xe";
-    private static final String USUARIO = "system";
+    private static final String USUARIO = "VS_13_EQUIPE_6";
     private static final String SENHA = "oracle";
-    private static final String SCHEMA = "APP";
+    private static final String SCHEMA = "VS_13_EQUIPE_6";
+
+//    private static final String HOST = "localhost";
+//    private static final int PORTA = 1521;
+//    private static final String DB = "xe";
+//    private static final String USUARIO = "system";
+//    private static final String SENHA = "oracle";
+//    private static final String SCHEMA = "APP";
 
     public static Connection conectar() {
         Connection con = null;

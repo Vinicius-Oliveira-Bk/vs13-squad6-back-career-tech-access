@@ -12,7 +12,7 @@ import java.util.List;
 public class ClienteRepository implements IRepository<Long, Cliente> {
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
-        String sql = "SELECT SEQ_CLIENTE.nextval SEQUENCE_CLIENTE from DUAL";
+        String sql = "SELECT VS_13_EQUIPE_6.SEQ_CLIENTE.nextval AS SEQUENCE_CLIENTE FROM DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
@@ -33,24 +33,17 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             Long novoId = this.getProximoId(con);
             cliente.setId(novoId);
 
-            String sql = "INSERT INTO CLIENTE\n" +
-                    "(ID, ID_CLIENTE, NOME, DATA_NASCIMENTO, CPF, EMAIL, SENHA, INTERESSES, IMAGEM_DOCUMENTO, TIPO_CLIENTE, PLANO, CONTROLE_PARENTAL, ACESSO_PCD)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
+            String sql = "INSERT INTO VS_13_EQUIPE_6.CLIENTE\n" +
+                    "(ID, ID_USUARIO, TIPO_CLIENTE, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
+                    "VALUES(?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, cliente.getId());
             stmt.setLong(2, cliente.getIdCliente());
-            stmt.setString(3, cliente.getNome());
-            stmt.setDate(4, java.sql.Date.valueOf(cliente.getDataNascimento()));
-            stmt.setString(5, cliente.getCpf());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getSenha());
-            stmt.setString(8, cliente.getInteresses());
-            stmt.setString(9, cliente.getImagemDocumento());
-            stmt.setString(10, cliente.getPlano().name());
-            stmt.setString(11, String.valueOf(cliente.getControleParental()));
-            stmt.setString(12, String.valueOf(cliente.getAcessoPcd()));
+            stmt.setString(3, cliente.getTipoCliente().name());
+            stmt.setString(4, cliente.getPlano().name());
+            stmt.setString(5, String.valueOf(cliente.getControleParental()));
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarCliente.res=" + res);
@@ -192,38 +185,21 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE CLIENTE SET ");
-            sql.append(" ID_CLIENTE = ?,");
-            sql.append(" NOME = ?,");
-            sql.append(" DATA_NASCIMENTO = ?, ");
-            sql.append(" CPF = ?, ");
-            sql.append(" EMAIL = ?, ");
-            sql.append(" SENHA = ?, ");
-            sql.append(" INTERESSES = ?, ");
-            sql.append(" IMAGEM_DOCUMENTO = ?, ");
-            sql.append(" TIPO_CLIENTE = ?, ");
-            sql.append(" PLANO = ?, ");
-            sql.append(" CONTROLE_PARENTAL = ?, ");
-            sql.append(" ACESSO_PCD = ? ");
+            sql.append("UPDATE VS_13_EQUIPE_6.CLIENTE SET ");
+            sql.append(" ID_USUARIO = ?,");
+            sql.append(" TIPO_CLIENTE = ?,");
+            sql.append(" TIPO_PLANO = ?, ");
+            sql.append(" CONTROLE_PARENTAL = ? ");
             sql.append(" WHERE ID = ?");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setLong(1, cliente.getIdCliente());
-            stmt.setString(2, cliente.getNome());
-            stmt.setDate(3, Date.valueOf(cliente.getDataNascimento()));
-            stmt.setString(4, cliente.getCpf());
-            stmt.setString(5, cliente.getEmail());
-            stmt.setString(6, cliente.getSenha());
-            stmt.setString(7, cliente.getInteresses());
-            stmt.setString(8, cliente.getImagemDocumento());
-            stmt.setString(9, cliente.getTipoCliente().name());
-            stmt.setString(10, cliente.getPlano().name());
-            stmt.setString(11, String.valueOf(cliente.getControleParental()));
-            stmt.setString(12, String.valueOf(cliente.getAcessoPcd()));
-            stmt.setLong(13, id);
+            stmt.setString(2, cliente.getTipoCliente().name());
+            stmt.setString(3, cliente.getPlano().name());
+            stmt.setString(4, String.valueOf(cliente.getControleParental()));
+            stmt.setLong(5, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("editarCliente.res=" + res);
 

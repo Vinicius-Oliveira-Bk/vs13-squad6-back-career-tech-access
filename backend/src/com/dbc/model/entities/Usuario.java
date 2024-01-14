@@ -1,7 +1,6 @@
 package com.dbc.model.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Usuario {
     private Integer id;
@@ -14,8 +13,6 @@ public class Usuario {
     private Long tipoUsuario;
     private String interesses;
     private String imagemDocumento;
-
-    private ArrayList<Usuario> usuarios;
 
     public Integer getId() {
         return id;
@@ -97,14 +94,6 @@ public class Usuario {
         this.imagemDocumento = imagemDocumento;
     }
 
-    public ArrayList<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(ArrayList<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-
     @Override
     public String toString() {
         return "Usuario{" +
@@ -118,8 +107,6 @@ public class Usuario {
                 ", tipoUsuario=" + tipoUsuario +
                 ", interesses='" + interesses + '\'' +
                 ", imagemDocumento='" + imagemDocumento + '\'' +
-                ", usuarios=" + usuarios +
                 '}';
     }
-
 }
