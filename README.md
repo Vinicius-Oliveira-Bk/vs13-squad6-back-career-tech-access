@@ -10,12 +10,23 @@
 
 ## Modelo conceitual
 
-![Diagrama](./CareerTechAccess-Diagrama.drawio.png)
+<details>
+  <summary>Diagrama de Classes</summary><br />
+  
+   ![diagrama_de_classes](https://github.com/Vinicius-Oliveira-Bk/vs13-squad6-back-career-tech-access/assets/71534326/14b0dd81-6565-4a8a-8094-8494eb0eae53)
+
+</details>
+<details>
+  <summary>Diagrama Entidade Relacionamento (ER)</summary><br />
+  
+   ![Diagrama ER](https://github.com/Vinicius-Oliveira-Bk/vs13-squad6-back-career-tech-access/assets/71534326/4d95ed05-ea8d-41d3-bf1e-c4d83f9ff31e)
+
+</details>
 
 ## Tecnologias e técnicas utilizadas
 
 <details>
-  <summary><strong>Para o front-end</strong></summary><br />
+  <summary>Para o front-end</summary><br />
    - HTML
    <br>
    - CSS
@@ -30,7 +41,7 @@
 </details>
 
 <details>
-  <summary><strong>Para o back-end</strong></summary><br />
+  <summary>Para o back-end</summary><br />
    - Paradigma utilizado: POO
    <br>
    - Java
@@ -43,7 +54,7 @@
 </details>
 
 <details>
-  <summary><strong>Banco de Dados</strong></summary><br />
+  <summary>Banco de Dados</summary><br />
    - Oracle
    <br>
    - Mongo DB
