@@ -13,6 +13,7 @@ import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Estudante;
 
 public class EstudanteRepository implements IRepository<Long, Estudante> {
+
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT seq_estudante.nextval mysequence from DUAL";

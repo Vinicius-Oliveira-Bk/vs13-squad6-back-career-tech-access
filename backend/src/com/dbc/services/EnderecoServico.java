@@ -20,7 +20,7 @@ public class EnderecoServico {
         }
     }
 
-    public void listar() {
+    public void listarTodos() {
         try {
             enderecoRepository.listar().forEach(System.out::println);
         } catch (BancoDeDadosException e) {

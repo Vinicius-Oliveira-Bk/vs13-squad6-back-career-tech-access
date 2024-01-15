@@ -26,10 +26,19 @@ public class ClienteServico {
         }
     }
 
-    public void remover(Long id) {
+    public Cliente listarUm(Long idCliente) {
         try {
-            boolean conseguiuRemover = clienteRepository.remover(id);
-            System.out.println("cliente removido? " + conseguiuRemover + "| com id=" + id);
+            return clienteRepository.listarUm(idCliente);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void listarTodos() {
+        try {
+            List<Cliente> listar = clienteRepository.listar();
+            listar.forEach(System.out::println);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -44,22 +53,13 @@ public class ClienteServico {
         }
     }
 
-    public void listarTodos() {
+    public void remover(Long id) {
         try {
-            List<Cliente> listar = clienteRepository.listar();
-            listar.forEach(System.out::println);
+            boolean conseguiuRemover = clienteRepository.remover(id);
+            System.out.println("cliente removido? " + conseguiuRemover + "| com id=" + id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
-    }
-
-    public Cliente listarUm(Long idCliente) {
-        try {
-            return clienteRepository.listarUm(idCliente);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public boolean validarCliente(Cliente cliente) {

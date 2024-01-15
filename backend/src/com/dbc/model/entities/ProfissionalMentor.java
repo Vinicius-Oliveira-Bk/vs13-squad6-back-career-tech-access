@@ -1,30 +1,23 @@
 package com.dbc.model.entities;
 
-import java.util.ArrayList;
-
-import com.dbc.interfaces.IDocumentacaoProfissional;
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 
-public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissional {
+public class ProfissionalMentor extends Usuario {
+    private Usuario usuario;
     private AreaAtuacaoEnum areaAtuacao;
     private NivelExperienciaEnum nivelExperienciaEnum;
     private String carteiraDeTrabalho;
-    private ArrayList<String> certificadosDeCapacitacao;
-    private boolean documentosValidados = false;
 
     public ProfissionalMentor() {
     }
 
-    public ProfissionalMentor(TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao,
-            NivelExperienciaEnum nivelExperienciaEnum,
-            String carteiraDeTrabalho, ArrayList<String> certificadosDeCapacitacao) {
+    public ProfissionalMentor(TipoUsuarioEnum tipo, AreaAtuacaoEnum areaAtuacao, NivelExperienciaEnum nivelExperienciaEnum, String carteiraDeTrabalho) {
         super();
         this.areaAtuacao = areaAtuacao;
         this.nivelExperienciaEnum = nivelExperienciaEnum;
         this.carteiraDeTrabalho = carteiraDeTrabalho;
-        this.certificadosDeCapacitacao = certificadosDeCapacitacao;
     }
 
     public AreaAtuacaoEnum getAreaAtuacao() {
@@ -51,27 +44,12 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
         this.carteiraDeTrabalho = carteiraDeTrabalho;
     }
 
-    public ArrayList<String> getCertificadosDeCapacitacao() {
-        return certificadosDeCapacitacao;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCertificadosDeCapacitacao(String certificadosDeCapacitacao) {
-        this.certificadosDeCapacitacao.add(certificadosDeCapacitacao);
-    }
-
-    public boolean isDocumentosValidados() {
-        return documentosValidados;
-    }
-
-    @Override
-    public boolean validarDocumentos() {
-        return true;
-    }
-
-    @Override
-    public void adicionarCertificados(String certificados) {
-        certificadosDeCapacitacao.add(certificados);
-        System.out.println("Certificado adicionado com sucesso!");
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
@@ -80,10 +58,10 @@ public class ProfissionalMentor extends Usuario implements IDocumentacaoProfissi
                 "\n\tArea de Atuacao .......: " + this.areaAtuacao +
                 "\n\tNivel de Experiencia ..: " + this.nivelExperienciaEnum +
                 "\n\tCarteira de Trabalho ..: " + this.carteiraDeTrabalho +
-                "\n\tDocumentos Validados ..: " + (this.documentosValidados ? "SIM" : "NÃO") +
                 "\n";
     }
 
     public void setId(Long id) {
+        super.setId(id);
     }
 }

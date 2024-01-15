@@ -12,8 +12,10 @@ import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
+import com.dbc.services.UsuarioServico;
 
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
+    UsuarioServico us = new UsuarioServico();
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_PROFISSIONAL_MENTOR.nextval mysequence from DUAL";
@@ -38,8 +40,8 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             Long proximoId = this.getProximoId(con);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
-                    "(ID, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA, DOCUMENTOS_VALIDOS)\n" +
-                    "VALUES(?, ?, ?, ?, ?)\n";
+                    "(ID, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA)\n" +
+                    "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -47,7 +49,6 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             stmt.setString(2, String.valueOf(mentor.getAreaAtuacao()));
             stmt.setString(3, mentor.getCarteiraDeTrabalho());
             stmt.setInt(4, mentor.getNivelExperienciaEnum().getValor());
-            stmt.setString(5, mentor.getCertificadosDeCapacitacao().toString());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarMentor.res=" + res);
@@ -140,7 +141,6 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             sql.append(" area_atuacao = ? ");
             sql.append(" nivel_experiencia = ?,");
             sql.append(" carteira_trabalho = ?,");
-            sql.append(" documentos_validados = ?,");
             sql.append(" WHERE id = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
@@ -148,8 +148,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
             stmt.setInt(2, mentor.getNivelExperienciaEnum().getValor());
             stmt.setString(3, mentor.getCarteiraDeTrabalho());
-            stmt.setString(4, mentor.getCertificadosDeCapacitacao().toString());
-            stmt.setLong(5, mentor.getId());
+            stmt.setLong(4, mentor.getId());
 
             int res = stmt.executeUpdate();
             System.out.println("editarMentor.res=" + res);
@@ -205,7 +204,6 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
         mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
         mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
-        mentor.setCertificadosDeCapacitacao(res.getString("certificados_de_capacitacao"));
 
         return mentor;
     }

@@ -178,7 +178,7 @@ public abstract class Utils {
 
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
-            usuario.setTipoUsuario((long) tipoUsuario.getValor());
+            // usuario.setTipoUsuario((long) tipoUsuario.getValor());
 
             rotinaCadastroContatosEenderecos(usuario);
         } catch (Exception e) {
@@ -188,6 +188,8 @@ public abstract class Utils {
     }
 
     public static void rotinaCadastroCliente(Cliente cliente) {
+        int controleParental, acessoPcd;
+
         try {
             PlanoEnum planoEscolhido = PlanoEnum.GRATUITO;
             planoEscolhido = (PlanoEnum) Utils.exibirMenuEnumDinamico(planoEscolhido);
@@ -235,8 +237,6 @@ public abstract class Utils {
 
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
         mentor.setAreaAtuacao(areaAtuacao);
-
-        mentor.setCertificadosDeCapacitacao(scanner.nextLine("Digite o link do seus certificados: "));
 
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
         mentor.setNivelExperienciaEnum(nivelExperiencia);

@@ -1,8 +1,11 @@
 package com.dbc.model.entities;
 
+import com.dbc.interfaces.IVinculosUsuario;
+import com.dbc.model.enums.TipoUsuarioEnum;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
-public class Usuario {
+public class Usuario implements IVinculosUsuario {
     private Long id;
     private String nome;
     private LocalDate dataNascimento;
@@ -10,8 +13,10 @@ public class Usuario {
     private String email;
     private String senha;
     private Character acessoPcd;
-    private Long tipoUsuario;
+    private TipoUsuarioEnum tipoUsuario;
     private String interesses;
+    private ArrayList<Contato> contatos;
+    private ArrayList<Endereco> enderecos;
     private String imagemDocumento;
 
     public Long getId() {
@@ -70,11 +75,11 @@ public class Usuario {
         this.acessoPcd = acessoPcd;
     }
 
-    public Long getTipoUsuario() {
+    public TipoUsuarioEnum getTipo() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(Long tipoUsuario) {
+    public void setTipo(TipoUsuarioEnum tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 
@@ -94,6 +99,22 @@ public class Usuario {
         this.imagemDocumento = imagemDocumento;
     }
 
+    public ArrayList<Contato> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(ArrayList<Contato> contatos) {
+        this.contatos = contatos;
+    }
+
+    public ArrayList<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(ArrayList<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -108,5 +129,21 @@ public class Usuario {
                 ", interesses='" + interesses + '\'' +
                 ", imagemDocumento='" + imagemDocumento + '\'' +
                 '}';
+    }
+
+    public boolean vincularContato(Usuario usuario, Contato contato) {
+        ArrayList<Contato> contatos = usuario.getContatos() != null ? usuario.getContatos() : new ArrayList<>();
+        contatos.add(contato);
+        usuario.setContatos(contatos);
+        System.out.println("✅ Contato vinculado!");
+        return true;
+    }
+
+    public boolean vincularEndereco(Usuario usuario, Endereco endereco) {
+        ArrayList<Endereco> enderecos = usuario.getEnderecos() != null ? usuario.getEnderecos() : new ArrayList<>();
+        enderecos.add(endereco);
+        usuario.setEnderecos(enderecos);
+        System.out.println("✅ Endereço vinculado!");
+        return true;
     }
 }

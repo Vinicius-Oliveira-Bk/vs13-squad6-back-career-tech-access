@@ -11,7 +11,6 @@ public class UsuarioServico {
 
     public void cadastrar(Usuario usuario) {
         try {
-
             if (usuario.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
@@ -27,16 +26,19 @@ public class UsuarioServico {
         }
     }
 
-    public void listarUm(Long idUsuario) {
+    public void remover(Long id) {
         try {
-            Usuario usuario = usuarioRepository.listarUm(idUsuario);
+            usuarioRepository.remover(id);
+            System.out.println("\nUsuário removido com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 
-            if (usuario != null) {
-                System.out.println("\nUsuário encontrado!\n");
-                System.out.println(usuario.toString());
-            } else {
-                System.err.println("\nUsuário não encontrado com o ID: " + idUsuario + "\n");
-            }
+    public void atualizar(Long id, Usuario usuario) {
+        try {
+            usuarioRepository.atualizar(id, usuario);
+            System.out.println("\nUsuário editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -53,21 +55,19 @@ public class UsuarioServico {
         }
     }
 
-    public void atualizar(Long id, Usuario usuario) {
+    public Usuario listarUm(Long idUsuario) {
         try {
-            usuarioRepository.atualizar(id, usuario);
-            System.out.println("\nUsuário editado com sucesso!");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
+            Usuario usuario = usuarioRepository.listarUm(idUsuario);
 
-    public void remover(Long id) {
-        try {
-            usuarioRepository.remover(id);
-            System.out.println("\nUsuário removido com sucesso!");
+            if (usuario != null) {
+                System.out.println("\nUsuário encontrado!\n");
+                return usuario;
+            } else {
+                System.err.println("\nUsuário não encontrado com o ID: " + idUsuario + "\n");
+            }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

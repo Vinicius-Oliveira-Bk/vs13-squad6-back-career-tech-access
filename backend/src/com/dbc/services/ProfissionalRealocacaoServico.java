@@ -25,20 +25,12 @@ public class ProfissionalRealocacaoServico {
         System.out.println("✅ Profissional Realocacao cadastrado!");
     }
     
-    public ProfissionalRealocacao listarUm(Long id) {
-        boolean profissionalRealocacaoEncontrado = false;
-
-        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id.intValue()) {
-                profissionalRealocacaoEncontrado = true;
-                return profissionalRealocacao;
-            }
+    public void listarUm(Long id) {
+        try {
+            profRealocRepository.listarUm(id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        if (!profissionalRealocacaoEncontrado) {
-            System.err.println("🚫 Profissional Realocacao não encontrado!");
-        }
-        return null;
     }
 
     public void listarTodos() {
@@ -73,8 +65,6 @@ public class ProfissionalRealocacaoServico {
                 return;
             }
         }
-
-        System.err.println("🚫 Usuário não encontrado!");
     }
 
     public void remover(Long id) {

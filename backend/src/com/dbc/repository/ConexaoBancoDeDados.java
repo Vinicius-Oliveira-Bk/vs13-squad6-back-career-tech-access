@@ -31,6 +31,7 @@ public class ConexaoBancoDeDados {
             con = DriverManager.getConnection(url, USUARIO, SENHA);
 
             con.createStatement().execute("alter session set current_schema=" + SCHEMA);
+
         } catch (ClassNotFoundException e) {
             System.err.println("Driver JDBC do Oracle não encontrado: " + e.getMessage());
         } catch (SQLException e) {

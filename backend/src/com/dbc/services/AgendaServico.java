@@ -125,6 +125,7 @@ public class AgendaServico {
 
             if (agendamentos.isEmpty()) {
                 System.out.println("Não há nenhum horário cadastrado.");
+                return;
             }
 
             for (Agenda agenda : agendamentos) {
@@ -132,9 +133,6 @@ public class AgendaServico {
             }
         } catch (BancoDeDadosException e) {
             System.err.println("🚫 ERRO: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
-            e.printStackTrace();
         }
     }
 

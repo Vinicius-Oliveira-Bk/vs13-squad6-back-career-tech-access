@@ -1,14 +1,15 @@
 package com.dbc.repository;
 
-import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.Cliente;
-import com.dbc.model.entities.ProfissionalRealocacao;
-import com.dbc.model.entities.Usuario;
-import com.dbc.model.enums.PlanoEnum;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.ProfissionalRealocacao;
 
 public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
     @Override
@@ -29,15 +30,12 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao)
-            throws BancoDeDadosException {
+    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         return null;
     }
 
-    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente)
-            throws BancoDeDadosException {
+    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
-
         try {
             con = ConexaoBancoDeDados.conectar();
 
@@ -91,7 +89,6 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
                     }
                 }
             }
-
             return profissionalRealocacao;
 
         } catch (SQLException e) {
@@ -116,10 +113,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * \n" +
-                    "    FROM PROFISSIONAL_REALOCACAO PR \n" +
-                    "    JOIN CLIENTE C ON (PR.ID_CLIENTE = C.ID)\n" +
-                    "    JOIN USUARIO U ON (C.ID_USUARIO = U.ID)";
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -220,28 +214,11 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
 
     private ProfissionalRealocacao getProfissionalRealocacaoFromResultSet(ResultSet res) throws SQLException {
         ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
-        profissionalRealocacao.setId(res.getLong("pr.id"));
-        profissionalRealocacao.setProfissao(res.getString("pr.profissao"));
-        profissionalRealocacao.setObjetivoProfissional(res.getString("pr.objetivo_profissional"));
-
-        Cliente cliente = new Cliente();
-        cliente.setPlano(PlanoEnum.fromValor(res.getInt("c.tipo_plano")));
-        cliente.setControleParental(res.getString("c.controle_parental").charAt(0));
-        Usuario usuario = new Usuario();
-        usuario.setId(res.getLong("u.id"));
-        usuario.setNome(res.getString("u.nome"));
-        usuario.setDataNascimento(res.getDate("u.data_nascimento").toLocalDate());
-        usuario.setCpf(res.getString("u.cpf"));
-        usuario.setEmail(res.getString("u.email"));
-        usuario.setSenha(res.getString("u.senha"));
-        usuario.setAcessoPcd(res.getString("u.acesso_pcd").charAt(0));
-        usuario.setTipoUsuario(res.getLong("u.tipo_usuario"));
-        usuario.setInteresses(res.getString("u.interesses"));
-        usuario.setImagemDocumento(res.getString("u.imagem_documento"));
-
-        // cliente.setUsuario(usuario);
-        // profissionalRealocacao.setCliente(cliente);
-
+        profissionalRealocacao.setId(res.getLong("id"));
+        profissionalRealocacao.setProfissao(res.getString("profissao"));
+        profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
         return profissionalRealocacao;
     }
 }
+
+

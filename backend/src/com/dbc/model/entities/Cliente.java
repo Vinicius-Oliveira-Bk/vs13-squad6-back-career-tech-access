@@ -8,6 +8,7 @@ import com.dbc.model.enums.PlanoEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
+    private Usuario usuario;
     private Long id;
     private PlanoEnum plano;
     private TipoUsuarioEnum tipoCliente;
@@ -28,8 +29,7 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
-    public Cliente(Long id, PlanoEnum plano, TipoUsuarioEnum tipoCliente, String interesses, String imagemDocumento,
-            Character controleParental, Character acessoPcd) {
+    public Cliente(Long id, PlanoEnum plano, TipoUsuarioEnum tipoCliente, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
         this.id = id;
         this.plano = plano;
         this.tipoCliente = tipoCliente;
@@ -39,11 +39,19 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.acessoPcd = acessoPcd;
     }
 
-    public Long getIdCliente() {
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setIdCliente(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

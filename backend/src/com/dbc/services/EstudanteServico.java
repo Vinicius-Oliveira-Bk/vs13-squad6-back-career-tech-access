@@ -30,7 +30,6 @@ public class EstudanteServico {
 
             if (estudante != null) {
                 System.out.println("\nEstudante encontrado!\n");
-                System.out.println(estudante.toString());
             } else {
                 System.err.println("\nEstudante não encontrado com o ID: " + idEstudante + "\n");
             }

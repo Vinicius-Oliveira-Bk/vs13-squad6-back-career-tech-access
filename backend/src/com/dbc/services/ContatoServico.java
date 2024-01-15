@@ -20,7 +20,7 @@ public class ContatoServico {
         }
     }
 
-    public void listar() {
+    public void listarTodos() {
         try {
             contatoRepository.listar().forEach(System.out::println);
         } catch (BancoDeDadosException e) {

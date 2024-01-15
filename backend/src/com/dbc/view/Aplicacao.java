@@ -124,7 +124,7 @@ public class Aplicacao {
                                     break;
                                 case 1:
                                     Pcd pcd = new Pcd();
-                                    
+
                                     Utils.rotinaCadastroUsuario(pcd, TipoUsuarioEnum.PCD);
                                     Utils.rotinaCadastroCliente(pcd);
                                     Utils.rotinaCadastroPcd(pcd);
@@ -132,7 +132,7 @@ public class Aplicacao {
                                     pcdServico.cadastrar(pcd);
                                     break;
                                 case 2:
-                                    idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
+                                    idUsuario = scanner.nextInt("Selecione o ID do pcd a ser consultado: ");
                                     System.out.println(pcdServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
@@ -141,17 +141,14 @@ public class Aplicacao {
                                     sc.nextLine();
                                     break;
                                 case 4:
-                                    int idPcd = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
+                                    int idPcd = scanner.nextInt("Selecione o ID do pcd a ser atualizado: ");
                                     Pcd pcdASerAtualizado = pcdServico.listarUm((long) idPcd);
-
                                     Utils.rotinaCadastroPcd(pcdASerAtualizado);
-
-                                    pcdServico.atualizar((long) idPcd, pcdASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
-                                    int idPcdAExcluir = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
-                                    pcdServico.remover((long) idPcdAExcluir);
+                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do pcd a ser excluído: ");
+                                    pcdServico.remover((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
                                 case 6:
@@ -174,11 +171,11 @@ public class Aplicacao {
                                     break;
                                 case 1:
                                     ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
-                                    
+
                                     Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
                                     Utils.rotinaCadastroCliente(profissionalRealocacao);
                                     Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacao);
-                                    
+
                                     profissionalRealocacaoServico.cadastrar(profissionalRealocacao);
                                     break;
                                 case 2:
@@ -191,14 +188,14 @@ public class Aplicacao {
                                     sc.nextLine();
                                     break;
                                 case 4:
-                                    ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
-                                    
                                     idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja atualizar: ");
                                     profissionalRealocacaoServico.listarUm((long) idUsuario);
 
+                                    ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
                                     Utils.rotinaCadastroUsuario(profissionalRealocacaoAtualizar, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
                                     Utils.rotinaCadastroCliente(profissionalRealocacaoAtualizar);
-                                    Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoAtualizar);
+                                    profissionalRealocacaoAtualizar.setProfissao(scanner.nextLine("Informe sua profissão: "));
+                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(scanner.nextLine("Informe seu objetivo profissional: "));
 
                                     profissionalRealocacaoServico.atualizar((long) idUsuario, profissionalRealocacaoAtualizar);
                                     break;

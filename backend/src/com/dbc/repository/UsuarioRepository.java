@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Usuario;
+import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class UsuarioRepository implements IRepository<Long, Usuario> {
     @Override
@@ -48,11 +49,11 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setString(5, usuario.getEmail());
             stmt.setString(6, usuario.getSenha());
             stmt.setString(7, String.valueOf(usuario.getAcessoPcd()));
-            stmt.setLong(8, usuario.getTipoUsuario());
+            stmt.setLong(8, usuario.getTipo().ordinal());
             stmt.setString(9, usuario.getInteresses());
             stmt.setString(10, usuario.getImagemDocumento());
 
-            int res = stmt.executeUpdate();
+            stmt.executeUpdate();
 
             return usuario;
         } catch (SQLException e) {
@@ -66,6 +67,48 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public Usuario listarUm(Long id) throws BancoDeDadosException {
+        Usuario usuario = null;
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            String sql = "SELECT * FROM USUARIO WHERE id = ?";
+
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setLong(1, id);
+                ResultSet res = stmt.executeQuery();
+
+                if (res.next()) {
+                    usuario = new Usuario();
+                    usuario.setId(res.getLong("id"));
+                    usuario.setNome(res.getString("nome"));
+                    usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+                    usuario.setCpf(res.getString("cpf"));
+                    usuario.setEmail(res.getString("email"));
+                    usuario.setSenha(res.getString("senha"));
+                    usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
+                    usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                    usuario.setInteresses(res.getString("interesses"));
+                    usuario.setImagemDocumento(res.getString("imagem_documento"));
+                }
+            }
+        } catch (SQLException e) {
+            // Trate a exceção ou relance-a conforme necessário
+            throw new BancoDeDadosException(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return usuario;
     }
 
     @Override
@@ -90,7 +133,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setEmail(res.getString("email"));
                 usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipoUsuario(res.getLong("tipo_usuario"));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -106,48 +149,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             }
         }
         return usuarios;
-    }
-
-    @Override
-    public Usuario listarUm(Long id) throws BancoDeDadosException {
-        Usuario usuario = null;
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            String sql = "SELECT * FROM USUARIO WHERE id = ?";
-
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setLong(1, id);
-                ResultSet res = stmt.executeQuery();
-
-                if (res.next()) {
-                    usuario = new Usuario();
-                    usuario.setId(res.getLong("id"));
-                    usuario.setNome(res.getString("nome"));
-                    usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                    usuario.setCpf(res.getString("cpf"));
-                    usuario.setEmail(res.getString("email"));
-                    usuario.setSenha(res.getString("senha"));
-                    usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                    usuario.setTipoUsuario(res.getLong("tipo_usuario"));
-                    usuario.setInteresses(res.getString("interesses"));
-                    usuario.setImagemDocumento(res.getString("imagem_documento"));
-                }
-            }
-        } catch (SQLException e) {
-            // Trate a exceção ou relance-a conforme necessário
-            throw new BancoDeDadosException(e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return usuario;
     }
 
     @Override
@@ -177,7 +178,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != 999) {
                 sql.append(" acesso_pcd = ?,");
             }
-            if (usuario.getTipoUsuario() != null) {
+            if (usuario.getTipo() != null) {
                 sql.append(" tipo_usuario = ?,");
             }
             if (usuario.getInteresses() != null) {
@@ -211,8 +212,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != null) {
                 stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
             }
-            if (usuario.getTipoUsuario() != null) {
-                stmt.setLong(index++, usuario.getTipoUsuario());
+            if (usuario.getTipo() != null) {
+                stmt.setLong(index++, usuario.getTipo().ordinal());
             }
             if (usuario.getInteresses() != null) {
                 stmt.setString(index++, usuario.getInteresses());
@@ -268,5 +269,87 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<Usuario> getUsuarioNaoProfissional() throws BancoDeDadosException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM USUARIO U " +
+                    "LEFT JOIN PROFISSIONAL_MENTOR P ON (P.ID_USUARIO = U.ID) " +
+                    "WHERE P.ID_USUARIO IS NULL";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(res.getLong("id"));
+                usuario.setNome(res.getString("nome"));
+                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+                usuario.setCpf(res.getString("cpf"));
+                usuario.setEmail(res.getString("email"));
+                usuario.setSenha(res.getString("senha"));
+                usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setInteresses(res.getString("interesses"));
+                usuario.setImagemDocumento(res.getString("imagem_documento"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return usuarios;
+    }
+
+    public List<Usuario> getUsuarioNaoCliente() throws BancoDeDadosException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM USUARIO U " +
+                    "LEFT JOIN CLIENTE C ON (C.ID_USUARIO = U.ID) " +
+                    "WHERE C.ID_USUARIO IS NULL";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(res.getLong("id"));
+                usuario.setNome(res.getString("nome"));
+                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+                usuario.setCpf(res.getString("cpf"));
+                usuario.setEmail(res.getString("email"));
+                usuario.setSenha(res.getString("senha"));
+                usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
+                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setInteresses(res.getString("interesses"));
+                usuario.setImagemDocumento(res.getString("imagem_documento"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return usuarios;
     }
 }
