@@ -73,7 +73,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
 
             ResultSet result = stmt.executeQuery(sql);
 
-            while (!result.next()) {
+            while (result.next()) {
                 Agenda agenda = new Agenda();
                 agenda.setId(result.getLong("ID"));
                 agenda.setCliente(cs.listarUm(result.getLong("ID_CLIENTE")));
