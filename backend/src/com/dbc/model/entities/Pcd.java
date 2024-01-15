@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Pcd extends Cliente {
+    private Cliente cliente;
     private Long id;
     private String tipoDeficiencia;
     private String certificadoDeficienciaGov;
@@ -25,11 +26,19 @@ public class Pcd extends Cliente {
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;
     }
 
-    public Long getIdPcd() {
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setIdPcd(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

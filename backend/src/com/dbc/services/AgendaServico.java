@@ -114,15 +114,13 @@ public class AgendaServico {
             List<Agenda> agendamentos = agendaRepository.listar();
             if (agendamentos.isEmpty()) {
                 System.out.println("Não há nenhum horário cadastrado.");
+                return;
             }
             for (Agenda agenda : agendamentos) {
                 System.out.println(agenda.toString());
             }
         } catch (BancoDeDadosException e) {
             System.err.println("🚫 ERRO: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
-            e.printStackTrace();
         }
     }
 

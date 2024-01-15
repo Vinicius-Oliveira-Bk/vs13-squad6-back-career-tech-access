@@ -4,12 +4,14 @@ import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
+import com.dbc.services.UsuarioServico;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
+    UsuarioServico us = new UsuarioServico();
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_PROFISSIONAL_MENTOR.nextval mysequence from DUAL";
@@ -131,18 +133,17 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE id = ?";
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE ID = ?";
 
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
             ResultSet res = preparedStatement.executeQuery();
 
-            while (res.next()) {
-                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
-                System.out.println(mentor);
+            if (res.next()) {
+                return getProfissionalMentorFromResultSet(res);
             }
-            return getProfissionalMentorFromResultSet(res);
+            return null;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -159,9 +160,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
         ProfissionalMentor mentor = new ProfissionalMentor();
         mentor.setId(res.getLong("id"));
-        mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
+        mentor.setAreaAtuacao(AreaAtuacaoEnum.fromValor(res.getInt("area_atuacao")));
+        mentor.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
         mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
-        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
+        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.fromValor(res.getInt("nivel_experiencia")));
 
         return mentor;
     }

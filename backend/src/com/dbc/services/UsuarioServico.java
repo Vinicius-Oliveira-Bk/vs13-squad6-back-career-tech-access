@@ -63,7 +63,7 @@ public class UsuarioServico {
         }
     }
 
-    public Usuario obterPorId(Long idUsuario) {
+    public Usuario listarUm(Long idUsuario) {
         try {
             Usuario usuario = usuarioRepository.listarUm(idUsuario);
 

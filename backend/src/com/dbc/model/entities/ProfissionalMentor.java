@@ -5,6 +5,7 @@ import com.dbc.model.enums.NivelExperienciaEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class ProfissionalMentor extends Usuario {
+    private Usuario usuario;
     private AreaAtuacaoEnum areaAtuacao;
     private NivelExperienciaEnum nivelExperienciaEnum;
     private String carteiraDeTrabalho;
@@ -42,6 +43,14 @@ public class ProfissionalMentor extends Usuario {
 
     public void setCarteiraDeTrabalho(String carteiraDeTrabalho) {
         this.carteiraDeTrabalho = carteiraDeTrabalho;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
