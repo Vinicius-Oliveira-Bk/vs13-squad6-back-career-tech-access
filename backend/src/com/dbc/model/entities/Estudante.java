@@ -69,14 +69,14 @@ public class Estudante extends Cliente {
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", matricula='" + matricula + '\'' +
-                ", comprovanteMatricula='" + comprovanteMatricula + '\'' +
-                ", instituicao='" + instituicao + '\'' +
-                ", curso='" + curso + '\'' +
-                ", dataInicio=" + dataInicio +
-                ", dataTermino=" + dataTermino +
-                '}';
+        return "\nEstudante" +
+                "\nId .....................: " + id +
+                "\nMatricula ..............: " + matricula +
+                "\nComprovante de Matricula: " + comprovanteMatricula +
+                "\nInstituicao ............: " + instituicao +
+                "\nCurso ..................: " + curso +
+                "\nData de Inicio .........: " + dataInicio +
+                "\nData de Termino ........: " + dataTermino +
+                "\n";
     }
 }

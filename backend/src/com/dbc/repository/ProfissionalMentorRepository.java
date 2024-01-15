@@ -16,6 +16,7 @@ import com.dbc.services.UsuarioServico;
 
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
     UsuarioServico us = new UsuarioServico();
+
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_PROFISSIONAL_MENTOR.nextval mysequence from DUAL";
@@ -201,9 +202,22 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         ProfissionalMentor mentor = new ProfissionalMentor();
 
         mentor.setId(res.getLong("id"));
-        mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
+
+        int areaAtuacaoOrdinal = res.getInt("area_atuacao");
+        AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.values()[areaAtuacaoOrdinal - 1];
+        if (areaAtuacao == null) {
+            areaAtuacao = AreaAtuacaoEnum.OUTROS;
+        }
+        mentor.setAreaAtuacao(areaAtuacao);
+
         mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
-        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
+
+        int nivelExperienciaOrdinal = res.getInt("nivel_experiencia");
+        NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.values()[nivelExperienciaOrdinal - 1];
+        if (nivelExperiencia == null) {
+            nivelExperiencia = NivelExperienciaEnum.JUNIOR;
+        }
+        mentor.setNivelExperienciaEnum(nivelExperiencia);
 
         return mentor;
     }
