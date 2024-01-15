@@ -15,6 +15,7 @@ public class ContatoServico {
     public void cadastrar(Contato contato) {
         try {
             contatoRepository.cadastrar(contato);
+            System.out.println("✅ Contato Adicionado com sucesso! " + contato);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -38,6 +39,7 @@ public class ContatoServico {
     public void atualizar(Long id, Contato contato) {
         try {
             contatoRepository.atualizar(id, contato);
+            System.out.println("✅ Contato Editado com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -46,6 +48,7 @@ public class ContatoServico {
     public void remover(Long id) {
         try {
             contatoRepository.remover(id);
+            System.out.println("✅ Contato Removido com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

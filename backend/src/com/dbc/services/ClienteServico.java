@@ -16,12 +16,12 @@ public class ClienteServico {
     public void cadastrar(Cliente cliente, Long idUsuario) {
         try {
             Cliente clienteAdicionado = clienteRepository.cadastrar(cliente, idUsuario);
-            System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);
+            System.out.println("✅ Cliente Adicionado com sucesso! " + clienteAdicionado);
         } catch (BancoDeDadosException e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("❌ ERRO: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("❌ ERRO: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -46,8 +46,8 @@ public class ClienteServico {
 
     public void atualizar(Long id, Cliente cliente) {
         try {
-            boolean conseguiuEditar = clienteRepository.atualizar(id, cliente);
-            System.out.println("cliente editado? " + conseguiuEditar + "| com id=" + id);
+            clienteRepository.atualizar(id, cliente);
+            System.out.println("✅ Cliente Editado com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -55,8 +55,8 @@ public class ClienteServico {
 
     public void remover(Long id) {
         try {
-            boolean conseguiuRemover = clienteRepository.remover(id);
-            System.out.println("cliente removido? " + conseguiuRemover + "| com id=" + id);
+            clienteRepository.remover(id);
+            System.out.println("✅ Cliente Removido com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

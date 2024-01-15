@@ -15,22 +15,20 @@ public class PcdServico {
 
     public void cadastrar(Pcd pcd) {
         try {
-            if (pcd.getCpf().length() != 11) {
-                throw new Exception("CPF Invalido!");
-            }
-            Pcd pcdAdicionado = pcdRepository.cadastrar(pcd);
-            System.out.println("pcd adicinado com sucesso! " + pcdAdicionado);
+            pcdRepository.cadastrar(pcd);
+            System.out.println("\n✅ Pcd adicionado com sucesso!");
         } catch (BancoDeDadosException e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("\n❌ ERRO: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("\n❌ ERRO: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public Pcd listarUm(Long idPcd) {
         try {
+            System.out.println("\n✅ Pcd encontrado com sucesso!");
             return pcdRepository.listarUm(idPcd);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -49,8 +47,8 @@ public class PcdServico {
 
     public void atualizar(Long id, Pcd pcd) {
         try {
-            boolean conseguiuEditar = pcdRepository.atualizar(id, pcd);
-            System.out.println("pcd editado? " + conseguiuEditar + "| com id=" + id);
+            pcdRepository.atualizar(id, pcd);
+            System.out.println("\n✅ Pcd editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -58,8 +56,8 @@ public class PcdServico {
 
     public void remover(Long id) {
         try {
-            boolean conseguiuRemover = pcdRepository.remover(id);
-            System.out.println("pcd removido? " + conseguiuRemover + "| com id=" + id);
+            pcdRepository.remover(id);
+            System.out.println("\n✅ Pcd removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

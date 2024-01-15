@@ -6,8 +6,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ProfissionalRealocacao extends Cliente {
+    private Cliente cliente;
     private String profissao;
     private String objetivoProfissional;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public ProfissionalRealocacao() {
     }

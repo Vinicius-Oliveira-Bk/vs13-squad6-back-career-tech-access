@@ -44,16 +44,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             cliente.setId(novoId);
 
             String sql = "INSERT INTO VS_13_EQUIPE_6.CLIENTE\n" +
-                    "(ID, ID_USUARIO, TIPO_CLIENTE, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
-                    "VALUES(?, ?, ?, ?, ?)\n";
+                    "(ID, ID_USUARIO, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
+                    "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, cliente.getId());
-            stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
-            stmt.setInt(3, cliente.getTipoCliente().ordinal());
-            stmt.setInt(4, cliente.getPlano().getValor());
-            stmt.setString(5, String.valueOf(cliente.getControleParental()));
+            stmt.setLong(2, idUsuario);
+            stmt.setInt(3, cliente.getPlano().getValor());
+            stmt.setString(4, String.valueOf(cliente.getControleParental()));
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarCliente.res=" + res);
@@ -158,10 +157,9 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setLong(1, cliente.getId());
-            stmt.setString(2, cliente.getTipoCliente().name());
-            stmt.setString(3, cliente.getPlano().name());
-            stmt.setString(4, String.valueOf(cliente.getControleParental()));
-            stmt.setLong(5, id);
+            stmt.setString(2, cliente.getPlano().name());
+            stmt.setString(3, String.valueOf(cliente.getControleParental()));
+            stmt.setLong(4, id);
 
             int res = stmt.executeUpdate();
             System.out.println("editarCliente.res=" + res);

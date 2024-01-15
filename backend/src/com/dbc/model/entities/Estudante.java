@@ -3,6 +3,7 @@ package com.dbc.model.entities;
 import java.time.LocalDate;
 
 public class Estudante extends Cliente {
+    private Cliente cliente;
     private Long id;
     private String matricula;
     private String comprovanteMatricula;
@@ -10,6 +11,14 @@ public class Estudante extends Cliente {
     private String curso;
     private LocalDate dataInicio;
     private LocalDate dataTermino;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public Long getId() {
         return id;
@@ -69,14 +78,14 @@ public class Estudante extends Cliente {
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", matricula='" + matricula + '\'' +
-                ", comprovanteMatricula='" + comprovanteMatricula + '\'' +
-                ", instituicao='" + instituicao + '\'' +
-                ", curso='" + curso + '\'' +
-                ", dataInicio=" + dataInicio +
-                ", dataTermino=" + dataTermino +
-                '}';
+        return "\nEstudante" +
+                "\nId .....................: " + id +
+                "\nMatricula ..............: " + matricula +
+                "\nComprovante de Matricula: " + comprovanteMatricula +
+                "\nInstituicao ............: " + instituicao +
+                "\nCurso ..................: " + curso +
+                "\nData de Inicio .........: " + dataInicio +
+                "\nData de Termino ........: " + dataTermino +
+                "\n";
     }
 }

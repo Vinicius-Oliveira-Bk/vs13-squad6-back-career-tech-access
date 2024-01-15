@@ -30,7 +30,7 @@ public class AgendaServico {
             agendaRepository.cadastrar(agenda);
             System.out.println("✅ Horário cadastrado com sucesso!");
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class AgendaServico {
                 System.out.println("✅ Agendamento de id "+idAgenda+" removido com sucesso!");
             }
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível remover o agendamento!");
+            System.err.println("❌ Não foi possível remover o agendamento!");
             e.printStackTrace();
         }
     }
@@ -61,9 +61,9 @@ public class AgendaServico {
                 System.out.println("✅ Agendamento realizado com sucesso!");
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível realizar o agendamento!");
+            System.err.println("❌ Não foi possível realizar o agendamento!");
             e.printStackTrace();
         }
     }
@@ -73,11 +73,11 @@ public class AgendaServico {
             Agenda agenda = agendaRepository.listarUm(idAgendaAtual);
 
             if (Objects.isNull(agenda)) {
-                throw new NoSuchElementException("🚫 O Não há horário cadastrado com este id.");
+                throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
             }
 
             if (agenda.getCliente() == null) {
-                throw new IllegalArgumentException("🚫 Não é possível reagendar um horário que não haja cliente.");
+                throw new IllegalArgumentException("❌ Não é possível reagendar um horário que não haja cliente.");
             }
 
             listarTodosPorStatus(StatusAgendaEnum.DISPONIVEL);
@@ -94,9 +94,9 @@ public class AgendaServico {
                 System.out.println("✅ Reagendamento realizado com sucesso!");
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível realizar o reagendamento!");
+            System.err.println("❌ Não foi possível realizar o reagendamento!");
             e.printStackTrace();
         }
     }
@@ -106,14 +106,14 @@ public class AgendaServico {
             Agenda agenda = agendaRepository.listarUm(idAgenda);
 
             if (Objects.isNull(agenda)) {
-                throw new NoSuchElementException("🚫 O Não há horário cadastrado com este id.");
+                throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
             }
 
             return agenda;
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
+            System.err.println("❌ Não foi possível encontrar o agendamento!");
             e.printStackTrace();
         }
         return null;
@@ -132,7 +132,7 @@ public class AgendaServico {
                 System.out.println(agenda.toString());
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         }
     }
 
@@ -152,9 +152,9 @@ public class AgendaServico {
                 System.out.println(agenda.toString());
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
+            System.err.println("❌ Não foi possível encontrar o agendamento!");
             e.printStackTrace();
         }
     }
@@ -175,9 +175,9 @@ public class AgendaServico {
                 System.out.println(agenda.toString());
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
+            System.err.println("❌ Não foi possível encontrar o agendamento!");
             e.printStackTrace();
         }
     }
@@ -198,9 +198,9 @@ public class AgendaServico {
                 System.out.println(agenda.toString());
             }
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
+            System.err.println("❌ Não foi possível encontrar o agendamento!");
             e.printStackTrace();
         }
     }
@@ -210,11 +210,11 @@ public class AgendaServico {
             Agenda agenda = agendaRepository.listarUm(idAgenda);
 
             if (Objects.isNull(agenda)) {
-                throw new NoSuchElementException("🚫 O Não há horário cadastrado com este id.");
+                throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
             }
 
             if (agenda.getCliente().getId() != idCliente) {
-                throw new IllegalArgumentException("🚫 Não é possível cancelar um horário que não pertença ao cliente selecionado.");
+                throw new IllegalArgumentException("❌ Não é possível cancelar um horário que não pertença ao cliente selecionado.");
             }
 
             agenda.setCliente(null);
@@ -223,9 +223,9 @@ public class AgendaServico {
 
             System.out.println("✅ Cancelamento realizado com sucesso!");
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 ERRO: " + e.getMessage());
+            System.err.println("❌ ERRO: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("🚫 Não foi possível encontrar o agendamento!");
+            System.err.println("❌ Não foi possível encontrar o agendamento!");
             e.printStackTrace();
         }
     }
@@ -234,34 +234,34 @@ public class AgendaServico {
         for (Agenda agendamento : agendamentos) {
             //data anterior
             if (agenda.getDataHoraInicio().isBefore(LocalDateTime.now()) || agenda.getDataHoraFim().isBefore(LocalDateTime.now())) {
-                throw new IllegalArgumentException("🚫 Não é possível cadastrar um agendamento em um horário passado, favor verifique.");
+                throw new IllegalArgumentException("❌ Não é possível cadastrar um agendamento em um horário passado, favor verifique.");
             }
 
             //Início no meio de horário já marcado
             if (agenda.getDataHoraInicio().isBefore(agendamento.getDataHoraFim())
                     && agenda.getDataHoraInicio().isAfter(agendamento.getDataHoraInicio())) {
-                throw new IllegalArgumentException("🚫 Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
+                throw new IllegalArgumentException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
             }
 
             //Fim no meio de horário já marcado
             if (agenda.getDataHoraFim().isBefore(agendamento.getDataHoraFim())
                     && agenda.getDataHoraFim().isAfter(agendamento.getDataHoraInicio())) {
-                throw new IllegalArgumentException("🚫 Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
+                throw new IllegalArgumentException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
             }
 
             //Início == início já marcado
             if (agenda.getDataHoraInicio() == agendamento.getDataHoraInicio() && agenda.getDataHoraFim() == agendamento.getDataHoraFim()) {
-                throw new IllegalArgumentException("🚫 Este horário já está cadastrado em sua agenda, favor verificar.");
+                throw new IllegalArgumentException("❌ Este horário já está cadastrado em sua agenda, favor verificar.");
             }
 
             //Fim == fim já marcado
             if (agenda.getDataHoraInicio() == agendamento.getDataHoraInicio()) {
-                throw new IllegalArgumentException("🚫 Já há horário cadastrado com esta data/hora inicial, verifique sua agenda.");
+                throw new IllegalArgumentException("❌ Já há horário cadastrado com esta data/hora inicial, verifique sua agenda.");
             }
 
             //Horário já cadastrado
             if (agenda.getDataHoraFim() == agendamento.getDataHoraFim()) {
-                throw new IllegalArgumentException("🚫 Já há horário cadastrado com esta data/hora final, verifique sua agenda.");
+                throw new IllegalArgumentException("❌ Já há horário cadastrado com esta data/hora final, verifique sua agenda.");
             }
         }
         return true;
@@ -269,7 +269,7 @@ public class AgendaServico {
 
     public boolean validarDisponibilidadeAgenda(Agenda agenda) {
         if (agenda.getCliente() != null) {
-            throw new IllegalArgumentException("🚫 Já há cliente agendado para este horário, agendamento cancelado.");
+            throw new IllegalArgumentException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
         
         return true;

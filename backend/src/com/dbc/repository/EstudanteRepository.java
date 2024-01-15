@@ -37,18 +37,19 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
             Long proximoId = this.getProximoId(con);
             estudante.setId(proximoId);
 
-            String sql = "INSERT INTO ESTUDANTE (ID, MATRICULA, COMPROVANTE_MATRICULA, INSTITUICAO, CURSO, DATA_INICIO, DATA_TERMINO) "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO ESTUDANTE (ID, ID_CLIENTE, MATRICULA, COMPROVANTE_MATRICULA, INSTITUICAO, CURSO, DATA_INICIO, DATA_TERMINO) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, estudante.getId());
-            stmt.setString(2, estudante.getMatricula());
-            stmt.setString(3, estudante.getComprovanteMatricula());
-            stmt.setString(4, estudante.getInstituicao());
-            stmt.setString(5, estudante.getCurso());
-            stmt.setTimestamp(6, Timestamp.valueOf(estudante.getDataInicio().atStartOfDay()));
-            stmt.setTimestamp(7, Timestamp.valueOf(estudante.getDataTermino().atStartOfDay()));
+            stmt.setLong(2, estudante.getCliente().getId());
+            stmt.setString(3, estudante.getMatricula());
+            stmt.setString(4, estudante.getComprovanteMatricula());
+            stmt.setString(5, estudante.getInstituicao());
+            stmt.setString(6, estudante.getCurso());
+            stmt.setTimestamp(7, Timestamp.valueOf(estudante.getDataInicio().atStartOfDay()));
+            stmt.setTimestamp(8, Timestamp.valueOf(estudante.getDataTermino().atStartOfDay()));
 
             stmt.executeUpdate();
 
@@ -83,6 +84,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 Estudante estudante = new Estudante();
 
                 estudante.setId(res.getLong("id"));
+                estudante.setCliente(new ClienteRepository().listarUm(res.getLong("id_cliente")));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -120,6 +122,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 if (res.next()) {
                     estudante = new Estudante();
                     estudante.setId(res.getLong("id"));
+                    estudante.setCliente(new ClienteRepository().listarUm(res.getLong("id_cliente")));
                     estudante.setMatricula(res.getString("matricula"));
                     estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                     estudante.setInstituicao(res.getString("instituicao"));
@@ -182,7 +185,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 stmt.setString(index++, estudante.getMatricula());
             }
             if (estudante.getComprovanteMatricula() != null) {
-                stmt.setTimestamp(index++, Timestamp.valueOf(estudante.getComprovanteMatricula()));
+                stmt.setString(index++, estudante.getComprovanteMatricula());
             }
             if (estudante.getInstituicao() != null) {
                 stmt.setString(index++, estudante.getInstituicao());

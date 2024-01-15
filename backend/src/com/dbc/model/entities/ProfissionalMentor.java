@@ -6,9 +6,18 @@ import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class ProfissionalMentor extends Usuario {
     private Usuario usuario;
+    private Cliente cliente;
     private AreaAtuacaoEnum areaAtuacao;
     private NivelExperienciaEnum nivelExperienciaEnum;
     private String carteiraDeTrabalho;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public ProfissionalMentor() {
     }
