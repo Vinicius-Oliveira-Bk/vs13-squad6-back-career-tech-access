@@ -1,88 +1,53 @@
 package com.dbc.services;
-import java.util.ArrayList;
 
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalRealocacao;
+import com.dbc.repository.ProfissionalRealocacaoRepository;
 
 public class ProfissionalRealocacaoServico {
-    private ArrayList<ProfissionalRealocacao> lista = new ArrayList<>();
-    UsuarioServico usuarioServico = new UsuarioServico();
 
-    public void cadastrar(ProfissionalRealocacao profissionalRealocacao) {
-        if (profissionalRealocacao == null) {
-            System.err.println("🚫 O usuário não pode ser nulo!");
-        } else {
-            lista.add(profissionalRealocacao);
-            usuarioServico.cadastrar(profissionalRealocacao);
-            System.out.println("✅ Profissional Realocacao cadastrado!");
+    private ProfissionalRealocacaoRepository profissionalRealocacaoRepository;
+
+    public ProfissionalRealocacaoServico() {
+        profissionalRealocacaoRepository = new ProfissionalRealocacaoRepository();
+    }
+
+    public void cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) {
+        try {
+            profissionalRealocacaoRepository.cadastrar(profissionalRealocacao, idCliente);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
 
-    public ProfissionalRealocacao listarUm(Long id) {
-        boolean profissionalRealocacaoEncontrado = false;
-
-        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id.intValue()) {
-                profissionalRealocacaoEncontrado = true;
-                return profissionalRealocacao;
-            }
+    public void listar() {
+        try {
+            profissionalRealocacaoRepository.listar().forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        if (!profissionalRealocacaoEncontrado) {
-            System.err.println("🚫 Profissional Realocacao não encontrado!");
-        }
-        return null;
     }
-
-    public void listarTodos() {
-        if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum Profissional Realocacao cadastrado!");
-            return;
-        }
-
-        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            System.out.println(profissionalRealocacao);
+    public void listarUm(Long id) {
+        try {
+            profissionalRealocacaoRepository.listarUm(id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
 
-    public void atualizar(Long id, ProfissionalRealocacao profissionalRealocacaoAtualiza) {
-        for (int i = 0; i < lista.size(); i++) {
-            ProfissionalRealocacao profissionalRealocacao = lista.get(i);
-
-            if (profissionalRealocacao.getId() == id.intValue()) {
-                profissionalRealocacao.setNome(profissionalRealocacaoAtualiza.getNome());
-                profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
-                profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
-                profissionalRealocacao.setEmail(profissionalRealocacaoAtualiza.getEmail());
-                profissionalRealocacao.setPlano(profissionalRealocacaoAtualiza.getPlano());
-                profissionalRealocacao.setInteresses(profissionalRealocacaoAtualiza.getInteresses());
-                profissionalRealocacao.setImagemDocumento(profissionalRealocacaoAtualiza.getImagemDocumento());
-                profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());
-                profissionalRealocacao.setAcessoPcd(profissionalRealocacaoAtualiza.getAcessoPcd());
-                profissionalRealocacao.setProfissao(profissionalRealocacaoAtualiza.getProfissao());
-                profissionalRealocacao.setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
-                System.out.println("✅ Profissional Realocação atualizado!");
-                return;
-            }
+    public void editar(Long id, ProfissionalRealocacao profissionalRealocacao) {
+        try {
+            profissionalRealocacaoRepository.atualizar(id, profissionalRealocacao);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
-
-        System.err.println("🚫 Usuário não encontrado!");
     }
 
     public void remover(Long id) {
-        ProfissionalRealocacao profissionalRealocacaoDeletar = null;
-
-        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id.intValue()) {
-                profissionalRealocacaoDeletar = profissionalRealocacao;
-            }
-        }
-
-        if (profissionalRealocacaoDeletar != null) {
-            lista.remove(profissionalRealocacaoDeletar);
-            usuarioServico.remover(profissionalRealocacaoDeletar.getId());
-            System.out.println("✅ Usuário removido!");
-        } else {
-            System.err.println("🚫 Usuário não encontrado!");
+        try {
+            profissionalRealocacaoRepository.remover(id);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
         }
     }
 }
