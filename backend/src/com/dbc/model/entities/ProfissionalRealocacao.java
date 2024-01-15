@@ -9,14 +9,18 @@ public class ProfissionalRealocacao extends Cliente {
     private String profissao;
     private String objetivoProfissional;
 
-    public ProfissionalRealocacao() {}
+    public ProfissionalRealocacao() {
+    }
 
     public ProfissionalRealocacao(String profissao, String objetivoProfissional) {
         this.profissao = profissao;
         this.objetivoProfissional = objetivoProfissional;
     }
 
-    public ProfissionalRealocacao(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao, String objetivoProfissional) {
+    public ProfissionalRealocacao(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
+            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses,
+            String imagemDocummento, boolean controleParental, boolean acessoPcd, String profissao,
+            String objetivoProfissional) {
         super();
         this.profissao = profissao;
         this.objetivoProfissional = objetivoProfissional;

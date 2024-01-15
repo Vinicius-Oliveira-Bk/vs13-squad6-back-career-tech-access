@@ -12,9 +12,11 @@ public class Agenda {
     private LocalDateTime dataHoraFim;
     private StatusAgendaEnum statusAgendaEnum;
 
-    public Agenda() { }
+    public Agenda() {
+    }
 
-    public Agenda(Cliente cliente, ProfissionalMentor profissionalMentor, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, StatusAgendaEnum statusAgendaEnum) {
+    public Agenda(Cliente cliente, ProfissionalMentor profissionalMentor, LocalDateTime dataHoraInicio,
+            LocalDateTime dataHoraFim, StatusAgendaEnum statusAgendaEnum) {
         this.cliente = cliente;
         this.profissionalMentor = profissionalMentor;
         this.dataHoraInicio = dataHoraInicio;
@@ -73,9 +75,9 @@ public class Agenda {
     @Override
     public String toString() {
         return "\n\tAgenda Id .............: " + this.id +
-               "\n\tMentor ................: " + this.profissionalMentor.getNome() +
-               "\n\tHorário Inicio ........: " + this.dataHoraInicio.toString() +
-               "\n\tHorário Fim ...........: " + this.dataHoraFim.toString() +
-               "\n\tStatus Agenda .........: " + this.statusAgendaEnum.name();
+                "\n\tMentor ................: " + this.profissionalMentor.getNome() +
+                "\n\tHorário Inicio ........: " + this.dataHoraInicio.toString() +
+                "\n\tHorário Fim ...........: " + this.dataHoraFim.toString() +
+                "\n\tStatus Agenda .........: " + this.statusAgendaEnum.name();
     }
 }

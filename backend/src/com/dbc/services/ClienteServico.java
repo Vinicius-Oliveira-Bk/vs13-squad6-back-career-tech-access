@@ -1,10 +1,10 @@
 package com.dbc.services;
 
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Cliente;
 import com.dbc.repository.ClienteRepository;
-
-import java.util.List;
 
 public class ClienteServico {
     private ClienteRepository clienteRepository;
@@ -13,7 +13,7 @@ public class ClienteServico {
         clienteRepository = new ClienteRepository();
     }
 
-    public void adicionar(Cliente cliente, Long idUsuario) {
+    public void cadastrar(Cliente cliente, Long idUsuario) {
         try {
             Cliente clienteAdicionado = clienteRepository.cadastrar(cliente, idUsuario);
             System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);

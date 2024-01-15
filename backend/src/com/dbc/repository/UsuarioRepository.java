@@ -1,14 +1,18 @@
 package com.dbc.repository;
 
-import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.Usuario;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioRepository implements IRepository<Long, Usuario> {
+import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.Usuario;
 
+public class UsuarioRepository implements IRepository<Long, Usuario> {
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT seq_usuario.nextval mysequence from DUAL";
@@ -51,126 +55,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             int res = stmt.executeUpdate();
 
             return usuario;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-
-            String sql = "DELETE FROM USUARIO WHERE ID = ?";
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setLong(1, id);
-
-            // Executa-se a consulta
-            int res = stmt.executeUpdate();
-            System.out.println("removerUsuarioPorId.res=" + res);
-
-            return res > 0;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public boolean atualizar(Long id, Usuario usuario) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-
-            StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE USUARIO SET \n");
-
-            if (usuario.getNome() != null) {
-                sql.append(" nome = ?,");
-            }
-            if (usuario.getDataNascimento() != null) {
-                sql.append(" data_nascimento = ?,");
-            }
-            if (usuario.getCpf() != null) {
-                sql.append(" cpf = ?,");
-            }
-            if (usuario.getEmail() != null) {
-                sql.append(" email = ?,");
-            }
-            if (usuario.getSenha() != null) {
-                sql.append(" senha = ?,");
-            }
-            if (usuario.getAcessoPcd() != 999) {
-                sql.append(" acesso_pcd = ?,");
-            }
-            if (usuario.getTipoUsuario() != null) {
-                sql.append(" tipo_usuario = ?,");
-            }
-            if (usuario.getInteresses() != null) {
-                sql.append(" interesses = ?,");
-            }
-            if (usuario.getImagemDocumento() != null) {
-                sql.append(" imagem_documento = ?,");
-            }
-
-            sql.deleteCharAt(sql.length() - 1);
-            sql.append(" WHERE id = ? ");
-
-            PreparedStatement stmt = con.prepareStatement(sql.toString());
-
-            int index = 1;
-            if (usuario.getNome() != null) {
-                stmt.setString(index++, usuario.getNome());
-            }
-            if (usuario.getDataNascimento() != null) {
-                stmt.setTimestamp(index++, Timestamp.valueOf(usuario.getDataNascimento().atStartOfDay()));
-            }
-            if (usuario.getCpf() != null) {
-                stmt.setString(index++, usuario.getCpf());
-            }
-            if (usuario.getEmail() != null) {
-                stmt.setString(index++, usuario.getEmail());
-            }
-            if (usuario.getSenha() != null) {
-                stmt.setString(index++, usuario.getSenha());
-            }
-            if (usuario.getAcessoPcd() != null) {
-                stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
-            }
-            if (usuario.getTipoUsuario() != null) {
-                stmt.setLong(index++, usuario.getTipoUsuario());
-            }
-            if (usuario.getInteresses() != null) {
-                stmt.setString(index++, usuario.getInteresses());
-            }
-            if (usuario.getImagemDocumento() != null) {
-                stmt.setString(index++, usuario.getImagemDocumento());
-            }
-
-            stmt.setLong(index++, id);
-
-            int res = stmt.executeUpdate();
-            System.out.println("editarUsuario.res=" + res);
-
-            return res > 0;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -266,4 +150,123 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
         return usuario;
     }
 
+    @Override
+    public boolean atualizar(Long id, Usuario usuario) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE USUARIO SET \n");
+
+            if (usuario.getNome() != null) {
+                sql.append(" nome = ?,");
+            }
+            if (usuario.getDataNascimento() != null) {
+                sql.append(" data_nascimento = ?,");
+            }
+            if (usuario.getCpf() != null) {
+                sql.append(" cpf = ?,");
+            }
+            if (usuario.getEmail() != null) {
+                sql.append(" email = ?,");
+            }
+            if (usuario.getSenha() != null) {
+                sql.append(" senha = ?,");
+            }
+            if (usuario.getAcessoPcd() != 999) {
+                sql.append(" acesso_pcd = ?,");
+            }
+            if (usuario.getTipoUsuario() != null) {
+                sql.append(" tipo_usuario = ?,");
+            }
+            if (usuario.getInteresses() != null) {
+                sql.append(" interesses = ?,");
+            }
+            if (usuario.getImagemDocumento() != null) {
+                sql.append(" imagem_documento = ?,");
+            }
+
+            sql.deleteCharAt(sql.length() - 1);
+            sql.append(" WHERE id = ? ");
+
+            PreparedStatement stmt = con.prepareStatement(sql.toString());
+
+            int index = 1;
+            if (usuario.getNome() != null) {
+                stmt.setString(index++, usuario.getNome());
+            }
+            if (usuario.getDataNascimento() != null) {
+                stmt.setTimestamp(index++, Timestamp.valueOf(usuario.getDataNascimento().atStartOfDay()));
+            }
+            if (usuario.getCpf() != null) {
+                stmt.setString(index++, usuario.getCpf());
+            }
+            if (usuario.getEmail() != null) {
+                stmt.setString(index++, usuario.getEmail());
+            }
+            if (usuario.getSenha() != null) {
+                stmt.setString(index++, usuario.getSenha());
+            }
+            if (usuario.getAcessoPcd() != null) {
+                stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
+            }
+            if (usuario.getTipoUsuario() != null) {
+                stmt.setLong(index++, usuario.getTipoUsuario());
+            }
+            if (usuario.getInteresses() != null) {
+                stmt.setString(index++, usuario.getInteresses());
+            }
+            if (usuario.getImagemDocumento() != null) {
+                stmt.setString(index++, usuario.getImagemDocumento());
+            }
+
+            stmt.setLong(index++, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("editarUsuario.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean remover(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "DELETE FROM USUARIO WHERE ID = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            // Executa-se a consulta
+            int res = stmt.executeUpdate();
+            System.out.println("removerUsuarioPorId.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

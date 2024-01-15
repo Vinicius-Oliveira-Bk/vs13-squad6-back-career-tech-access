@@ -1,26 +1,22 @@
 package com.dbc.services;
 
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Usuario;
 import com.dbc.repository.UsuarioRepository;
 
-import java.util.List;
-
 public class UsuarioServico {
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-    public UsuarioServico() {
-        usuarioRepository = new UsuarioRepository();
-    }
-
-    public void adicionarUsuario(Usuario usuario) {
+    public void cadastrar(Usuario usuario) {
         try {
 
             if (usuario.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario usuarioAdicionado = usuarioRepository.cadastrar(usuario);
+            usuarioRepository.cadastrar(usuario);
             System.out.println("\nUsuário adicinado com sucesso!\n");
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -31,39 +27,7 @@ public class UsuarioServico {
         }
     }
 
-    // remoção
-    public void removerUsuario(Long id) {
-        try {
-            boolean conseguiuRemover = usuarioRepository.remover(id);
-            System.out.println("\nUsuário removido com sucesso!");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // atualização de um objeto
-    public void editarUsuario(Long id, Usuario usuario) {
-        try {
-            boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
-            System.out.println("\nUsuário editado com sucesso!");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // leitura
-    public void listarTodosUsuarios() {
-        try {
-            List<Usuario> listar = usuarioRepository.listar();
-            for (Usuario usuario : listar) {
-                System.out.println(usuario.toString());
-            }
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void obterUsuarioPorId(Long idUsuario) {
+    public void listarUm(Long idUsuario) {
         try {
             Usuario usuario = usuarioRepository.listarUm(idUsuario);
 
@@ -78,4 +42,32 @@ public class UsuarioServico {
         }
     }
 
+    public void listarTodos() {
+        try {
+            List<Usuario> listar = usuarioRepository.listar();
+            for (Usuario usuario : listar) {
+                System.out.println(usuario.toString());
+            }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void atualizar(Long id, Usuario usuario) {
+        try {
+            usuarioRepository.atualizar(id, usuario);
+            System.out.println("\nUsuário editado com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void remover(Long id) {
+        try {
+            usuarioRepository.remover(id);
+            System.out.println("\nUsuário removido com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 }

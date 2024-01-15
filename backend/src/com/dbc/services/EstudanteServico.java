@@ -1,15 +1,15 @@
 package com.dbc.services;
 
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Estudante;
 import com.dbc.repository.EstudanteRepository;
 
-import java.util.List;
-
 public class EstudanteServico {
     private EstudanteRepository estudanteRepository = new EstudanteRepository();
 
-    public void adicionarEstudante(Estudante estudante) {
+    public void cadastrar(Estudante estudante) {
         try {
 
             if (estudante.getComprovanteMatricula() == null) {
@@ -24,39 +24,7 @@ public class EstudanteServico {
         }
     }
 
-    // remoção
-    public void removerEstudante(Long id) {
-        try {
-            estudanteRepository.remover(id);
-            System.out.println("\nEstudante removido com sucesso!");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // atualização de um objeto
-    public void editarEstudante(Long id, Estudante estudante) {
-        try {
-            estudanteRepository.atualizar(id, estudante);
-            System.out.println("\nEstudante editado com sucesso!");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // leitura
-    public void listarTodosEstudantes() {
-        try {
-            List<Estudante> listar = estudanteRepository.listar();
-            for (Estudante estudante : listar) {
-                System.out.println(estudante.toString());
-            }
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void obterEstudantePorId(Long idEstudante) {
+    public void listarUm(Long idEstudante) {
         try {
             Estudante estudante = estudanteRepository.listarUm(idEstudante);
 
@@ -71,4 +39,32 @@ public class EstudanteServico {
         }
     }
 
+    public void listarTodos() {
+        try {
+            List<Estudante> listar = estudanteRepository.listar();
+            for (Estudante estudante : listar) {
+                System.out.println(estudante.toString());
+            }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void atualizar(Long id, Estudante estudante) {
+        try {
+            estudanteRepository.atualizar(id, estudante);
+            System.out.println("\nEstudante editado com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void remover(Long id) {
+        try {
+            estudanteRepository.remover(id);
+            System.out.println("\nEstudante removido com sucesso!");
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 }

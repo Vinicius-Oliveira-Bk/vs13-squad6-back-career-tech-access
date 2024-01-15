@@ -3,9 +3,19 @@ package com.dbc.view;
 import java.util.Scanner;
 
 import com.dbc.model.entities.Estudante;
+import com.dbc.model.entities.Pcd;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.entities.ProfissionalRealocacao;
 import com.dbc.model.enums.TipoUsuarioEnum;
+
+// import com.dbc.services.AgendaServico;
+// import com.dbc.services.ContatoServico;
+// import com.dbc.services.EnderecoServico;
+
+import com.dbc.services.EstudanteServico;
+import com.dbc.services.PcdServico;
+import com.dbc.services.ProfissionalMentorServico;
+import com.dbc.services.ProfissionalRealocacaoServico;
 import com.dbc.services.UsuarioServico;
 import com.dbc.utils.CustomScanner;
 import com.dbc.utils.Utils;
@@ -14,8 +24,16 @@ public class Aplicacao {
     public static void iniciarAplicacao() {
         Scanner sc = new Scanner(System.in);
         CustomScanner scanner = new CustomScanner();
-        
+
+        // EnderecoServico enderecoServico = new EnderecoServico();
+        // ContatoServico contatoServico = new ContatoServico();
+        // AgendaServico agendaServico = new AgendaServico();
+
         UsuarioServico usuarioServico = new UsuarioServico();
+        EstudanteServico estudanteServico = new EstudanteServico();
+        PcdServico pcdServico = new PcdServico();
+        ProfissionalMentorServico profissionalMentorServico = new ProfissionalMentorServico();
+        ProfissionalRealocacaoServico profissionalRealocacaoServico = new ProfissionalRealocacaoServico();
 
         int opcao, idUsuario;
 
@@ -41,7 +59,7 @@ public class Aplicacao {
                         case 1:
                             usuarioServico.listarTodos();
                             sc.nextLine();
-                            break;  
+                            break;
                         case 2:
                             Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("Estudante");
@@ -55,29 +73,36 @@ public class Aplicacao {
                                     break;
                                 case 1:
                                     Estudante estudante = new Estudante();
+                                    
                                     Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
                                     Utils.rotinaCadastroCliente(estudante);
                                     Utils.rotinaCadastroEstudante(estudante);
-                                    usuarioServico.cadastrar(estudante);
+                                    
+                                    estudanteServico.cadastrar(estudante);
                                     break;
                                 case 2:
                                     idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
-                                    System.out.println(usuarioServico.listarUm((long) idUsuario));
+                                    estudanteServico.listarUm((long) idUsuario);
                                     sc.nextLine();
                                     break;
                                 case 3:
-                                    usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.ESTUDANTE);
+                                    estudanteServico.listarTodos();
                                     sc.nextLine();
                                     break;
                                 case 4:
+                                    Estudante estudanteASerAtualizado = new Estudante();
+                                    
                                     int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
-                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
+                                    estudanteServico.listarUm((long) idEstudante);
+
                                     Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
+
+                                    estudanteServico.atualizar((long) idEstudante, estudanteASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
                                     int idUsuarioExcluido = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
-                                    usuarioServico.deletar((long) idUsuarioExcluido);
+                                    estudanteServico.remover((long) idUsuarioExcluido);
                                     sc.nextLine();
                                     break;
                                 case 6:
@@ -98,32 +123,35 @@ public class Aplicacao {
                                     System.out.println("\n👋 Até mais!\n");
                                     break;
                                 case 1:
-                                    Estudante estudante = new Estudante();
-
-                                    Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.PCD);
-                                    Utils.rotinaCadastroCliente(estudante);
-                                    Utils.rotinaCadastroEstudante(estudante);
+                                    Pcd pcd = new Pcd();
                                     
-                                    usuarioServico.cadastrar(estudante);
+                                    Utils.rotinaCadastroUsuario(pcd, TipoUsuarioEnum.PCD);
+                                    Utils.rotinaCadastroCliente(pcd);
+                                    Utils.rotinaCadastroPcd(pcd);
+                                    
+                                    pcdServico.cadastrar(pcd);
                                     break;
                                 case 2:
                                     idUsuario = scanner.nextInt("Selecione o ID do estudante a ser consultado: ");
-                                    System.out.println(usuarioServico.listarUm((long) idUsuario));
+                                    System.out.println(pcdServico.listarUm((long) idUsuario));
                                     sc.nextLine();
                                     break;
                                 case 3:
-                                    usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PCD);
+                                    pcdServico.listarTodos();
                                     sc.nextLine();
                                     break;
                                 case 4:
-                                    int idEstudante = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
-                                    Estudante estudanteASerAtualizado = (Estudante) usuarioServico.listarUm((long) idEstudante);
-                                    Utils.rotinaCadastroEstudante(estudanteASerAtualizado);
+                                    int idPcd = scanner.nextInt("Selecione o ID do estudante a ser atualizado: ");
+                                    Pcd pcdASerAtualizado = pcdServico.listarUm((long) idPcd);
+
+                                    Utils.rotinaCadastroPcd(pcdASerAtualizado);
+
+                                    pcdServico.atualizar((long) idPcd, pcdASerAtualizado);
                                     sc.nextLine();
                                     break;
                                 case 5:
-                                    int idUsuarioExcluido = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
-                                    usuarioServico.deletar((long) idUsuarioExcluido);
+                                    int idPcdAExcluir = scanner.nextInt("Selecione o ID do estudante a ser excluído: ");
+                                    pcdServico.remover((long) idPcdAExcluir);
                                     sc.nextLine();
                                     break;
                                 case 6:
@@ -146,38 +174,37 @@ public class Aplicacao {
                                     break;
                                 case 1:
                                     ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
-
-                                    Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL);
+                                    
+                                    Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
                                     Utils.rotinaCadastroCliente(profissionalRealocacao);
                                     Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacao);
-
-                                    usuarioServico.cadastrar(profissionalRealocacao);
+                                    
+                                    profissionalRealocacaoServico.cadastrar(profissionalRealocacao);
                                     break;
                                 case 2:
                                     idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja visualizar: ");
-                                    usuarioServico.listarUm(idUsuario);
+                                    profissionalRealocacaoServico.listarUm((long) idUsuario);
                                     sc.nextLine();
                                     break;
                                 case 3:
-                                    usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.PROFISSIONAL);
-                                    usuarioServico.listarTodos();
+                                    profissionalRealocacaoServico.listarTodos();
                                     sc.nextLine();
                                     break;
                                 case 4:
-                                    idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja atualizar: ");
-                                    usuarioServico.listarUm(idUsuario);
-
                                     ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
-                                    Utils.rotinaCadastroUsuario(profissionalRealocacaoAtualizar, TipoUsuarioEnum.PROFISSIONAL);
-                                    Utils.rotinaCadastroCliente(profissionalRealocacaoAtualizar);
-                                    profissionalRealocacaoAtualizar.setProfissao(scanner.nextLine("Informe sua profissão: "));
-                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(scanner.nextLine("Informe seu objetivo profissional: "));
+                                    
+                                    idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja atualizar: ");
+                                    profissionalRealocacaoServico.listarUm((long) idUsuario);
 
-                                    usuarioServico.atualizar(idUsuario, profissionalRealocacaoAtualizar);
+                                    Utils.rotinaCadastroUsuario(profissionalRealocacaoAtualizar, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
+                                    Utils.rotinaCadastroCliente(profissionalRealocacaoAtualizar);
+                                    Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoAtualizar);
+
+                                    profissionalRealocacaoServico.atualizar((long) idUsuario, profissionalRealocacaoAtualizar);
                                     break;
                                 case 5:
                                     int idUsuarioDeletar = scanner.nextInt("Informe o id do profissional em realocação que deseja deletar: ");
-                                    usuarioServico.deletar(idUsuarioDeletar);
+                                    profissionalRealocacaoServico.remover((long) idUsuarioDeletar);
                                     sc.nextLine();
                                     break;
                                 case 6:
@@ -209,25 +236,26 @@ public class Aplicacao {
                             ProfissionalMentor mentorCadastro = new ProfissionalMentor();
                             Utils.rotinaCadastroUsuario(mentorCadastro, TipoUsuarioEnum.MENTOR);
                             Utils.rotinaCadastroMentor(mentorCadastro);
-                            usuarioServico.cadastrar(mentorCadastro);
+                            profissionalMentorServico.cadastrar(mentorCadastro);
                             break;
                         case 2:
                             int idMentor = scanner.nextInt("Selecione o ID do mentor a ser consultado: ");
-                            System.out.println(usuarioServico.listarUm((long) idMentor));
+                            profissionalMentorServico.listarUm((long) idMentor);
                             sc.nextLine();
                             break;
                         case 3:
-                            usuarioServico.listarTodosPorTipo(TipoUsuarioEnum.MENTOR);
+                            profissionalMentorServico.listarTodos();
                             scanner.nextLine();
                             break;
                         case 4:
                             int idMentorAtualizar = scanner.nextInt("Selecione o ID do Mentor a ser atualizado: ");
-                            ProfissionalMentor mentorASerAtualizado = (ProfissionalMentor) usuarioServico.listarUm((long) idMentorAtualizar);
+                            ProfissionalMentor mentorASerAtualizado = (ProfissionalMentor) profissionalMentorServico.listarUm((long) idMentorAtualizar);
                             Utils.rotinaCadastroMentor(mentorASerAtualizado);
+                            profissionalMentorServico.atualizar((long) idMentorAtualizar, mentorASerAtualizado);
                             break;
                         case 5:
                             int idUsuarioExcluido = scanner.nextInt("Selecione o ID do Mentor a ser excluído: ");
-                            usuarioServico.deletar((long) idUsuarioExcluido);
+                            profissionalMentorServico.remover((long) idUsuarioExcluido);
                             break;
                         case 6:
                             break;
@@ -236,6 +264,50 @@ public class Aplicacao {
                             break;
                     }
                     break;
+                case 3:
+                    Utils.limparConsole();
+                    Utils.exibirEntidadeManipulada("Agenda");
+                    Utils.exibirMenuOperacoes();
+
+                    opcao = scanner.nextInt();
+
+                    switch (opcao) {
+                        case 0:
+                            System.out.println("\n👋 Até mais!\n");
+                            break;
+                        case 1:
+                            System.out.println("Cadastrar disponibilidade");
+                            sc.nextLine();
+                            break;
+                        case 2:
+                            System.out.println("Remover disponibilidade");
+                            sc.nextLine();
+                            break;
+                        case 3:
+                            System.out.println("Listar toda a agenda");
+                            sc.nextLine();
+                            break;
+                        case 4:
+                            System.out.println("Listar um agendamento");
+                            sc.nextLine();    
+                            break;
+                        case 5:
+                            System.out.println("Agendar um horário");
+                            sc.nextLine();
+                            break;
+                        case 6:
+                            System.out.println("Reagendar um horário");
+                            sc.nextLine();
+                            break;
+                        case 7:
+                            System.out.println("Cancelar um horário");
+                            break;
+                        case 8:
+                            break;
+                        default:
+                            System.err.println("🚫 Opção inválida!");
+                            break;
+                    }
                 default:
                     System.err.println("🚫 Opção inválida!");
                     break;

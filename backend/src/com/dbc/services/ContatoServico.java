@@ -35,7 +35,7 @@ public class ContatoServico {
         }
     }
 
-    public void editar(Long id, Contato contato) {
+    public void atualizar(Long id, Contato contato) {
         try {
             contatoRepository.atualizar(id, contato);
         } catch (BancoDeDadosException e) {

@@ -1,15 +1,18 @@
 package com.dbc.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Contato;
 import com.dbc.model.enums.TipoEnum;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ContatoRepository implements IRepository<Long, Contato> {
-
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
@@ -64,21 +67,58 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public Contato listarUm(Long id) throws BancoDeDadosException {
+        Contato contato = null;
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
+            String sql = "SELECT * FROM CONTATO WHERE ID = ?";
 
-            String sql = "DELETE FROM CONTATO WHERE ID = ?";
+            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+                pstmt.setLong(1, id);
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+                try (ResultSet res = pstmt.executeQuery()) {
+                    if (res.next()) {
+                        contato = getContatoFromResultSet(res);
+                        System.out.println(contato);
+                    } else {
+                        System.out.println("Nenhum contato encontrado para o Id: " + id);
+                    }
+                }
+            }
+            return contato;
 
-            stmt.setLong(1, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerContatoPorId.res=" + res);
+    @Override
+    public List<Contato> listar() throws BancoDeDadosException {
+        List<Contato> contatos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
 
-            return res > 0;
+            String sql = "SELECT * FROM CONTATO";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Contato contato = getContatoFromResultSet(res);
+                contatos.add(contato);
+            }
+            return contatos;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -149,59 +189,22 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public List<Contato> listar() throws BancoDeDadosException {
-        List<Contato> contatos = new ArrayList<>();
+    public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM CONTATO";
+            String sql = "DELETE FROM CONTATO WHERE ID = ?";
 
-            ResultSet res = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
 
-            while (res.next()) {
-                Contato contato = getContatoFromResultSet(res);
-                contatos.add(contato);
-            }
-            return contatos;
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerContatoPorId.res=" + res);
+
+            return res > 0;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public Contato listarUm(Long id) throws BancoDeDadosException {
-        Contato contato = null;
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            String sql = "SELECT * FROM CONTATO WHERE ID = ?";
-
-            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-                pstmt.setLong(1, id);
-
-                try (ResultSet res = pstmt.executeQuery()) {
-                    if (res.next()) {
-                        contato = getContatoFromResultSet(res);
-                        System.out.println(contato);
-                    } else {
-                        System.out.println("Nenhum contato encontrado para o Id: " + id);
-                    }
-                }
-            }
-            return contato;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -223,5 +226,3 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         return contato;
     }
 }
-
-

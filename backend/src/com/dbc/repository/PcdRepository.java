@@ -1,11 +1,15 @@
 package com.dbc.repository;
 
-import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.Pcd;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.Pcd;
 
 public class PcdRepository implements IRepository<Long, Pcd> {
     @Override
@@ -61,21 +65,27 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public Pcd listarUm(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            String sql = "DELETE FROM PCD WHERE ID = ?";
-
+            String sql = "SELECT * FROM PCD WHERE ID = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-
             stmt.setLong(1, id);
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerPcdPorId.res=" + res);
+            ResultSet res = stmt.executeQuery();
 
-            return res > 0;
+            if (res.next()) {
+                Pcd pcd = new Pcd();
+                pcd.setId(res.getLong("ID"));
+                pcd.setIdCliente(res.getLong("ID_CLIENTE"));
+                pcd.setIdPcd(res.getLong("ID_PCD"));
+                pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
+                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
+
+                return pcd;
+            }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -87,6 +97,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
                 e.printStackTrace();
             }
         }
+        return null;
     }
 
     @Override
@@ -125,42 +136,6 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public Pcd listarUm(Long id) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-
-            String sql = "SELECT * FROM PCD WHERE ID = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setLong(1, id);
-
-            ResultSet res = stmt.executeQuery();
-
-            if (res.next()) {
-                Pcd pcd = new Pcd();
-                pcd.setId(res.getLong("ID"));
-                pcd.setIdCliente(res.getLong("ID_CLIENTE"));
-                pcd.setIdPcd(res.getLong("ID_PCD"));
-                pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
-                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
-
-                return pcd;
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    @Override
     public boolean atualizar(Long id, Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
         try {
@@ -185,6 +160,35 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("editarPcd.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean remover(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "DELETE FROM PCD WHERE ID = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerPcdPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {

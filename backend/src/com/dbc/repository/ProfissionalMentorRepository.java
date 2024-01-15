@@ -1,13 +1,17 @@
 package com.dbc.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.enums.AreaAtuacaoEnum;
 import com.dbc.model.enums.NivelExperienciaEnum;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
     @Override
@@ -23,9 +27,11 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
 
         return null;
     }
+
     @Override
-    public ProfissionalMentor cadastrar(ProfissionalMentor mentor) throws BancoDeDadosException{
+    public ProfissionalMentor cadastrar(ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
+
         try {
             con = ConexaoBancoDeDados.conectar();
 
@@ -59,6 +65,70 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             }
         }
     }
+
+    @Override
+    public ProfissionalMentor listarUm(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE id = ?";
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+
+            ResultSet res = preparedStatement.executeQuery();
+
+            while (res.next()) {
+                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
+                System.out.println(mentor);
+            }
+            return getProfissionalMentorFromResultSet(res);
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public List<ProfissionalMentor> listar() throws BancoDeDadosException {
+        List<ProfissionalMentor> mentores = new ArrayList<>();
+        Connection con = null;
+
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
+                mentores.add(mentor);
+            }
+            return mentores;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public boolean atualizar(Long id, ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
@@ -99,80 +169,9 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public List<ProfissionalMentor> listar() throws BancoDeDadosException {
-        List<ProfissionalMentor> mentores = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
-                boolean add = mentores.add(mentor);
-            }
-            return mentores;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public ProfissionalMentor listarUm(Long id) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE id = ?";
-
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
-
-            ResultSet res = preparedStatement.executeQuery();
-
-            while (res.next()) {
-                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
-                System.out.println(mentor);
-            }
-            return getProfissionalMentorFromResultSet(res);
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
-        ProfissionalMentor mentor = new ProfissionalMentor();
-        mentor.setId(res.getLong("id"));
-        mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
-        mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
-        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
-        mentor.setCertificadosDeCapacitacao(res.getString("certificados_de_capacitacao"));
-
-        return mentor;
-    }
-
-    @Override
     public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
+
         try {
             con = ConexaoBancoDeDados.conectar();
 
@@ -197,5 +196,17 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
                 e.printStackTrace();
             }
         }
+    }
+
+    private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
+        ProfissionalMentor mentor = new ProfissionalMentor();
+
+        mentor.setId(res.getLong("id"));
+        mentor.setAreaAtuacao(AreaAtuacaoEnum.valueOf(res.getString("area_atuacao")));
+        mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
+        mentor.setNivelExperienciaEnum(NivelExperienciaEnum.valueOf(res.getString("nivel_experiencia")));
+        mentor.setCertificadosDeCapacitacao(res.getString("certificados_de_capacitacao"));
+
+        return mentor;
     }
 }

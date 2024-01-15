@@ -1,15 +1,18 @@
 package com.dbc.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Endereco;
 import com.dbc.model.enums.TipoEnum;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class EnderecoRepository implements IRepository<Long, Endereco> {
-
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
@@ -69,21 +72,58 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public Endereco listarUm(Long id) throws BancoDeDadosException {
+        Endereco endereco = null;
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
+            String sql = "SELECT * FROM ENDERECO WHERE ID = ?";
 
-            String sql = "DELETE FROM ENDERECO WHERE ID = ?";
+            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+                pstmt.setLong(1, id);
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+                try (ResultSet res = pstmt.executeQuery()) {
+                    if (res.next()) {
+                        endereco = getEnderecoFromResultSet(res);
+                        System.out.println(endereco);
+                    } else {
+                        System.out.println("Nenhum endereço encontrado para o Id: " + id);
+                    }
+                }
+            }
+            return endereco;
 
-            stmt.setLong(1, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerEnderecoPorId.res=" + res);
+    @Override
+    public List<Endereco> listar() throws BancoDeDadosException {
+        List<Endereco> enderecos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
 
-            return res > 0;
+            String sql = "SELECT * FROM ENDERECO";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Endereco endereco = getEnderecoFromResultSet(res);
+                enderecos.add(endereco);
+            }
+            return enderecos;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -182,59 +222,22 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public List<Endereco> listar() throws BancoDeDadosException {
-        List<Endereco> enderecos = new ArrayList<>();
+    public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM ENDERECO";
+            String sql = "DELETE FROM ENDERECO WHERE ID = ?";
 
-            ResultSet res = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
 
-            while (res.next()) {
-                Endereco endereco = getEnderecoFromResultSet(res);
-                enderecos.add(endereco);
-            }
-            return enderecos;
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerEnderecoPorId.res=" + res);
+
+            return res > 0;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public Endereco listarUm(Long id) throws BancoDeDadosException {
-        Endereco endereco = null;
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            String sql = "SELECT * FROM ENDERECO WHERE ID = ?";
-
-            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-                pstmt.setLong(1, id);
-
-                try (ResultSet res = pstmt.executeQuery()) {
-                    if (res.next()) {
-                        endereco = getEnderecoFromResultSet(res);
-                        System.out.println(endereco);
-                    } else {
-                        System.out.println("Nenhum endereço encontrado para o Id: " + id);
-                    }
-                }
-            }
-            return endereco;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {

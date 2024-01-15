@@ -47,8 +47,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, cliente.getIdCliente());
-            stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
-            stmt.setInt(3, cliente.getTipoCliente().getTipoCliente());
+            stmt.setLong(2, idUsuario);
+            stmt.setInt(3, cliente.getTipoCliente().getValor());
             stmt.setInt(4, cliente.getPlano().getValor());
             stmt.setString(5, String.valueOf(cliente.getControleParental()));
 
@@ -67,69 +67,6 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-
-            String sql = "DELETE FROM CLIENTE WHERE ID = ?";
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setLong(1, id);
-
-            int res = stmt.executeUpdate();
-            System.out.println("removerClientePorId.res=" + res);
-
-            return res > 0;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public List<Cliente> listar() throws BancoDeDadosException {
-        List<Cliente> clientes = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setIdCliente(res.getLong("ID_USUARIO"));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                clientes.add(cliente);
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return clientes;
     }
 
     @Override
@@ -168,6 +105,40 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
+    public List<Cliente> listar() throws BancoDeDadosException {
+        List<Cliente> clientes = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
+
+            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(res.getLong("ID"));
+                cliente.setIdCliente(res.getLong("ID_USUARIO"));
+                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+                clientes.add(cliente);
+            }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return clientes;
+    }
+
+    @Override
     public boolean atualizar(Long id, Cliente cliente) throws BancoDeDadosException {
         Connection con = null;
         try {
@@ -191,6 +162,35 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             int res = stmt.executeUpdate();
             System.out.println("editarCliente.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean remover(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "DELETE FROM CLIENTE WHERE ID = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerClientePorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {

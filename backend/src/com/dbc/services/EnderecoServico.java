@@ -35,7 +35,7 @@ public class EnderecoServico {
         }
     }
 
-    public void editar(Long id, Endereco endereco) {
+    public void atualizar(Long id, Endereco endereco) {
         try {
             enderecoRepository.atualizar(id, endereco);
         } catch (BancoDeDadosException e) {
