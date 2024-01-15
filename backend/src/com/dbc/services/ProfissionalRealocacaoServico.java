@@ -10,9 +10,13 @@ public class ProfissionalRealocacaoServico {
     private ArrayList<ProfissionalRealocacao> lista = new ArrayList<>();
     private ProfissionalRealocacaoRepository profRealocRepository;
 
+    public ProfissionalRealocacaoServico() {
+        profRealocRepository = new ProfissionalRealocacaoRepository();
+    }
+
     public void cadastrar(ProfissionalRealocacao profissionalRealocacao) {
         if (profissionalRealocacao == null) {
-            System.err.println("🚫 O usuário não pode ser nulo!");
+            System.err.println("❌ O usuário não pode ser nulo!");
         }
 
         try {
@@ -22,7 +26,7 @@ public class ProfissionalRealocacaoServico {
             e.printStackTrace();
         }
 
-        System.out.println("✅ Profissional Realocacao cadastrado!");
+        System.out.println("\n✅ Profissional Realocacao cadastrado!");
     }
     
     public void listarUm(Long id) {
@@ -35,7 +39,7 @@ public class ProfissionalRealocacaoServico {
 
     public void listarTodos() {
         if (lista.isEmpty()) {
-            System.err.println("🚫 Nenhum Profissional Realocacao cadastrado!");
+            System.err.println("❌ Nenhum Profissional Realocacao cadastrado!");
             return;
         }
 
@@ -59,8 +63,7 @@ public class ProfissionalRealocacaoServico {
                 profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());
                 profissionalRealocacao.setAcessoPcd(profissionalRealocacaoAtualiza.getAcessoPcd());
                 profissionalRealocacao.setProfissao(profissionalRealocacaoAtualiza.getProfissao());
-                profissionalRealocacao
-                        .setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
+                profissionalRealocacao.setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
                 System.out.println("✅ Profissional Realocação atualizado!");
                 return;
             }
@@ -68,23 +71,17 @@ public class ProfissionalRealocacaoServico {
     }
 
     public void remover(Long id) {
-        ProfissionalRealocacao profissionalRealocacaoDeletar = null;
-
-        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-            if (profissionalRealocacao.getId() == id) {
-                profissionalRealocacaoDeletar = profissionalRealocacao;
-            }
-        }
-
-        if (profissionalRealocacaoDeletar == null)
-            System.err.println("🚫 Usuário não encontrado!");
-
         try {
+            ProfissionalRealocacao profissionalRealocacaoDeletar = profRealocRepository.listarUm(id);
+
+            if (profissionalRealocacaoDeletar == null)
+            System.err.println("❌ Usuário não encontrado!");
+
             lista.remove(profissionalRealocacaoDeletar);
             profRealocRepository.remover(profissionalRealocacaoDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } catch (BancoDeDadosException e) {
-            System.err.println("🚫 Erro ao remover usuário: " + e.getMessage());
+            System.err.println("❌ Erro ao remover usuário: " + e.getMessage());
         }
     }
 }

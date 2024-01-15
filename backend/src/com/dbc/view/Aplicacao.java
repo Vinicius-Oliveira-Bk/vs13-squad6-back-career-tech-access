@@ -2,11 +2,14 @@ package com.dbc.view;
 
 import java.util.Scanner;
 
+import com.dbc.model.entities.Cliente;
 import com.dbc.model.entities.Estudante;
 import com.dbc.model.entities.Pcd;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.model.entities.ProfissionalRealocacao;
+import com.dbc.model.entities.Usuario;
 import com.dbc.model.enums.TipoUsuarioEnum;
+import com.dbc.services.ClienteServico;
 
 // import com.dbc.services.AgendaServico;
 // import com.dbc.services.ContatoServico;
@@ -30,6 +33,7 @@ public class Aplicacao {
         // AgendaServico agendaServico = new AgendaServico();
 
         UsuarioServico usuarioServico = new UsuarioServico();
+        ClienteServico clienteServico = new ClienteServico();
         EstudanteServico estudanteServico = new EstudanteServico();
         PcdServico pcdServico = new PcdServico();
         ProfissionalMentorServico profissionalMentorServico = new ProfissionalMentorServico();
@@ -38,7 +42,7 @@ public class Aplicacao {
         int opcao, idUsuario;
 
         do {
-            Utils.limparConsole();
+            // Utils.limparConsole();
             Utils.telaInicial();
             opcao = scanner.nextInt();
 
@@ -48,7 +52,7 @@ public class Aplicacao {
                     System.out.println("\n👋 Até mais!\n");
                     break;
                 case 1:
-                    Utils.limparConsole();
+                    // Utils.limparConsole();
                     Utils.selecionarTipoCliente();
                     opcao = scanner.nextInt();
 
@@ -61,7 +65,7 @@ public class Aplicacao {
                             sc.nextLine();
                             break;
                         case 2:
-                            Utils.limparConsole();
+                            // Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("Estudante");
                             Utils.exibirMenuOperacoes();
 
@@ -74,9 +78,17 @@ public class Aplicacao {
                                 case 1:
                                     Estudante estudante = new Estudante();
                                     
-                                    Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
-                                    Utils.rotinaCadastroCliente(estudante);
+                                    Usuario usuario = new Usuario();
+                                    usuario = Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
+                                
+                                    Cliente cliente = new Cliente();
+                                    cliente = Utils.rotinaCadastroCliente(estudante);
+
                                     Utils.rotinaCadastroEstudante(estudante);
+                                    usuarioServico.cadastrar(usuario);
+
+                                    clienteServico.cadastrar(cliente, usuario.getId());
+                                    estudante.setCliente(cliente);
                                     
                                     estudanteServico.cadastrar(estudante);
                                     break;
@@ -125,9 +137,17 @@ public class Aplicacao {
                                 case 1:
                                     Pcd pcd = new Pcd();
 
-                                    Utils.rotinaCadastroUsuario(pcd, TipoUsuarioEnum.PCD);
-                                    Utils.rotinaCadastroCliente(pcd);
+                                    Usuario usuario = new Usuario();
+                                    usuario = Utils.rotinaCadastroUsuario(pcd, TipoUsuarioEnum.PCD);
+                                    
+                                    Cliente cliente = new Cliente();
+                                    cliente = Utils.rotinaCadastroCliente(pcd);
+
                                     Utils.rotinaCadastroPcd(pcd);
+                                    usuarioServico.cadastrar(usuario);
+
+                                    clienteServico.cadastrar(cliente, usuario.getId());
+                                    pcd.setCliente(cliente);
                                     
                                     pcdServico.cadastrar(pcd);
                                     break;
@@ -172,9 +192,17 @@ public class Aplicacao {
                                 case 1:
                                     ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
 
-                                    Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
-                                    Utils.rotinaCadastroCliente(profissionalRealocacao);
+                                    Usuario usuario = new Usuario();
+                                    usuario = Utils.rotinaCadastroUsuario(profissionalRealocacao, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
+                                   
+                                    Cliente cliente = new Cliente();
+                                    cliente = Utils.rotinaCadastroCliente(profissionalRealocacao);
+
                                     Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacao);
+                                    usuarioServico.cadastrar(usuario);
+
+                                    clienteServico.cadastrar(cliente, usuario.getId());
+                                    profissionalRealocacao.setCliente(cliente);
 
                                     profissionalRealocacaoServico.cadastrar(profissionalRealocacao);
                                     break;
@@ -188,21 +216,21 @@ public class Aplicacao {
                                     sc.nextLine();
                                     break;
                                 case 4:
+                                    ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
+                                    
                                     idUsuario = scanner.nextInt("Informe o id do profissional em realocação que deseja atualizar: ");
                                     profissionalRealocacaoServico.listarUm((long) idUsuario);
 
-                                    ProfissionalRealocacao profissionalRealocacaoAtualizar = new ProfissionalRealocacao();
                                     Utils.rotinaCadastroUsuario(profissionalRealocacaoAtualizar, TipoUsuarioEnum.PROFISSIONAL_REALOCACAO);
                                     Utils.rotinaCadastroCliente(profissionalRealocacaoAtualizar);
-                                    profissionalRealocacaoAtualizar.setProfissao(scanner.nextLine("Informe sua profissão: "));
-                                    profissionalRealocacaoAtualizar.setObjetivoProfissional(scanner.nextLine("Informe seu objetivo profissional: "));
+                                    Utils.rotinaCadastroProfissionalRealocacao(profissionalRealocacaoAtualizar);
 
                                     profissionalRealocacaoServico.atualizar((long) idUsuario, profissionalRealocacaoAtualizar);
                                     break;
                                 case 5:
                                     int idUsuarioDeletar = scanner.nextInt("Informe o id do profissional em realocação que deseja deletar: ");
-                                    profissionalRealocacaoServico.remover((long) idUsuarioDeletar);
                                     sc.nextLine();
+                                    profissionalRealocacaoServico.remover((long) idUsuarioDeletar);
                                     break;
                                 case 6:
                                     break;
@@ -231,8 +259,21 @@ public class Aplicacao {
                             break;
                         case 1:
                             ProfissionalMentor mentorCadastro = new ProfissionalMentor();
-                            Utils.rotinaCadastroUsuario(mentorCadastro, TipoUsuarioEnum.MENTOR);
+
+                            Usuario usuario = new Usuario();
+                            usuario = Utils.rotinaCadastroUsuario(mentorCadastro, TipoUsuarioEnum.MENTOR);
+                            
+                            Cliente cliente = new Cliente();
+                            cliente = Utils.rotinaCadastroCliente(cliente);
+
+                            // TODO: revisar regra de negócio, se id_usuario é necessário em Mentor
+                            // já que em Cliente já temos o id_usuario
                             Utils.rotinaCadastroMentor(mentorCadastro);
+                            usuarioServico.cadastrar(usuario);
+
+                            clienteServico.cadastrar(cliente, usuario.getId());
+                            mentorCadastro.setCliente(cliente);
+
                             profissionalMentorServico.cadastrar(mentorCadastro);
                             break;
                         case 2:
@@ -262,6 +303,7 @@ public class Aplicacao {
                     }
                     break;
                 case 3:
+                    // TODO: finalizar implementação da agenda
                     Utils.limparConsole();
                     Utils.exibirEntidadeManipulada("Agenda");
                     Utils.exibirMenuOperacoes();

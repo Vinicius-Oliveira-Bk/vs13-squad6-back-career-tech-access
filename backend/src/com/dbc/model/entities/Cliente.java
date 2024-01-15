@@ -170,10 +170,10 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     @Override
     public String toString() {
         return super.toString() +
-                "\n\tCliente Id .............: " + this.id +
+                "\n\tId ....................: " + this.id +
                 "\n\tPlano .................: " + this.plano +
                 "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO") +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd.equals('S') ? "SIM" : "NÃO");
+                "\n\tControle Parental .....: " + this.controleParental +
+                "\n\tAcesso Pcd ............: " + this.acessoPcd;
     }
 }

@@ -11,7 +11,6 @@ public class Usuario implements IVinculosUsuario {
     private LocalDate dataNascimento;
     private String cpf;
     private String email;
-    private String senha;
     private Character acessoPcd;
     private TipoUsuarioEnum tipoUsuario;
     private String interesses;
@@ -57,14 +56,6 @@ public class Usuario implements IVinculosUsuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public Character getAcessoPcd() {
@@ -118,12 +109,11 @@ public class Usuario implements IVinculosUsuario {
     @Override
     public String toString() {
         return "\nUsuario" +
-                "\n\tId .....................: " + this.id +
+                "\n\tId ....................: " + this.id +
                 "\n\tNome ..................: " + this.nome +
                 "\n\tData de Nascimento ....: " + this.dataNascimento +
                 "\n\tCPF ...................: " + this.cpf +
                 "\n\tEmail .................: " + this.email +
-                "\n\tSenha .................: " + this.senha +
                 "\n\tAcesso PCD ............: " + this.acessoPcd +
                 "\n\tTipo de Usuario .......: " + this.tipoUsuario +
                 "\n\tInteresses ............: " + this.interesses +

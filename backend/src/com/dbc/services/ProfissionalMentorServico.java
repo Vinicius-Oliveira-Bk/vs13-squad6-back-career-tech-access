@@ -14,7 +14,7 @@ public class ProfissionalMentorServico {
     public void cadastrar(ProfissionalMentor mentor) {
         try {
             mentorRepository.cadastrar(mentor);
-            System.out.println("✅ Profissional Mentor cadastrado!");
+            System.out.println("\n✅ Profissional Mentor cadastrado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -22,6 +22,7 @@ public class ProfissionalMentorServico {
 
     public ProfissionalMentor listarUm(Long id) {
         try {
+            if(id == null) System.out.println("\n❌ ID não pode ser nulo!");
             return mentorRepository.listarUm(id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -40,7 +41,7 @@ public class ProfissionalMentorServico {
     public void atualizar(Long id, ProfissionalMentor mentor) {
         try {
             mentorRepository.atualizar(id, mentor);
-            System.out.println("✅ Profissional Mentor atualizado!");
+            System.out.println("\n✅ Profissional Mentor atualizado!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +50,7 @@ public class ProfissionalMentorServico {
     public void remover(Long id) {
         try {
             mentorRepository.remover(id);
-            System.out.println("✅ Profissional Mentor deletado!");
+            System.out.println("\n✅ Profissional Mentor deletado!");
         } catch (Exception e) {
             e.printStackTrace();
         }

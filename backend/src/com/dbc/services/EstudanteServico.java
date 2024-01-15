@@ -13,13 +13,13 @@ public class EstudanteServico {
         try {
 
             if (estudante.getComprovanteMatricula() == null) {
-                throw new Exception("É preciso anexar o comprovante de matrícula!");
+                throw new Exception("\n❌ É preciso anexar o comprovante de matrícula!");
             }
 
             estudanteRepository.cadastrar(estudante);
-            System.out.println("\nEstudante adicinado com sucesso!\n");
+            System.out.println("\n✅ Estudante adicionado com sucesso!\n");
         } catch (Exception e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("❌ ERRO: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -28,11 +28,12 @@ public class EstudanteServico {
         try {
             Estudante estudante = estudanteRepository.listarUm(idEstudante);
 
-            if (estudante != null) {
-                System.out.println("\nEstudante encontrado!\n");
-            } else {
-                System.err.println("\nEstudante não encontrado com o ID: " + idEstudante + "\n");
-            }
+            if (estudante == null) {
+                System.err.println("\n❌ Estudante não encontrado com o ID: " + idEstudante + "\n");
+            } 
+            
+            System.out.println("\n✅ Estudante encontrado!\n");
+            System.out.println(estudante.toString());
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,7 @@ public class EstudanteServico {
     public void atualizar(Long id, Estudante estudante) {
         try {
             estudanteRepository.atualizar(id, estudante);
-            System.out.println("\nEstudante editado com sucesso!");
+            System.out.println("\n✅ Estudante editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -61,7 +62,7 @@ public class EstudanteServico {
     public void remover(Long id) {
         try {
             estudanteRepository.remover(id);
-            System.out.println("\nEstudante removido com sucesso!");
+            System.out.println("\n✅ Estudante removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }

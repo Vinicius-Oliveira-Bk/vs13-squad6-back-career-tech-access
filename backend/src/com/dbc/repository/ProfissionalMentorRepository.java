@@ -41,15 +41,16 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             Long proximoId = this.getProximoId(con);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
-                    "(ID, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA)\n" +
+                    "(ID, ID_USUARIO, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA)\n" +
                     "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, proximoId);
-            stmt.setString(2, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setString(3, mentor.getCarteiraDeTrabalho());
-            stmt.setInt(4, mentor.getNivelExperienciaEnum().getValor());
+            stmt.setLong(2, mentor.getUsuario().getId());
+            stmt.setString(3, String.valueOf(mentor.getAreaAtuacao()));
+            stmt.setString(4, mentor.getCarteiraDeTrabalho());
+            stmt.setInt(5, mentor.getNivelExperienciaEnum().getValor());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarMentor.res=" + res);
@@ -75,7 +76,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR WHERE id = ?";
+
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR " +
+                    "JOIN USUARIO ON PROFISSIONAL_MENTOR.ID_USUARIO = USUARIO.ID " +
+                    "JOIN CLIENTE ON USUARIO.ID = CLIENTE.ID_USUARIO WHERE id = ?";
 
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setLong(1, id);
@@ -109,8 +113,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR";
-
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR " +
+                    "JOIN USUARIO ON PROFISSIONAL_MENTOR.ID_USUARIO = USUARIO.ID " +
+                    "JOIN CLIENTE ON USUARIO.ID = CLIENTE.ID_USUARIO";
+                    
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
@@ -139,6 +145,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE SET PROFISSIONAL_MENTOR");
+            sql.append(" id_usuario = ? ");
             sql.append(" area_atuacao = ? ");
             sql.append(" nivel_experiencia = ?,");
             sql.append(" carteira_trabalho = ?,");
@@ -147,9 +154,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setInt(2, mentor.getNivelExperienciaEnum().getValor());
-            stmt.setString(3, mentor.getCarteiraDeTrabalho());
-            stmt.setLong(4, mentor.getId());
+            stmt.setLong(2, mentor.getUsuario().getId());
+            stmt.setInt(3, mentor.getNivelExperienciaEnum().getValor());
+            stmt.setString(4, mentor.getCarteiraDeTrabalho());
+            stmt.setLong(5, mentor.getId());
 
             int res = stmt.executeUpdate();
             System.out.println("editarMentor.res=" + res);
