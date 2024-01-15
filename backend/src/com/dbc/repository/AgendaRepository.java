@@ -1,16 +1,22 @@
 package com.dbc.repository;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Agenda;
 import com.dbc.model.enums.StatusAgendaEnum;
 import com.dbc.services.ClienteServico;
 import com.dbc.services.ProfissionalMentorServico;
-import com.dbc.exceptions.BancoDeDadosException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AgendaRepository implements IRepository<Long, Agenda>{
-
     ProfissionalMentorServico ps = new ProfissionalMentorServico();
     ClienteServico cs = new ClienteServico();
 

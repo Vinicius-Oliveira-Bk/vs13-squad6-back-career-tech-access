@@ -5,7 +5,6 @@ import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.repository.ProfissionalMentorRepository;
 
 public class ProfissionalMentorServico {
-
     private ProfissionalMentorRepository mentorRepository;
 
     public ProfissionalMentorServico() {
@@ -21,14 +20,6 @@ public class ProfissionalMentorServico {
         }
     }
 
-    public void listarTodos() {
-       try {
-            mentorRepository.listar().forEach(System.out::println);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
     public ProfissionalMentor listarUm(Long id) {
         try {
             return mentorRepository.listarUm(id);
@@ -37,6 +28,14 @@ public class ProfissionalMentorServico {
         }
         return null;
     }
+
+    public void listarTodos() {
+        try {
+             mentorRepository.listar().forEach(System.out::println);
+         } catch (BancoDeDadosException e) {
+             e.printStackTrace();
+         }
+     }
 
     public void atualizar(Long id, ProfissionalMentor mentor) {
         try {

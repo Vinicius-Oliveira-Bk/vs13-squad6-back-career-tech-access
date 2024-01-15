@@ -8,7 +8,8 @@ public class Contato {
     private String telefone;
     private TipoEnum tipo;
 
-    public Contato() { }
+    public Contato() {
+    }
 
     public Contato(String descricao, String telefone, TipoEnum tipo) {
         this.descricao = descricao;
@@ -51,8 +52,8 @@ public class Contato {
     @Override
     public String toString() {
         return "\n\tContato Id ............: " + this.id +
-               "\n\tDescrição .............: " + this.descricao +
-               "\n\tTelefone ..............: " + this.telefone +
-               "\n\tTipo de contato .......: " + this.tipo;
+                "\n\tDescrição .............: " + this.descricao +
+                "\n\tTelefone ..............: " + this.telefone +
+                "\n\tTipo de contato .......: " + this.tipo;
     }
 }

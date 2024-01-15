@@ -8,7 +8,6 @@ import com.dbc.model.enums.PlanoEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
 
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
-
     private Usuario usuario;
     private Long id;
     private PlanoEnum plano;

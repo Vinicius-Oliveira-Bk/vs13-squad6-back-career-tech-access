@@ -15,6 +15,7 @@ import com.dbc.services.UsuarioServico;
 
 public class ClienteRepository implements IRepository<Long, Cliente> {
     UsuarioServico us = new UsuarioServico();
+    
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT VS_13_EQUIPE_6.SEQ_CLIENTE.nextval AS SEQUENCE_CLIENTE FROM DUAL";
@@ -72,21 +73,26 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public Cliente listarUm(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            String sql = "DELETE FROM CLIENTE WHERE ID = ?";
-
+            String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-
             stmt.setLong(1, id);
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerClientePorId.res=" + res);
+            ResultSet res = stmt.executeQuery();
 
-            return res > 0;
+            if (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(res.getLong("ID"));
+                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
+                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+
+                return cliente;
+            }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -98,6 +104,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 e.printStackTrace();
             }
         }
+        return null;
     }
 
     @Override
@@ -132,41 +139,6 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             }
         }
         return clientes;
-    }
-
-    @Override
-    public Cliente listarUm(Long id) throws BancoDeDadosException {
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-
-            String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setLong(1, id);
-
-            ResultSet res = stmt.executeQuery();
-
-            if (res.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-
-                return cliente;
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     @Override
@@ -207,6 +179,36 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             }
         }
     }
+
+    @Override
+    public boolean remover(Long id) throws BancoDeDadosException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "DELETE FROM CLIENTE WHERE ID = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerClientePorId.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     public List<Cliente> getClientesNaoPcd() throws BancoDeDadosException {
         List<Cliente> clientes = new ArrayList<>();
         Connection con = null;

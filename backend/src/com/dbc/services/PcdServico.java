@@ -1,10 +1,10 @@
 package com.dbc.services;
 
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Pcd;
 import com.dbc.repository.PcdRepository;
-
-import java.util.List;
 
 public class PcdServico {
     private PcdRepository pcdRepository;
@@ -29,10 +29,19 @@ public class PcdServico {
         }
     }
 
-    public void remover(Long id) {
+    public Pcd listarUm(Long idPcd) {
         try {
-            boolean conseguiuRemover = pcdRepository.remover(id);
-            System.out.println("pcd removido? " + conseguiuRemover + "| com id=" + id);
+            return pcdRepository.listarUm(idPcd);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void listarTodos() {
+        try {
+            List<Pcd> listar = pcdRepository.listar();
+            listar.forEach(System.out::println);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -47,21 +56,12 @@ public class PcdServico {
         }
     }
 
-    public void listarTodos() {
+    public void remover(Long id) {
         try {
-            List<Pcd> listar = pcdRepository.listar();
-            listar.forEach(System.out::println);
+            boolean conseguiuRemover = pcdRepository.remover(id);
+            System.out.println("pcd removido? " + conseguiuRemover + "| com id=" + id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
-    }
-
-    public Pcd listarUm(Long idPcd) {
-        try {
-            return pcdRepository.listarUm(idPcd);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

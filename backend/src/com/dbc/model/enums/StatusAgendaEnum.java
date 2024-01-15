@@ -1,10 +1,10 @@
 package com.dbc.model.enums;
 
 public enum StatusAgendaEnum {
-    DISPONIVEL (1),
-    AGENDADO (2),
-    CANCELADO (3),
-    PRESENTE (4);
+    DISPONIVEL(1),
+    AGENDADO(2),
+    CANCELADO(3),
+    PRESENTE(4);
 
     private final int valor;
 

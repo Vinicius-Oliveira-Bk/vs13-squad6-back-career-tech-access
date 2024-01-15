@@ -2,18 +2,26 @@ package com.dbc.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.dbc.model.entities.*;
 import com.dbc.exceptions.EntradaUsuarioException;
-import com.dbc.model.enums.*;
-import com.dbc.services.UsuarioServico;
+import com.dbc.model.entities.Cliente;
+import com.dbc.model.entities.Contato;
+import com.dbc.model.entities.Endereco;
+import com.dbc.model.entities.Estudante;
+import com.dbc.model.entities.Pcd;
+import com.dbc.model.entities.ProfissionalMentor;
+import com.dbc.model.entities.ProfissionalRealocacao;
+import com.dbc.model.entities.Usuario;
+import com.dbc.model.enums.AreaAtuacaoEnum;
+import com.dbc.model.enums.NivelExperienciaEnum;
+import com.dbc.model.enums.PlanoEnum;
+import com.dbc.model.enums.TipoEnum;
+import com.dbc.model.enums.TipoUsuarioEnum;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static UsuarioServico usuarioServico = new UsuarioServico();
 
     // https://www.invertexto.com/simbolos-para-copiar
     // https://www.simbolosparacopiar.com/p/simbolos-redondos-e-quadrados.html?m=1
@@ -29,6 +37,7 @@ public abstract class Utils {
         System.out.println("┃ 0 - Sair                                     ┃");
         System.out.println("┃ 1 - Cliente                                  ┃");
         System.out.println("┃ 2 - Profissional mentor                      ┃");
+        System.out.println("┃ 3 - Agendamento (Mentor)                     ┃");
         System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     }
 
@@ -52,6 +61,20 @@ public abstract class Utils {
         System.out.println("┃ 4 - Atualizar                   ┃");
         System.out.println("┃ 5 - Deletar                     ┃");
         System.out.println("┃ 6 - Voltar ao menu              ┃");
+        System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+    }
+
+    public static void exibirMenuAgendamento() {
+        System.out.println("┏━━━   Selecione uma opção 📝  ━━━┓");
+        System.out.println("┃ 0 - Sair                        ┃");
+        System.out.println("┃ 1 - Cadastrar disponibilidade   ┃");
+        System.out.println("┃ 2 - Remover disponibilidade     ┃");
+        System.out.println("┃ 3 - Listar toda a agenda        ┃");
+        System.out.println("┃ 4 - Listar um agendamento       ┃");
+        System.out.println("┃ 5 - Agendar um horário          ┃");
+        System.out.println("┃ 6 - Reagendar um horário        ┃");
+        System.out.println("┃ 7 - Cancelar um horário         ┃");
+        System.out.println("┃ 8 - Voltar ao menu              ┃");
         System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     }
 
@@ -99,7 +122,7 @@ public abstract class Utils {
 
             if (opcaoEscolhida < 0 || opcaoEscolhida > opcoesDoEnum.length)
                 throw new EntradaUsuarioException("🚫 Opção inválida! Por favor informe os valores corretamente.");
-                
+
             return opcoesDoEnum[opcaoEscolhida - 1];
         } while (opcaoEscolhida != 0);
 
@@ -125,8 +148,6 @@ public abstract class Utils {
             tipoContato = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoContato);
             contato.setTipo(tipoContato);
 
-            usuario.vincularContato(usuario, contato);
-
             Endereco endereco = new Endereco();
 
             endereco.setLogradouro(scanner.nextLine("Digite o logradouro do endereço: "));
@@ -140,8 +161,6 @@ public abstract class Utils {
             TipoEnum tipoEndereco = TipoEnum.RESIDENCIAL;
             tipoEndereco = (TipoEnum) Utils.exibirMenuEnumDinamico(tipoEndereco);
             endereco.setTipo(tipoEndereco);
-
-            usuario.vincularEndereco(usuario, endereco);
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
@@ -159,7 +178,7 @@ public abstract class Utils {
 
             usuario.setEmail(scanner.nextLine("Digite o email: "));
 
-            usuario.setTipo(tipoUsuario);
+            // usuario.setTipoUsuario((long) tipoUsuario.getValor());
 
             rotinaCadastroContatosEenderecos(usuario);
         } catch (Exception e) {
@@ -178,10 +197,8 @@ public abstract class Utils {
 
             cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
             cliente.setImagemDocumento(scanner.nextLine("Digite o link da imagem do seu documento: "));
-            controleParental = scanner.nextInt("Tem controle parental (1- SIM / 2 - NÃO)? ");
-            cliente.setControleParental(controleParental == 1 ? 'S' : 'N');
-            acessoPcd = scanner.nextInt("Tem acesso PCD (1 - SIM / 2 - NÃO)? ");
-            cliente.setAcessoPcd(acessoPcd == 1 ? 'S' : 'N');
+            cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - S / 2 - N)? ").charAt(0));
+            cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - S / 2 - N)? ").charAt(0));
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
@@ -199,9 +216,15 @@ public abstract class Utils {
         LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
         estudante.setDataInicio(dataInicio);
 
-        String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy): ");
-        LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
-        estudante.setDataTermino(dataFim);
+        // String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy):
+        // ");
+        // LocalDate dataFim = LocalDate.parse(dataFimString, formatter);
+        // // estudante.setDataFim(dataFim);
+    }
+
+    public static void rotinaCadastroPcd(Pcd pcd) {
+        pcd.setTipoDeficiencia(scanner.nextLine("Digite o tipo de deficiência: "));
+        pcd.setCertificadoDeficienciaGov(scanner.nextLine("Digite o link do certificado de deficiência: "));
     }
 
     public static void rotinaCadastroProfissionalRealocacao(ProfissionalRealocacao profissionalRealocacao) {
@@ -210,22 +233,12 @@ public abstract class Utils {
     }
 
     public static void rotinaCadastroMentor(ProfissionalMentor mentor) {
-        // TODO: revisar futuramente
         mentor.setCarteiraDeTrabalho(scanner.nextLine("Digite sua carteira de trabalho: "));
 
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
         mentor.setAreaAtuacao(areaAtuacao);
 
-        String certificadosDeCapacitacao = new String();
-
-        String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
         mentor.setNivelExperienciaEnum(nivelExperiencia);
-    }
-
-    public static void rotinaCadastroPcd(Pcd pcd) {
-        pcd.setTipoDeficiencia(scanner.nextLine("Informe seu tipo de deficiência: "));
-        pcd.setCertificadoDeficienciaGov(scanner.nextLine("Informe seu certificado de deficiência: "));
-
     }
 }

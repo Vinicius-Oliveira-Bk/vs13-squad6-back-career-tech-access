@@ -45,11 +45,11 @@ CREATE TABLE ESTUDANTE (
 	id NUMBER,
 	id_cliente NUMBER,
 	matricula VARCHAR2(20),
-	comprovante_matricula VARCHAR2(255),			
-	instituicao VARCHAR2(255), 							
-	curso VARCHAR2(255), 							
-	data_inicio DATE, 								
-	data_termino DATE, 								
+	comprovante_matricula VARCHAR2(255),
+	instituicao VARCHAR2(255),
+	curso VARCHAR2(255),
+	data_inicio DATE,
+	data_termino DATE,
 	CONSTRAINT PK_ESTUDANTE PRIMARY KEY (ID),
 	CONSTRAINT PK_ESTUDANTE_CLIENTE FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id)
 );
@@ -66,8 +66,8 @@ CREATE SEQUENCE SEQ_ESTUDANTE
 CREATE TABLE PCD (
 	id NUMBER,
 	id_cliente NUMBER,
-	tipo_deficiencia VARCHAR2(255),					
-	certificado_deficiencia_gov VARCHAR2 (255),		
+	tipo_deficiencia VARCHAR2(255),
+	certificado_deficiencia_gov VARCHAR2 (255),
 	CONSTRAINT PK_PCD PRIMARY KEY (ID),
 	CONSTRAINT PK_PCD_CLIENTE FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id)
 );
@@ -152,7 +152,7 @@ CREATE TABLE CONTATO (
     id NUMBER NOT NULL,
     descricao VARCHAR2(255) NOT NULL,
     telefone VARCHAR2(13) NOT NULL,
-    tipo NUMBER(1) NOT NULL,  
+    tipo NUMBER(1) NOT NULL,
     CONSTRAINT PK_CONTATO PRIMARY KEY(id)
 );
 

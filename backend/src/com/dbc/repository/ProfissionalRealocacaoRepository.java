@@ -1,14 +1,17 @@
 package com.dbc.repository;
 
-import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.ProfissionalRealocacao;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
+import com.dbc.exceptions.BancoDeDadosException;
+import com.dbc.model.entities.ProfissionalRealocacao;
 
+public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
@@ -30,7 +33,6 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         return null;
     }
-
 
     public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
@@ -68,21 +70,58 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public ProfissionalRealocacao listarUm(Long id) throws BancoDeDadosException {
+        ProfissionalRealocacao profissionalRealocacao = null;
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
-            String sql = "DELETE FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
+            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+                pstmt.setLong(1, id);
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+                try (ResultSet res = pstmt.executeQuery()) {
+                    if (res.next()) {
+                        profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                        System.out.println(profissionalRealocacao);
+                    } else {
+                        System.out.println("Nenhum profissional encontrado para o Id: " + id);
+                    }
+                }
+            }
+            return profissionalRealocacao;
 
-            stmt.setLong(1, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerProfissionalRealocacaoPorId.res=" + res);
+    @Override
+    public List<ProfissionalRealocacao> listar() throws BancoDeDadosException {
+        List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+            Statement stmt = con.createStatement();
 
-            return res > 0;
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            while (res.next()) {
+                ProfissionalRealocacao profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                profissionalRealocacaos.add(profissionalRealocacao);
+            }
+            return profissionalRealocacaos;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -145,59 +184,22 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public List<ProfissionalRealocacao> listar() throws BancoDeDadosException {
-        List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
+    public boolean remover(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
+            String sql = "DELETE FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
-            ResultSet res = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
 
-            while (res.next()) {
-                ProfissionalRealocacao profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
-                profissionalRealocacaos.add(profissionalRealocacao);
-            }
-            return profissionalRealocacaos;
+            stmt.setLong(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerProfissionalRealocacaoPorId.res=" + res);
+
+            return res > 0;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public ProfissionalRealocacao listarUm(Long id) throws BancoDeDadosException {
-        ProfissionalRealocacao profissionalRealocacao = null;
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
-
-            try (PreparedStatement pstmt = con.prepareStatement(sql)) {
-                pstmt.setLong(1, id);
-
-                try (ResultSet res = pstmt.executeQuery()) {
-                    if (res.next()) {
-                        profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
-                        System.out.println(profissionalRealocacao);
-                    } else {
-                        System.out.println("Nenhum profissional encontrado para o Id: " + id);
-                    }
-                }
-            }
-            return profissionalRealocacao;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {

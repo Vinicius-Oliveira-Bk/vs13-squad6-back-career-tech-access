@@ -1,26 +1,21 @@
 package com.dbc.services;
 
+import java.util.List;
+
 import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.Usuario;
 import com.dbc.repository.UsuarioRepository;
 
-import java.util.List;
-
 public class UsuarioServico {
-    private UsuarioRepository usuarioRepository;
-
-    public UsuarioServico() {
-        usuarioRepository = new UsuarioRepository();
-    }
+    private UsuarioRepository usuarioRepository = new UsuarioRepository();
 
     public void cadastrar(Usuario usuario) {
         try {
-
             if (usuario.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
 
-            Usuario usuarioAdicionado = usuarioRepository.cadastrar(usuario);
+            usuarioRepository.cadastrar(usuario);
             System.out.println("\nUsuário adicinado com sucesso!\n");
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
@@ -31,27 +26,24 @@ public class UsuarioServico {
         }
     }
 
-    // remoção
     public void remover(Long id) {
         try {
-            boolean conseguiuRemover = usuarioRepository.remover(id);
+            usuarioRepository.remover(id);
             System.out.println("\nUsuário removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
 
-    // atualização de um objeto
     public void atualizar(Long id, Usuario usuario) {
         try {
-            boolean conseguiuEditar = usuarioRepository.atualizar(id, usuario);
+            usuarioRepository.atualizar(id, usuario);
             System.out.println("\nUsuário editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
     }
 
-    // leitura
     public void listarTodos() {
         try {
             List<Usuario> listar = usuarioRepository.listar();
