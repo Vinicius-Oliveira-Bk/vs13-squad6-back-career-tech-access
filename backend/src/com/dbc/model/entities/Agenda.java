@@ -12,9 +12,11 @@ public class Agenda {
     private LocalDateTime dataHoraFim;
     private StatusAgendaEnum statusAgendaEnum;
 
-    public Agenda() { }
+    public Agenda() {
+    }
 
-    public Agenda(Cliente cliente, ProfissionalMentor profissionalMentor, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, StatusAgendaEnum statusAgendaEnum) {
+    public Agenda(Cliente cliente, ProfissionalMentor profissionalMentor, LocalDateTime dataHoraInicio,
+            LocalDateTime dataHoraFim, StatusAgendaEnum statusAgendaEnum) {
         this.cliente = cliente;
         this.profissionalMentor = profissionalMentor;
         this.dataHoraInicio = dataHoraInicio;

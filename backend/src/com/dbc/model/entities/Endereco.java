@@ -13,9 +13,11 @@ public class Endereco {
     private String pais;
     private TipoEnum tipo;
 
-    public Endereco() {    }
+    public Endereco() {
+    }
 
-    public Endereco(String logradouro, String numero, String complemento, String cep, String cidade, String estado, String pais, TipoEnum tipo) {
+    public Endereco(String logradouro, String numero, String complemento, String cep, String cidade, String estado,
+            String pais, TipoEnum tipo) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -101,13 +103,13 @@ public class Endereco {
     @Override
     public String toString() {
         return "\n\tEndereço Id ...........: " + this.id +
-               "\n\tLogradouro ............: " + this.logradouro +
-               "\n\tNumero ................: " + this.numero +
-               "\n\tComplemento ...........: " + this.complemento +
-               "\n\tCep ...................: " + this.cep +
-               "\n\tCidade ................: " + this.cidade +
-               "\n\tEstado ................: " + this.estado +
-               "\n\tPais ..................: " + this.pais +
-               "\n\tTipo de endereco ......: " + this.tipo;
+                "\n\tLogradouro ............: " + this.logradouro +
+                "\n\tNumero ................: " + this.numero +
+                "\n\tComplemento ...........: " + this.complemento +
+                "\n\tCep ...................: " + this.cep +
+                "\n\tCidade ................: " + this.cidade +
+                "\n\tEstado ................: " + this.estado +
+                "\n\tPais ..................: " + this.pais +
+                "\n\tTipo de endereco ......: " + this.tipo;
     }
 }

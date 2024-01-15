@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dbc.exceptions.BancoDeDadosException;
-import com.dbc.model.entities.Contato;
-import com.dbc.model.enums.TipoEnum;
+import com.dbc.model.entities.ProfissionalRealocacao;
 
-public class ContatoRepository implements IRepository<Long, Contato> {
+public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
-            String sql = "SELECT seq_contato.nextval mysequence from DUAL";
+            String sql = "SELECT seq_profissional_realocacao.nextval mysequence from DUAL";
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
@@ -31,28 +30,32 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public Contato cadastrar(Contato contato) throws BancoDeDadosException {
+    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
+        return null;
+    }
+
+    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
-            contato.setId(proximoId);
+            profissionalRealocacao.setId(proximoId);
 
-            String sql = "INSERT INTO CONTATO\n" +
-                    "(ID, DESCRICAO, TELEFONE, TIPO)\n" +
+            String sql = "INSERT INTO PROFISSIONAL_REALOCACAO\n" +
+                    "(ID, ID_CLIENTE, PROFISSAO, OBJETIVO_PROFISSIONAL)\n" +
                     "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setLong(1, contato.getId());
-            stmt.setString(2, contato.getDescricao());
-            stmt.setString(3, contato.getTelefone());
-            stmt.setInt(4, contato.getTipo().getValor());
+            stmt.setLong(1, profissionalRealocacao.getId());
+            stmt.setLong(2, idCliente);
+            stmt.setString(3, profissionalRealocacao.getProfissao());
+            stmt.setString(4, profissionalRealocacao.getObjetivoProfissional());
 
             int res = stmt.executeUpdate();
-            System.out.println("adicionarContato.res=" + res);
-            return contato;
+            System.out.println("adicionarProfissionalRealocacao.res=" + res);
+            return profissionalRealocacao;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -67,26 +70,26 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public Contato listarUm(Long id) throws BancoDeDadosException {
-        Contato contato = null;
+    public ProfissionalRealocacao listarUm(Long id) throws BancoDeDadosException {
+        ProfissionalRealocacao profissionalRealocacao = null;
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
-            String sql = "SELECT * FROM CONTATO WHERE ID = ?";
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
                 pstmt.setLong(1, id);
 
                 try (ResultSet res = pstmt.executeQuery()) {
                     if (res.next()) {
-                        contato = getContatoFromResultSet(res);
-                        System.out.println(contato);
+                        profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                        System.out.println(profissionalRealocacao);
                     } else {
-                        System.out.println("Nenhum contato encontrado para o Id: " + id);
+                        System.out.println("Nenhum profissional encontrado para o Id: " + id);
                     }
                 }
             }
-            return contato;
+            return profissionalRealocacao;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,22 +106,22 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public List<Contato> listar() throws BancoDeDadosException {
-        List<Contato> contatos = new ArrayList<>();
+    public List<ProfissionalRealocacao> listar() throws BancoDeDadosException {
+        List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM CONTATO";
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                Contato contato = getContatoFromResultSet(res);
-                contatos.add(contato);
+                ProfissionalRealocacao profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                profissionalRealocacaos.add(profissionalRealocacao);
             }
-            return contatos;
+            return profissionalRealocacaos;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -133,23 +136,19 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public boolean atualizar(Long id, Contato contato) throws BancoDeDadosException {
+    public boolean atualizar(Long id, ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE CONTATO SET \n");
+            sql.append("UPDATE PROFISSIONAL_REALOCACAO SET \n");
 
-            if (contato.getDescricao() != null) {
-                sql.append(" descricao = ?,");
+            if (profissionalRealocacao.getProfissao() != null) {
+                sql.append(" profissao = ?,");
             }
-            if (contato.getTelefone() != null) {
-                sql.append(" telefone = ?,");
-            }
-
-            if (contato.getTipo() != null) {
-                sql.append(" tipo = ?,");
+            if (profissionalRealocacao.getObjetivoProfissional() != null) {
+                sql.append(" objetivo_profissional = ?,");
             }
 
             sql.deleteCharAt(sql.length() - 1);
@@ -158,21 +157,17 @@ public class ContatoRepository implements IRepository<Long, Contato> {
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             int index = 1;
-            if (contato.getDescricao() != null) {
-                stmt.setString(index++, contato.getDescricao());
+            if (profissionalRealocacao.getProfissao() != null) {
+                stmt.setString(index++, profissionalRealocacao.getProfissao());
             }
-            if (contato.getTelefone() != null) {
-                stmt.setString(index++, contato.getTelefone());
-            }
-
-            if (contato.getTipo() != null) {
-                stmt.setInt(index++, contato.getTipo().getValor());
+            if (profissionalRealocacao.getObjetivoProfissional() != null) {
+                stmt.setString(index++, profissionalRealocacao.getObjetivoProfissional());
             }
 
             stmt.setLong(index++, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("editarContato.res=" + res);
+            System.out.println("editarProfissionalRealocacao.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -194,14 +189,14 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         try {
             con = ConexaoBancoDeDados.conectar();
 
-            String sql = "DELETE FROM CONTATO WHERE ID = ?";
+            String sql = "DELETE FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("removerContatoPorId.res=" + res);
+            System.out.println("removerProfissionalRealocacaoPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -217,12 +212,13 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         }
     }
 
-    private Contato getContatoFromResultSet(ResultSet res) throws SQLException {
-        Contato contato = new Contato();
-        contato.setId(res.getLong("id"));
-        contato.setDescricao(res.getString("descricao"));
-        contato.setTelefone(res.getString("telefone"));
-        contato.setTipo(TipoEnum.fromValor(res.getInt("tipo")));
-        return contato;
+    private ProfissionalRealocacao getProfissionalRealocacaoFromResultSet(ResultSet res) throws SQLException {
+        ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+        profissionalRealocacao.setId(res.getLong("id"));
+        profissionalRealocacao.setProfissao(res.getString("profissao"));
+        profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+        return profissionalRealocacao;
     }
 }
+
+
