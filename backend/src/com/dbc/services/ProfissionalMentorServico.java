@@ -4,9 +4,11 @@ import com.dbc.exceptions.BancoDeDadosException;
 import com.dbc.model.entities.ProfissionalMentor;
 import com.dbc.repository.ProfissionalMentorRepository;
 
+import java.util.List;
+
 public class ProfissionalMentorServico {
 
-    private ProfissionalMentorRepository mentorRepository;
+    private ProfissionalMentorRepository mentorRepository = new ProfissionalMentorRepository();
 
     public ProfissionalMentorServico() {
         mentorRepository = new ProfissionalMentorRepository();
@@ -14,8 +16,8 @@ public class ProfissionalMentorServico {
 
     public void cadastrar(ProfissionalMentor mentor) {
         try {
-            mentorRepository.cadastrar(mentor);
-            System.out.println("✅ Profissional Mentor cadastrado!");
+            mentorRepository.cadastrar(mentor, Long.valueOf(2));
+            System.out.println("\n✅ Profissional Mentor cadastrado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -23,7 +25,10 @@ public class ProfissionalMentorServico {
 
     public void listarTodos() {
        try {
-            mentorRepository.listar().forEach(System.out::println);
+           List<ProfissionalMentor> listar = mentorRepository.listar();
+              for (ProfissionalMentor mentor : listar) {
+                System.out.println(mentor.toString());
+              }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -31,7 +36,14 @@ public class ProfissionalMentorServico {
 
     public ProfissionalMentor listarUm(Long id) {
         try {
-            return mentorRepository.listarUm(id);
+            ProfissionalMentor mentor = mentorRepository.listarUm(id);
+
+            if (mentor != null) {
+                System.out.println("\nMentor encontrado!\n");
+                return mentor;
+            } else {
+                System.err.println("\nMentor não encontrado com o ID: " + id + "\n");
+            }
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -41,7 +53,7 @@ public class ProfissionalMentorServico {
     public void atualizar(Long id, ProfissionalMentor mentor) {
         try {
             mentorRepository.atualizar(id, mentor);
-            System.out.println("✅ Profissional Mentor atualizado!");
+            System.out.println("\n✅ Profissional Mentor atualizado!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +62,7 @@ public class ProfissionalMentorServico {
     public void remover(Long id) {
         try {
             mentorRepository.remover(id);
-            System.out.println("✅ Profissional Mentor deletado!");
+            System.out.println("\n✅ Profissional Mentor deletado!");
         } catch (Exception e) {
             e.printStackTrace();
         }

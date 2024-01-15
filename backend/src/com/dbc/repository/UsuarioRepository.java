@@ -51,7 +51,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setString(9, usuario.getInteresses());
             stmt.setString(10, usuario.getImagemDocumento());
 
-            int res = stmt.executeUpdate();
+            Long res = Long.valueOf(stmt.executeUpdate());
 
             return usuario;
         } catch (SQLException e) {

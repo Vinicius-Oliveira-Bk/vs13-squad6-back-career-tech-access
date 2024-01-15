@@ -45,7 +45,7 @@ public class Aplicacao {
                         case 1:
                             usuarioServico.listarTodos();
                             sc.nextLine();
-                            break;  
+                            break;
                         case 2:
                             Utils.limparConsole();
                             Utils.exibirEntidadeManipulada("Estudante");
@@ -107,7 +107,7 @@ public class Aplicacao {
                                     Utils.rotinaCadastroUsuario(pcd, TipoUsuarioEnum.PCD);
                                     Utils.rotinaCadastroCliente(pcd);
                                     Utils.rotinaCadastroPcd(pcd);
-                                    
+
                                     pcdServico.cadastrar(pcd);
                                     break;
                                 case 2:
@@ -163,7 +163,7 @@ public class Aplicacao {
                                     sc.nextLine();
                                     break;
                                 case 3:
-                                    profissionalRealocacaoServico.listarTodos();
+                                    profissionalRealocacaoServico.listar();
                                     sc.nextLine();
                                     break;
                                 case 4:

@@ -12,9 +12,9 @@ public class ProfissionalRealocacaoServico {
         profissionalRealocacaoRepository = new ProfissionalRealocacaoRepository();
     }
 
-    public void cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) {
+    public void cadastrar(ProfissionalRealocacao profissionalRealocacao) {
         try {
-            profissionalRealocacaoRepository.cadastrar(profissionalRealocacao, idCliente);
+            profissionalRealocacaoRepository.cadastrar(profissionalRealocacao);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class ProfissionalRealocacaoServico {
         }
     }
 
-    public void editar(Long id, ProfissionalRealocacao profissionalRealocacao) {
+    public void atualizar(Long id, ProfissionalRealocacao profissionalRealocacao) {
         try {
             profissionalRealocacaoRepository.atualizar(id, profissionalRealocacao);
         } catch (BancoDeDadosException e) {

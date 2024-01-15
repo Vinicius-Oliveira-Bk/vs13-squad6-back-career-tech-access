@@ -216,8 +216,6 @@ public abstract class Utils {
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.TI;
         mentor.setAreaAtuacao(areaAtuacao);
 
-        String certificadosDeCapacitacao = new String();
-
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.JUNIOR;
         mentor.setNivelExperienciaEnum(nivelExperiencia);
