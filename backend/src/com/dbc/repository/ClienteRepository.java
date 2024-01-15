@@ -176,9 +176,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE VS_13_EQUIPE_6.CLIENTE SET ");
+            sql.append("UPDATE CLIENTE SET ");
             sql.append(" ID_USUARIO = ?,");
-            sql.append(" TIPO_CLIENTE = ?,");
             sql.append(" TIPO_PLANO = ?, ");
             sql.append(" CONTROLE_PARENTAL = ? ");
             sql.append(" WHERE ID = ?");
