@@ -38,15 +38,15 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             pcd.setId(novoId);
 
             String sql = "INSERT INTO PCD\n" +
-                    "(ID, ID_CLIENTE, TIPO_DE_DEFICIENCIA, CERTIFICADO_DE_DEFICIENCIA_GOV)\n" +
-                    "VALUES(?, ?, ?)\n";
+                    "(ID, ID_CLIENTE, TIPO_DEFICIENCIA, CERTIFICADO_DEFICIENCIA_GOV)\n" +
+                    "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, pcd.getId());
             stmt.setLong(2, pcd.getCliente().getId());
-            stmt.setString(4, pcd.getTipoDeficiencia());
-            stmt.setString(5, pcd.getCertificadoDeficienciaGov());
+            stmt.setString(3, pcd.getTipoDeficiencia());
+            stmt.setString(4, pcd.getCertificadoDeficienciaGov());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarPcd.res=" + res);
@@ -81,8 +81,8 @@ public class PcdRepository implements IRepository<Long, Pcd> {
                 Pcd pcd = new Pcd();
                 pcd.setId(res.getLong("ID"));
                 pcd.setCliente(cs.listarUm(res.getLong("ID_CLIENTE")));
-                pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
-                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
+                pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
+                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
 
                 return pcd;
             }
@@ -117,8 +117,8 @@ public class PcdRepository implements IRepository<Long, Pcd> {
                 Pcd pcd = new Pcd();
                 pcd.setId(res.getLong("ID"));
                 pcd.setCliente(cs.listarUm(res.getLong("ID_CLIENTE")));
-                pcd.setTipoDeficiencia(res.getString("TIPO_DE_DEFICIENCIA"));
-                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DE_DEFICIENCIA_GOV"));
+                pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
+                pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
                 pcds.add(pcd);
             }
         } catch (SQLException e) {
@@ -146,18 +146,16 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE PCD SET ");
             sql.append(" ID_CLIENTE = ?,");
-            sql.append(" ID_PCD = ?,");
-            sql.append(" TIPO_DE_DEFICIENCIA = ?,");
-            sql.append(" CERTIFICADO_DE_DEFICIENCIA_GOV = ? ");
+            sql.append(" TIPO_DEFICIENCIA = ?,");
+            sql.append(" CERTIFICADO_DEFICIENCIA_GOV = ? ");
             sql.append(" WHERE ID = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setLong(1, pcd.getCliente().getId());
-            stmt.setLong(2, pcd.getId());
-            stmt.setString(3, pcd.getTipoDeficiencia());
-            stmt.setString(4, pcd.getCertificadoDeficienciaGov());
-            stmt.setLong(5, id);
+            stmt.setString(2, pcd.getTipoDeficiencia());
+            stmt.setString(3, pcd.getCertificadoDeficienciaGov());
+            stmt.setLong(4, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();

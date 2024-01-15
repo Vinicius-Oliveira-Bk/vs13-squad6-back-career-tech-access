@@ -53,12 +53,20 @@ public class Pcd extends Cliente {
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;
     }
 
+//    @Override
+//    public String toString() {
+//        return super.toString() +
+//                "\n\tPcd Id .............: " + this.id +
+//                "\n\tTipo de Deficiencia ...: " + this.tipoDeficiencia +
+//                "\n\tCertificado de Deficiencia do Governo ...: " + this.certificadoDeficienciaGov +
+//                "\n";
+//    }
     @Override
     public String toString() {
-        return super.toString() +
-                "\n\tPcd Id .............: " + this.id +
-                "\n\tTipo de Deficiencia ...: " + this.tipoDeficiencia +
-                "\n\tCertificado de Deficiencia do Governo ...: " + this.certificadoDeficienciaGov +
-                "\n";
+        return "Cliente{" +
+                "id=" + this.id +
+                ", Tipo de Deficiencia='" + this.tipoDeficiencia + '\'' +
+                ", Certificado de Deficiencia do Governo='" + this.certificadoDeficienciaGov + '\'' +
+                '}';
     }
 }

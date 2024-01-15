@@ -15,7 +15,7 @@ public class PcdServico {
 
     public void cadastrar(Pcd pcd) {
         try {
-            if (pcd.getCpf().length() != 11) {
+            if (pcd.getCliente().getUsuario().getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
             Pcd pcdAdicionado = pcdRepository.cadastrar(pcd);

@@ -122,7 +122,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -155,8 +155,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setLong(1, cliente.getId());
-            stmt.setString(2, cliente.getPlano().name());
+            stmt.setLong(1, cliente.getUsuario().getId());
+            stmt.setInt(2, cliente.getPlano().ordinal());
             stmt.setString(3, String.valueOf(cliente.getControleParental()));
             stmt.setLong(4, id);
 
@@ -223,7 +223,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -258,7 +258,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -293,7 +293,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
                 cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
