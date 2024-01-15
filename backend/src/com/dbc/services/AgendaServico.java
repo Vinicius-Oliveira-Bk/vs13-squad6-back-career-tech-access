@@ -114,6 +114,7 @@ public class AgendaServico {
             List<Agenda> agendamentos = agendaRepository.listar();
             if (agendamentos.isEmpty()) {
                 System.out.println("Não há nenhum horário cadastrado.");
+                return;
             }
             for (Agenda agenda : agendamentos) {
                 System.out.println(agenda.toString());
