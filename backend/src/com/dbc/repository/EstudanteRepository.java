@@ -37,18 +37,19 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
             Long proximoId = this.getProximoId(con);
             estudante.setId(proximoId);
 
-            String sql = "INSERT INTO ESTUDANTE (ID, MATRICULA, COMPROVANTE_MATRICULA, INSTITUICAO, CURSO, DATA_INICIO, DATA_TERMINO) "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO ESTUDANTE (ID, ID_CLIENTE, MATRICULA, COMPROVANTE_MATRICULA, INSTITUICAO, CURSO, DATA_INICIO, DATA_TERMINO) "
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, estudante.getId());
-            stmt.setString(2, estudante.getMatricula());
-            stmt.setString(3, estudante.getComprovanteMatricula());
-            stmt.setString(4, estudante.getInstituicao());
-            stmt.setString(5, estudante.getCurso());
-            stmt.setTimestamp(6, Timestamp.valueOf(estudante.getDataInicio().atStartOfDay()));
-            stmt.setTimestamp(7, Timestamp.valueOf(estudante.getDataTermino().atStartOfDay()));
+            stmt.setLong(2, estudante.getCliente().getId());
+            stmt.setString(3, estudante.getMatricula());
+            stmt.setString(4, estudante.getComprovanteMatricula());
+            stmt.setString(5, estudante.getInstituicao());
+            stmt.setString(6, estudante.getCurso());
+            stmt.setTimestamp(7, Timestamp.valueOf(estudante.getDataInicio().atStartOfDay()));
+            stmt.setTimestamp(8, Timestamp.valueOf(estudante.getDataTermino().atStartOfDay()));
 
             stmt.executeUpdate();
 

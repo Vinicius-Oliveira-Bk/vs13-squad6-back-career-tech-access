@@ -13,10 +13,11 @@ public class ClienteServico {
         clienteRepository = new ClienteRepository();
     }
 
-    public void cadastrar(Cliente cliente, Long idUsuario) {
+    public Cliente cadastrar(Cliente cliente, Long idUsuario) {
         try {
             Cliente clienteAdicionado = clienteRepository.cadastrar(cliente, idUsuario);
             System.out.println("cliente adicinado com sucesso! " + clienteAdicionado);
+            return clienteAdicionado;
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
             e.printStackTrace();
@@ -24,6 +25,7 @@ public class ClienteServico {
             System.out.println("ERRO: " + e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     public Cliente listarUm(Long idCliente) {

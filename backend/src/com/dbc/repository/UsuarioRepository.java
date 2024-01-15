@@ -37,8 +37,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Long proximoId = this.getProximoId(con);
             usuario.setId(proximoId);
 
-            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, SENHA, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) "
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -47,11 +47,10 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setTimestamp(3, Timestamp.valueOf(usuario.getDataNascimento().atStartOfDay()));
             stmt.setString(4, usuario.getCpf());
             stmt.setString(5, usuario.getEmail());
-            stmt.setString(6, usuario.getSenha());
-            stmt.setString(7, String.valueOf(usuario.getAcessoPcd()));
-            stmt.setLong(8, usuario.getTipo().ordinal());
-            stmt.setString(9, usuario.getInteresses());
-            stmt.setString(10, usuario.getImagemDocumento());
+            stmt.setString(6, String.valueOf(usuario.getAcessoPcd()));
+            stmt.setLong(7, usuario.getTipo().ordinal());
+            stmt.setString(8, usuario.getInteresses());
+            stmt.setString(9, usuario.getImagemDocumento());
 
             stmt.executeUpdate();
 
@@ -88,7 +87,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                     usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
                     usuario.setCpf(res.getString("cpf"));
                     usuario.setEmail(res.getString("email"));
-                    usuario.setSenha(res.getString("senha"));
                     usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
                     usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                     usuario.setInteresses(res.getString("interesses"));
@@ -131,7 +129,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
                 usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
@@ -172,9 +169,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getEmail() != null) {
                 sql.append(" email = ?,");
             }
-            if (usuario.getSenha() != null) {
-                sql.append(" senha = ?,");
-            }
             if (usuario.getAcessoPcd() != 999) {
                 sql.append(" acesso_pcd = ?,");
             }
@@ -205,9 +199,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             }
             if (usuario.getEmail() != null) {
                 stmt.setString(index++, usuario.getEmail());
-            }
-            if (usuario.getSenha() != null) {
-                stmt.setString(index++, usuario.getSenha());
             }
             if (usuario.getAcessoPcd() != null) {
                 stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
@@ -291,7 +282,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
                 usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
@@ -332,7 +322,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
-                usuario.setSenha(res.getString("senha"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
                 usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));

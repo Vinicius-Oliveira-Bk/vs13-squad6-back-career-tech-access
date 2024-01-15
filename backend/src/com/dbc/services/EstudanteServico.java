@@ -15,7 +15,6 @@ public class EstudanteServico {
             if (estudante.getComprovanteMatricula() == null) {
                 throw new Exception("É preciso anexar o comprovante de matrícula!");
             }
-
             estudanteRepository.cadastrar(estudante);
             System.out.println("\nEstudante adicinado com sucesso!\n");
         } catch (Exception e) {

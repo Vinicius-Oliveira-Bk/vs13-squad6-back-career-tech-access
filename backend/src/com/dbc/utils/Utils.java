@@ -18,6 +18,7 @@ import com.dbc.model.enums.NivelExperienciaEnum;
 import com.dbc.model.enums.PlanoEnum;
 import com.dbc.model.enums.TipoEnum;
 import com.dbc.model.enums.TipoUsuarioEnum;
+import com.dbc.services.UsuarioServico;
 
 public abstract class Utils {
     private static CustomScanner scanner = new CustomScanner();
@@ -167,45 +168,44 @@ public abstract class Utils {
         }
     }
 
-    public static void rotinaCadastroUsuario(Usuario usuario, TipoUsuarioEnum tipoUsuario) {
+    public static Usuario rotinaCadastroUsuario(Usuario usuario, TipoUsuarioEnum tipoUsuario) {
+        UsuarioServico usuarioServico = new UsuarioServico();
         try {
             usuario.setNome(scanner.nextLine("Digite o nome: "));
             usuario.setCpf(scanner.nextLine("Digite o CPF: "));
-
             String dataNascimentoString = scanner.nextLine("Digite a data de nascimento (dd/MM/yyyy): ");
             LocalDate dataNascimento = LocalDate.parse(dataNascimentoString, formatter);
             usuario.setDataNascimento(dataNascimento);
-
             usuario.setEmail(scanner.nextLine("Digite o email: "));
-
-            // usuario.setTipoUsuario((long) tipoUsuario.getValor());
-
-            rotinaCadastroContatosEenderecos(usuario);
+            usuario.setAcessoPcd(scanner.nextLine("Tem acesso PCD ( S / N)? ").toUpperCase().charAt(0));
+            usuario.setTipo(tipoUsuario);
+            usuario.setInteresses(scanner.nextLine("Informe seus interesses: "));
+            usuario.setImagemDocumento(scanner.nextLine("Informe o link da imagem do documento: "));
+            return usuario;
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
         }
+        return null;
     }
 
-    public static void rotinaCadastroCliente(Cliente cliente) {
+    public static Cliente rotinaCadastroCliente(Cliente cliente) {
         int controleParental, acessoPcd;
 
         try {
             PlanoEnum planoEscolhido = PlanoEnum.GRATUITO;
             planoEscolhido = (PlanoEnum) Utils.exibirMenuEnumDinamico(planoEscolhido);
             cliente.setPlano(planoEscolhido);
-
-            cliente.setInteresses(scanner.nextLine("Digite um interesse: "));
-            cliente.setImagemDocumento(scanner.nextLine("Digite o link da imagem do seu documento: "));
-            cliente.setControleParental(scanner.nextLine("Tem controle parental (1 - S / 2 - N)? ").charAt(0));
-            cliente.setAcessoPcd(scanner.nextLine("Tem acesso PCD (1 - S / 2 - N)? ").charAt(0));
+            cliente.setControleParental(scanner.nextLine("Tem controle parental ( S / N )? ").toUpperCase().charAt(0));
+            return cliente;
         } catch (Exception e) {
             System.err.println("🚫 Entrada inválida! Por favor informe os valores corretamente.");
             scanner.nextLine();
         }
+        return null;
     }
 
-    public static void rotinaCadastroEstudante(Estudante estudante) {
+    public static Estudante rotinaCadastroEstudante(Estudante estudante) {
         estudante.setMatricula(scanner.nextLine("Digite a matrícula: "));
         estudante.setComprovanteMatricula(scanner.nextLine("Digite o link do comprovante de matrícula: "));
 
@@ -215,7 +215,10 @@ public abstract class Utils {
         String dataInicioString = scanner.nextLine("Digite a data de início (dd/MM/yyyy): ");
         LocalDate dataInicio = LocalDate.parse(dataInicioString, formatter);
         estudante.setDataInicio(dataInicio);
-
+        String dataTerminoString = scanner.nextLine("Digite a data de término (dd/MM/yyyy): ");
+        LocalDate dataTermino = LocalDate.parse(dataTerminoString, formatter);
+        estudante.setDataTermino(dataTermino);
+        return estudante;
         // String dataFimString = scanner.nextLine("Digite a data de fim (dd/MM/yyyy):
         // ");
         // LocalDate dataFim = LocalDate.parse(dataFimString, formatter);

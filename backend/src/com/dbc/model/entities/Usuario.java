@@ -11,7 +11,6 @@ public class Usuario implements IVinculosUsuario {
     private LocalDate dataNascimento;
     private String cpf;
     private String email;
-    private String senha;
     private Character acessoPcd;
     private TipoUsuarioEnum tipoUsuario;
     private String interesses;
@@ -20,12 +19,11 @@ public class Usuario implements IVinculosUsuario {
     private String imagemDocumento;
 
     public Usuario () {}
-    public Usuario(String nome, LocalDate dataNascimento, String cpf, String email, String senha, Character acessoPcd, TipoUsuarioEnum tipoUsuario, String interesses, ArrayList<Contato> contatos, ArrayList<Endereco> enderecos, String imagemDocumento) {
+    public Usuario(String nome, LocalDate dataNascimento, String cpf, String email, Character acessoPcd, TipoUsuarioEnum tipoUsuario, String interesses, ArrayList<Contato> contatos, ArrayList<Endereco> enderecos, String imagemDocumento) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.email = email;
-        this.senha = senha;
         this.acessoPcd = acessoPcd;
         this.tipoUsuario = tipoUsuario;
         this.interesses = interesses;
@@ -72,14 +70,6 @@ public class Usuario implements IVinculosUsuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public Character getAcessoPcd() {
@@ -138,7 +128,6 @@ public class Usuario implements IVinculosUsuario {
                 ", dataDeNascimento=" + dataNascimento +
                 ", cpf='" + cpf + '\'' +
                 ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
                 ", acessoPcd=" + acessoPcd +
                 ", tipoUsuario=" + tipoUsuario +
                 ", interesses='" + interesses + '\'' +

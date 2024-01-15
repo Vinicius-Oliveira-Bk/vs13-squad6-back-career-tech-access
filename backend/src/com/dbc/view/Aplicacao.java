@@ -1,22 +1,16 @@
 package com.dbc.view;
 
+import java.util.Objects;
 import java.util.Scanner;
 
-import com.dbc.model.entities.Estudante;
-import com.dbc.model.entities.Pcd;
-import com.dbc.model.entities.ProfissionalMentor;
-import com.dbc.model.entities.ProfissionalRealocacao;
+import com.dbc.model.entities.*;
 import com.dbc.model.enums.TipoUsuarioEnum;
 
 // import com.dbc.services.AgendaServico;
 // import com.dbc.services.ContatoServico;
 // import com.dbc.services.EnderecoServico;
 
-import com.dbc.services.EstudanteServico;
-import com.dbc.services.PcdServico;
-import com.dbc.services.ProfissionalMentorServico;
-import com.dbc.services.ProfissionalRealocacaoServico;
-import com.dbc.services.UsuarioServico;
+import com.dbc.services.*;
 import com.dbc.utils.CustomScanner;
 import com.dbc.utils.Utils;
 
@@ -30,6 +24,7 @@ public class Aplicacao {
         // AgendaServico agendaServico = new AgendaServico();
 
         UsuarioServico usuarioServico = new UsuarioServico();
+        ClienteServico clienteServico = new ClienteServico();
         EstudanteServico estudanteServico = new EstudanteServico();
         PcdServico pcdServico = new PcdServico();
         ProfissionalMentorServico profissionalMentorServico = new ProfissionalMentorServico();
@@ -73,11 +68,17 @@ public class Aplicacao {
                                     break;
                                 case 1:
                                     Estudante estudante = new Estudante();
-                                    
-                                    Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
-                                    Utils.rotinaCadastroCliente(estudante);
+                                    Usuario usuario = new Usuario();
+                                    Cliente cliente = new Cliente();
+                                    usuario = Utils.rotinaCadastroUsuario(estudante, TipoUsuarioEnum.ESTUDANTE);
+//                                    Utils.rotinaCadastroContatosEenderecos(estudante);
+                                    cliente = Utils.rotinaCadastroCliente(estudante);
                                     Utils.rotinaCadastroEstudante(estudante);
-                                    
+
+                                    usuario = usuarioServico.cadastrar(usuario);
+
+                                    cliente = clienteServico.cadastrar(cliente, usuario.getId());
+                                    estudante.setCliente(cliente);
                                     estudanteServico.cadastrar(estudante);
                                     break;
                                 case 2:

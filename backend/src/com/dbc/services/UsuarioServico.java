@@ -9,14 +9,15 @@ import com.dbc.repository.UsuarioRepository;
 public class UsuarioServico {
     private UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-    public void cadastrar(Usuario usuario) {
+    public Usuario cadastrar(Usuario usuario) {
         try {
             if (usuario.getCpf().length() != 11) {
                 throw new Exception("CPF Invalido!");
             }
 
-            usuarioRepository.cadastrar(usuario);
+            usuario = usuarioRepository.cadastrar(usuario);
             System.out.println("\nUsuário adicinado com sucesso!\n");
+            return usuario;
         } catch (BancoDeDadosException e) {
             System.out.println("ERRO: " + e.getMessage());
             e.printStackTrace();
@@ -24,6 +25,7 @@ public class UsuarioServico {
             System.out.println("ERRO: " + e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
     public void remover(Long id) {
