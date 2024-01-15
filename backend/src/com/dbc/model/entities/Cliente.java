@@ -15,28 +15,17 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private String interesses;
     private String imagemDocumento;
     private Character controleParental;
-    private Character acessoPcd;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
-        super();
-        this.plano = plano;
-        this.interesses = interesses;
-        this.imagemDocumento = imagemDocumento;
-        this.controleParental = controleParental;
-        this.acessoPcd = acessoPcd;
-    }
-
-    public Cliente(Long id, PlanoEnum plano, TipoUsuarioEnum tipoCliente, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
-        this.id = id;
+    public Cliente(Usuario usuario, PlanoEnum plano, TipoUsuarioEnum tipoCliente, String interesses, String imagemDocumento, Character controleParental) {
+        this.usuario = usuario;
         this.plano = plano;
         this.tipoCliente = tipoCliente;
         this.interesses = interesses;
         this.imagemDocumento = imagemDocumento;
         this.controleParental = controleParental;
-        this.acessoPcd = acessoPcd;
     }
 
     public Usuario getUsuario() {
@@ -95,13 +84,6 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         this.controleParental = controleParental;
     }
 
-    public Character getAcessoPcd() {
-        return acessoPcd;
-    }
-
-    public void setAcessoPcd(Character acessoPcd) {
-        this.acessoPcd = acessoPcd;
-    }
 
     @Override
     public boolean validarCPF(String cpf) {
@@ -173,7 +155,6 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
                 "\n\tCliente Id .............: " + this.id +
                 "\n\tPlano .................: " + this.plano +
                 "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO") +
-                "\n\tAcesso Pcd ............: " + (this.acessoPcd.equals('S') ? "SIM" : "NÃO");
+                "\n\tControle Parental .....: " + (this.controleParental.equals('S') ? "SIM" : "NÃO");
     }
 }

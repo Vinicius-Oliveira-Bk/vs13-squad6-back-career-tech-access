@@ -1,7 +1,9 @@
 package servicos;
 
-import entidades.*;
-import enums.TipoUsuarioEnum;
+import com.dbc.model.entities.Contato;
+import com.dbc.model.entities.Endereco;
+import com.dbc.model.entities.Usuario;
+import com.dbc.model.enums.TipoUsuarioEnum;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -74,7 +76,7 @@ public class UsuarioServico {
             if (usuario.getId() == id) {
                 usuario.setNome(usuarioAtualiza.getNome());
                 usuario.setCpf(usuarioAtualiza.getCpf());
-                usuario.setDataDeNascimento(usuarioAtualiza.getDataDeNascimento());
+                usuario.setDataNascimento(usuarioAtualiza.getDataNascimento());
                 usuario.setEmail(usuarioAtualiza.getEmail());
                 usuario.setTipo(usuarioAtualiza.getTipo());
                 System.out.println("✅ Usuário atualizado!");

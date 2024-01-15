@@ -15,17 +15,8 @@ public class Pcd extends Cliente {
     public Pcd() {
     }
 
-    public Pcd(String tipoDeficiencia, String certificadoDeficienciaGov) {
-        this.tipoDeficiencia = tipoDeficiencia;
-        this.certificadoDeficienciaGov = certificadoDeficienciaGov;
-    }
-
-    public Pcd(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos,
-            ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses,
-            String imagemDocummento, Character controleParental, Character acessoPcd, String tipoDeficiencia,
-            String certificadoDeficienciaGov) {
-        super(nome, cpf, dataDeNascimento, enderecos, contatos, email, tipo, plano, interesses, imagemDocummento,
-                controleParental, acessoPcd);
+    public Pcd(Cliente cliente, String tipoDeficiencia, String certificadoDeficienciaGov) {
+        this.cliente = cliente;
         this.tipoDeficiencia = tipoDeficiencia;
         this.certificadoDeficienciaGov = certificadoDeficienciaGov;
     }

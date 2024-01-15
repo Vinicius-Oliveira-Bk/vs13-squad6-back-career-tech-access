@@ -27,9 +27,6 @@ public class CustomScanner {
                 input = Integer.parseInt(scanner.nextLine().trim());
                 scanner.nextLine();
 
-                if (input < 0 || input > 6)
-                    throw new Exception();
-
                 isInputValido = true;
             } catch (NumberFormatException e) {
                 System.err.println("\n🚫 Entrada inválida! Digite um número inteiro.");

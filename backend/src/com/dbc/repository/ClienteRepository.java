@@ -18,7 +18,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
-        String sql = "SELECT VS_13_EQUIPE_6.SEQ_CLIENTE.nextval AS SEQUENCE_CLIENTE FROM DUAL";
+        String sql = "SELECT SEQ_CLIENTE.nextval AS SEQUENCE_CLIENTE FROM DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
@@ -43,17 +43,16 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             Long novoId = this.getProximoId(con);
             cliente.setId(novoId);
 
-            String sql = "INSERT INTO VS_13_EQUIPE_6.CLIENTE\n" +
-                    "(ID, ID_USUARIO, TIPO_CLIENTE, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
-                    "VALUES(?, ?, ?, ?, ?)\n";
+            String sql = "INSERT INTO CLIENTE\n" +
+                    "(ID, ID_USUARIO, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
+                    "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, cliente.getId());
             stmt.setLong(2, idUsuario); // lançar o id long de usuário que existe na tabela usuário
-            stmt.setInt(3, cliente.getTipoCliente().ordinal());
-            stmt.setInt(4, cliente.getPlano().getValor());
-            stmt.setString(5, String.valueOf(cliente.getControleParental()));
+            stmt.setInt(3, cliente.getPlano().ordinal());
+            stmt.setString(4, String.valueOf(cliente.getControleParental()));
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarCliente.res=" + res);
@@ -115,7 +114,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE";
+            String sql = "SELECT * FROM CLIENTE";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -157,10 +156,9 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setLong(1, cliente.getId());
-            stmt.setString(2, cliente.getTipoCliente().name());
-            stmt.setString(3, cliente.getPlano().name());
-            stmt.setString(4, String.valueOf(cliente.getControleParental()));
-            stmt.setLong(5, id);
+            stmt.setString(2, cliente.getPlano().name());
+            stmt.setString(3, String.valueOf(cliente.getControleParental()));
+            stmt.setLong(4, id);
 
             int res = stmt.executeUpdate();
             System.out.println("editarCliente.res=" + res);

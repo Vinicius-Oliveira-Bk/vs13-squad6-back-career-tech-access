@@ -65,4 +65,31 @@ public class ClienteServico {
     public boolean validarCliente(Cliente cliente) {
         return true;
     }
+
+    public void listarNaoPcds() {
+        try {
+            List<Cliente> listar = clienteRepository.getClientesNaoPcd();
+            listar.forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listarNaoProfissionaisRealocacao() {
+        try {
+            List<Cliente> listar = clienteRepository.getClientesNaoProfissionalRealocacao();
+            listar.forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listarNaoEstudantes() {
+        try {
+            List<Cliente> listar = clienteRepository.getClientesNaoEstudante();
+            listar.forEach(System.out::println);
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 }

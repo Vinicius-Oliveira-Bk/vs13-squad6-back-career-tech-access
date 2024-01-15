@@ -19,6 +19,21 @@ public class Usuario implements IVinculosUsuario {
     private ArrayList<Endereco> enderecos;
     private String imagemDocumento;
 
+    public Usuario () {}
+    public Usuario(String nome, LocalDate dataNascimento, String cpf, String email, String senha, Character acessoPcd, TipoUsuarioEnum tipoUsuario, String interesses, ArrayList<Contato> contatos, ArrayList<Endereco> enderecos, String imagemDocumento) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+        this.acessoPcd = acessoPcd;
+        this.tipoUsuario = tipoUsuario;
+        this.interesses = interesses;
+        this.contatos = contatos;
+        this.enderecos = enderecos;
+        this.imagemDocumento = imagemDocumento;
+    }
+
     public Long getId() {
         return id;
     }

@@ -70,9 +70,26 @@ public class UsuarioServico {
         }
         return null;
     }
-<<<<<<< Updated upstream
-=======
 
+    public void listarNaoProfissionais() {
+        try {
+            List<Usuario> listar = usuarioRepository.getUsuarioNaoProfissional();
+            for (Usuario usuario : listar) {
+                System.out.println(usuario.toString());
+            }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 
->>>>>>> Stashed changes
+    public void listarNaoClientes() {
+        try {
+            List<Usuario> listar = usuarioRepository.getUsuarioNaoCliente();
+            for (Usuario usuario : listar) {
+                System.out.println(usuario.toString());
+            }
+        } catch (BancoDeDadosException e) {
+            e.printStackTrace();
+        }
+    }
 }
