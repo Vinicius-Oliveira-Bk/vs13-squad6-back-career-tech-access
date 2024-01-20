@@ -19,13 +19,13 @@ public class AgendaService {
 
     public void cadastrarDisponibilidade(Agenda agenda) {
         try {
-            List<Agenda> agendamentos = agendaRepository.listar();
-            
+            List<Agenda> agendamentos = agendaRepository.getAll();
+
             if (!validarHorarioAgendamento(agenda, agendamentos)) {
                 return;
             }
 
-            agendaRepository.cadastrar(agenda);
+            agendaRepository.create(agenda);
             System.out.println("✅ Horário cadastrado com sucesso!");
         } catch (BancoDeDadosException e) {
             System.err.println("❌ ERRO: " + e.getMessage());
@@ -36,8 +36,8 @@ public class AgendaService {
 
     public void removerDisponibilidade(Long idAgenda) {
         try {
-            boolean horarioRemovido = agendaRepository.remover(idAgenda);
-            
+            boolean horarioRemovido = agendaRepository.delete(idAgenda);
+
             if (horarioRemovido) {
                 System.out.println("✅ Agendamento de id "+idAgenda+" removido com sucesso!");
             }
@@ -49,13 +49,13 @@ public class AgendaService {
 
     public void agendarHorario(Long idCliente, Long idAgenda) {
         try {
-            Agenda agenda = agendaRepository.listarUm(idAgenda);
+            Agenda agenda = agendaRepository.getById(idAgenda);
             Cliente cliente = clienteService.listarUm(idCliente);
 
             if (validarDisponibilidadeAgenda(agenda) && clienteService.validarCliente(cliente)) {
                 agenda.setCliente(cliente);
                 agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
-                agendaRepository.atualizar(idAgenda, agenda);
+                agendaRepository.update(idAgenda, agenda);
                 System.out.println("✅ Agendamento realizado com sucesso!");
             }
         } catch (BancoDeDadosException e) {
@@ -65,10 +65,10 @@ public class AgendaService {
             e.printStackTrace();
         }
     }
-    
+
     public void reagendarHorario(Long idAgendaAtual) {
         try {
-            Agenda agenda = agendaRepository.listarUm(idAgendaAtual);
+            Agenda agenda = agendaRepository.getById(idAgendaAtual);
 
             if (Objects.isNull(agenda)) {
                 throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
@@ -79,15 +79,15 @@ public class AgendaService {
             }
 
             listarTodosPorStatus(StatusAgendaEnum.DISPONIVEL);
-            Agenda novaAgenda = agendaRepository.listarUm(idAgendaAtual);
+            Agenda novaAgenda = agendaRepository.getById(idAgendaAtual);
 
             if (validarDisponibilidadeAgenda(novaAgenda)) {
                 novaAgenda.setCliente(agenda.getCliente());
                 novaAgenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
                 agenda.setCliente(null);
                 agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
-                agendaRepository.atualizar(novaAgenda.getId(), novaAgenda);
-                agendaRepository.atualizar(idAgendaAtual, agenda);
+                agendaRepository.update(novaAgenda.getId(), novaAgenda);
+                agendaRepository.update(idAgendaAtual, agenda);
                 System.out.println("✅ Reagendamento realizado com sucesso!");
             }
         } catch (BancoDeDadosException e) {
@@ -100,7 +100,7 @@ public class AgendaService {
 
     public Agenda listarUm(Long idAgenda) {
         try {
-            Agenda agenda = agendaRepository.listarUm(idAgenda);
+            Agenda agenda = agendaRepository.getById(idAgenda);
 
             if (Objects.isNull(agenda)) {
                 throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
@@ -118,7 +118,7 @@ public class AgendaService {
 
     public void listarTodos() {
         try {
-            List<Agenda> agendamentos = agendaRepository.listar();
+            List<Agenda> agendamentos = agendaRepository.getAll();
 
             if (agendamentos.isEmpty()) {
                 System.out.println("Não há nenhum horário cadastrado.");
@@ -135,7 +135,7 @@ public class AgendaService {
 
     public void listarTodosPorCliente(Long idCliente) {
         try {
-            List<Agenda> agendamentos = agendaRepository.listar();
+            List<Agenda> agendamentos = agendaRepository.getAll();
 
             agendamentos.stream()
                     .filter(x -> x.getCliente().getId() == idCliente)
@@ -158,7 +158,7 @@ public class AgendaService {
 
     public void listarTodosPorProfissional(Long idProfissional) {
         try {
-            List<Agenda> agendamentos = agendaRepository.listar();
+            List<Agenda> agendamentos = agendaRepository.getAll();
 
             agendamentos.stream()
                     .filter(x -> x.getProfissionalMentor().getId() == idProfissional)
@@ -181,7 +181,7 @@ public class AgendaService {
 
     public void listarTodosPorStatus(StatusAgendaEnum statusAgendaEnum) {
         try {
-            List<Agenda> agendamentos = agendaRepository.listar();
+            List<Agenda> agendamentos = agendaRepository.getAll();
 
             agendamentos.stream()
                     .filter(x -> x.getStatusAgendaEnum() == statusAgendaEnum)
@@ -204,7 +204,7 @@ public class AgendaService {
 
     public void cancelarHorario(Long idCliente, Long idAgenda) {
         try {
-            Agenda agenda = agendaRepository.listarUm(idAgenda);
+            Agenda agenda = agendaRepository.getById(idAgenda);
 
             if (Objects.isNull(agenda)) {
                 throw new NoSuchElementException("❌ O Não há horário cadastrado com este id.");
@@ -216,7 +216,7 @@ public class AgendaService {
 
             agenda.setCliente(null);
             agenda.setStatusAgendaEnum(StatusAgendaEnum.CANCELADO);
-            agendaRepository.atualizar(idAgenda, agenda);
+            agendaRepository.update(idAgenda, agenda);
 
             System.out.println("✅ Cancelamento realizado com sucesso!");
         } catch (BancoDeDadosException e) {
@@ -268,7 +268,7 @@ public class AgendaService {
         if (agenda.getCliente() != null) {
             throw new IllegalArgumentException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
-        
+
         return true;
     }
 }

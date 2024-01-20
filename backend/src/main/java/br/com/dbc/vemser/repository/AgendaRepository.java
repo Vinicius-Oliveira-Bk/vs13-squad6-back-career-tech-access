@@ -32,7 +32,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     }
 
     @Override
-    public Agenda cadastrar(Agenda agenda) throws BancoDeDadosException {
+    public Agenda create(Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -69,7 +69,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     }
 
     @Override
-    public List listar() throws BancoDeDadosException {
+    public List getAll() throws BancoDeDadosException {
         List<Agenda> agendamentos = new ArrayList<>();
         Connection con = null;
         try {
@@ -104,7 +104,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     }
 
     @Override
-    public Agenda listarUm(Long id) throws BancoDeDadosException {
+    public Agenda getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             String sql = "SELECT * FROM AGENDA WHERE ID = ?";
@@ -136,7 +136,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     }
 
     @Override
-    public boolean atualizar(Long id, Agenda agenda) throws BancoDeDadosException {
+    public boolean update(Long id, Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -174,7 +174,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

@@ -21,17 +21,17 @@ public class ProfissionalRealocacaoService {
 
         try {
             lista.add(profissionalRealocacao);
-            profRealocRepository.cadastrar(profissionalRealocacao);
+            profRealocRepository.create(profissionalRealocacao);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
 
         System.out.println("\n✅ Profissional Realocacao cadastrado!");
     }
-    
+
     public void listarUm(Long id) {
         try {
-            profRealocRepository.listarUm(id);
+            profRealocRepository.getById(id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -72,13 +72,13 @@ public class ProfissionalRealocacaoService {
 
     public void remover(Long id) {
         try {
-            ProfissionalRealocacao profissionalRealocacaoDeletar = profRealocRepository.listarUm(id);
+            ProfissionalRealocacao profissionalRealocacaoDeletar = profRealocRepository.getById(id);
 
             if (profissionalRealocacaoDeletar == null)
             System.err.println("❌ Usuário não encontrado!");
 
             lista.remove(profissionalRealocacaoDeletar);
-            profRealocRepository.remover(profissionalRealocacaoDeletar.getId());
+            profRealocRepository.delete(profissionalRealocacaoDeletar.getId());
             System.out.println("✅ Usuário removido!");
         } catch (BancoDeDadosException e) {
             System.err.println("❌ Erro ao remover usuário: " + e.getMessage());

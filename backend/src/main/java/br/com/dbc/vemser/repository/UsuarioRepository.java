@@ -29,7 +29,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public Usuario cadastrar(Usuario usuario) throws BancoDeDadosException {
+    public Usuario create(Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -69,7 +69,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public Usuario listarUm(Long id) throws BancoDeDadosException {
+    public Usuario getById(Long id) throws BancoDeDadosException {
         Usuario usuario = null;
         Connection con = null;
         try {
@@ -110,7 +110,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws BancoDeDadosException {
+    public List<Usuario> getAll() throws BancoDeDadosException {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
@@ -149,7 +149,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public boolean atualizar(Long id, Usuario usuario) throws BancoDeDadosException {
+    public boolean update(Long id, Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -233,7 +233,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

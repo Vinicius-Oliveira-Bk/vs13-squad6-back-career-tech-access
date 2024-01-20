@@ -11,7 +11,7 @@ public class UsuarioService {
 
     public void cadastrar(Usuario usuario) {
         try {
-            usuarioRepository.cadastrar(usuario);
+            usuarioRepository.create(usuario);
             System.out.println("\n✅ Usuário Adicionado Com Sucesso!\n");
         } catch (BancoDeDadosException e) {
             System.out.println("❌ ERRO: " + e.getMessage());
@@ -24,7 +24,7 @@ public class UsuarioService {
 
     public void remover(Long id) {
         try {
-            usuarioRepository.remover(id);
+            usuarioRepository.delete(id);
             System.out.println("\n✅ Usuário removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -33,7 +33,7 @@ public class UsuarioService {
 
     public void atualizar(Long id, Usuario usuario) {
         try {
-            usuarioRepository.atualizar(id, usuario);
+            usuarioRepository.update(id, usuario);
             System.out.println("\n✅ Usuário editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public class UsuarioService {
 
     public void listarTodos() {
         try {
-            List<Usuario> listar = usuarioRepository.listar();
+            List<Usuario> listar = usuarioRepository.getAll();
             for (Usuario usuario : listar) {
                 System.out.println(usuario.toString());
             }
@@ -53,7 +53,7 @@ public class UsuarioService {
 
     public Usuario listarUm(Long idUsuario) {
         try {
-            Usuario usuario = usuarioRepository.listarUm(idUsuario);
+            Usuario usuario = usuarioRepository.getById(idUsuario);
 
             if(usuario == null) {
                 System.out.println("\n");
