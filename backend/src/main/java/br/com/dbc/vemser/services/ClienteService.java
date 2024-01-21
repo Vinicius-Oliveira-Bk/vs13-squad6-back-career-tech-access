@@ -15,7 +15,7 @@ public class ClienteService {
 
     public void cadastrar(Cliente cliente, Long idUsuario) {
         try {
-            Cliente clienteAdicionado = clienteRepository.cadastrar(cliente, idUsuario);
+            Cliente clienteAdicionado = clienteRepository.create(cliente, idUsuario);
             System.out.println("✅ Cliente Adicionado com sucesso! " + clienteAdicionado);
         } catch (BancoDeDadosException e) {
             System.out.println("❌ ERRO: " + e.getMessage());
@@ -28,7 +28,7 @@ public class ClienteService {
 
     public Cliente listarUm(Long idCliente) {
         try {
-            return clienteRepository.listarUm(idCliente);
+            return clienteRepository.getById(idCliente);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class ClienteService {
 
     public void listarTodos() {
         try {
-            List<Cliente> listar = clienteRepository.listar();
+            List<Cliente> listar = clienteRepository.getAll();
             listar.forEach(System.out::println);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class ClienteService {
 
     public void atualizar(Long id, Cliente cliente) {
         try {
-            clienteRepository.atualizar(id, cliente);
+            clienteRepository.update(id, cliente);
             System.out.println("✅ Cliente Editado com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class ClienteService {
 
     public void remover(Long id) {
         try {
-            clienteRepository.remover(id);
+            clienteRepository.delete(id);
             System.out.println("✅ Cliente Removido com Sucesso");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();

@@ -32,7 +32,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public ProfissionalMentor cadastrar(ProfissionalMentor mentor) throws BancoDeDadosException {
+    public ProfissionalMentor create(ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -70,7 +70,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public ProfissionalMentor listarUm(Long id) throws BancoDeDadosException {
+    public ProfissionalMentor getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -105,7 +105,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public List<ProfissionalMentor> listar() throws BancoDeDadosException {
+    public List<ProfissionalMentor> getAll() throws BancoDeDadosException {
         List<ProfissionalMentor> mentores = new ArrayList<>();
         Connection con = null;
 
@@ -116,7 +116,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             String sql = "SELECT * FROM PROFISSIONAL_MENTOR " +
                     "JOIN USUARIO ON PROFISSIONAL_MENTOR.ID_USUARIO = USUARIO.ID " +
                     "JOIN CLIENTE ON USUARIO.ID = CLIENTE.ID_USUARIO";
-                    
+
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
@@ -138,7 +138,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public boolean atualizar(Long id, ProfissionalMentor mentor) throws BancoDeDadosException {
+    public boolean update(Long id, ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -177,7 +177,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
 
         try {

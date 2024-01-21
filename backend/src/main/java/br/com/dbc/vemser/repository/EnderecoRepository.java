@@ -8,10 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class EnderecoRepository implements IRepository<Long, Endereco> {
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
@@ -31,7 +34,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public Endereco cadastrar(Endereco endereco) throws BancoDeDadosException {
+    public Endereco create(Endereco endereco) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -72,7 +75,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public Endereco listarUm(Long id) throws BancoDeDadosException {
+    public Endereco getById(Long id) throws BancoDeDadosException {
         Endereco endereco = null;
         Connection con = null;
         try {
@@ -85,10 +88,11 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
                 try (ResultSet res = pstmt.executeQuery()) {
                     if (res.next()) {
                         endereco = getEnderecoFromResultSet(res);
-                        System.out.println(endereco);
                     } else {
-                        System.out.println("Nenhum endereço encontrado para o Id: " + id);
+                        throw new RegraDeNegocioException("Nenhum endereço encontrado para o Id: " + id);
                     }
+                } catch (RegraDeNegocioException e) {
+                    throw new RuntimeException(e);
                 }
             }
             return endereco;
@@ -108,7 +112,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public List<Endereco> listar() throws BancoDeDadosException {
+    public List<Endereco> getAll() throws BancoDeDadosException {
         List<Endereco> enderecos = new ArrayList<>();
         Connection con = null;
         try {
@@ -138,7 +142,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public boolean atualizar(Long id, Endereco endereco) throws BancoDeDadosException {
+    public boolean update(Long id, Endereco endereco) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -146,30 +150,14 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ENDERECO SET \n");
 
-            if (endereco.getLogradouro() != null) {
-                sql.append(" logradouro = ?,");
-            }
-            if (endereco.getNumero() != null) {
-                sql.append(" numero = ?,");
-            }
-            if (endereco.getComplemento() != null) {
-                sql.append(" complemento = ?,");
-            }
-            if (endereco.getCep() != null) {
-                sql.append(" cep = ?,");
-            }
-            if (endereco.getCidade() != null) {
-                sql.append(" cidade = ?,");
-            }
-            if (endereco.getEstado() != null) {
-                sql.append(" estado = ?,");
-            }
-            if (endereco.getPais() != null) {
-                sql.append(" pais = ?,");
-            }
-            if (endereco.getTipo() != null) {
-                sql.append(" tipo = ?,");
-            }
+            sql.append(" logradouro = ?,");
+            sql.append(" numero = ?,");
+            sql.append(" complemento = ?,");
+            sql.append(" cep = ?,");
+            sql.append(" cidade = ?,");
+            sql.append(" estado = ?,");
+            sql.append(" pais = ?,");
+            sql.append(" tipo = ?,");
 
             sql.deleteCharAt(sql.length() - 1);
             sql.append(" WHERE id = ? ");
@@ -177,30 +165,14 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             int index = 1;
-            if (endereco.getLogradouro() != null) {
-                stmt.setString(index++, endereco.getLogradouro());
-            }
-            if (endereco.getNumero() != null) {
-                stmt.setString(index++, endereco.getNumero());
-            }
-            if (endereco.getComplemento() != null) {
-                stmt.setString(index++, endereco.getComplemento());
-            }
-            if (endereco.getCep() != null) {
-                stmt.setString(index++, endereco.getCep());
-            }
-            if (endereco.getCidade() != null) {
-                stmt.setString(index++, endereco.getCidade());
-            }
-            if (endereco.getEstado() != null) {
-                stmt.setString(index++, endereco.getEstado());
-            }
-            if (endereco.getPais() != null) {
-                stmt.setString(index++, endereco.getPais());
-            }
-            if (endereco.getTipo() != null) {
-                stmt.setInt(index++, endereco.getTipo().getValor());
-            }
+            stmt.setString(index++, endereco.getLogradouro());
+            stmt.setString(index++, endereco.getNumero());
+            stmt.setString(index++, endereco.getComplemento());
+            stmt.setString(index++, endereco.getCep());
+            stmt.setString(index++, endereco.getCidade());
+            stmt.setString(index++, endereco.getEstado());
+            stmt.setString(index++, endereco.getPais());
+            stmt.setInt(index++, endereco.getTipo().getValor());
 
             stmt.setLong(index++, id);
 
@@ -222,7 +194,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

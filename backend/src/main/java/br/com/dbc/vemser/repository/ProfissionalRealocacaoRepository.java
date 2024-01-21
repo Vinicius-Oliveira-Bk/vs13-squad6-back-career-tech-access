@@ -30,11 +30,11 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
+    public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         return null;
     }
 
-    public ProfissionalRealocacao cadastrar(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
+    public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -70,7 +70,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public ProfissionalRealocacao listarUm(Long id) throws BancoDeDadosException {
+    public ProfissionalRealocacao getById(Long id) throws BancoDeDadosException {
         ProfissionalRealocacao profissionalRealocacao = null;
         Connection con = null;
         try {
@@ -106,7 +106,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public List<ProfissionalRealocacao> listar() throws BancoDeDadosException {
+    public List<ProfissionalRealocacao> getAll() throws BancoDeDadosException {
         List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
         Connection con = null;
         try {
@@ -136,7 +136,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public boolean atualizar(Long id, ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
+    public boolean update(Long id, ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -184,7 +184,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

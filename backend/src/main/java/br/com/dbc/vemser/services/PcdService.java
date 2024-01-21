@@ -15,7 +15,7 @@ public class PcdService {
 
     public void cadastrar(Pcd pcd) {
         try {
-            pcdRepository.cadastrar(pcd);
+            pcdRepository.create(pcd);
             System.out.println("\n✅ Pcd adicionado com sucesso!");
         } catch (BancoDeDadosException e) {
             System.out.println("\n❌ ERRO: " + e.getMessage());
@@ -29,7 +29,7 @@ public class PcdService {
     public Pcd listarUm(Long idPcd) {
         try {
             System.out.println("\n✅ Pcd encontrado com sucesso!");
-            return pcdRepository.listarUm(idPcd);
+            return pcdRepository.getById(idPcd);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class PcdService {
 
     public void listarTodos() {
         try {
-            List<Pcd> listar = pcdRepository.listar();
+            List<Pcd> listar = pcdRepository.getAll();
             listar.forEach(System.out::println);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class PcdService {
 
     public void atualizar(Long id, Pcd pcd) {
         try {
-            pcdRepository.atualizar(id, pcd);
+            pcdRepository.update(id, pcd);
             System.out.println("\n✅ Pcd editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -56,7 +56,7 @@ public class PcdService {
 
     public void remover(Long id) {
         try {
-            pcdRepository.remover(id);
+            pcdRepository.delete(id);
             System.out.println("\n✅ Pcd removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();

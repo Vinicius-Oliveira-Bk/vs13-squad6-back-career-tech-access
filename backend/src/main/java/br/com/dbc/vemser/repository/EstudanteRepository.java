@@ -28,7 +28,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     }
 
     @Override
-    public Estudante cadastrar(Estudante estudante) throws BancoDeDadosException {
+    public Estudante create(Estudante estudante) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -68,7 +68,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     }
 
     @Override
-    public List<Estudante> listar() throws BancoDeDadosException {
+    public List<Estudante> getAll() throws BancoDeDadosException {
         List<Estudante> estudantes = new ArrayList<>();
         Connection con = null;
 
@@ -84,7 +84,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 Estudante estudante = new Estudante();
 
                 estudante.setId(res.getLong("id"));
-                estudante.setCliente(new ClienteRepository().listarUm(res.getLong("id_cliente")));
+                estudante.setCliente(new ClienteRepository().getById(res.getLong("id_cliente")));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -108,7 +108,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     }
 
     @Override
-    public Estudante listarUm(Long id) throws BancoDeDadosException {
+    public Estudante getById(Long id) throws BancoDeDadosException {
         Estudante estudante = null;
         Connection con = null;
         try {
@@ -122,7 +122,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 if (res.next()) {
                     estudante = new Estudante();
                     estudante.setId(res.getLong("id"));
-                    estudante.setCliente(new ClienteRepository().listarUm(res.getLong("id_cliente")));
+                    estudante.setCliente(new ClienteRepository().getById(res.getLong("id_cliente")));
                     estudante.setMatricula(res.getString("matricula"));
                     estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                     estudante.setInstituicao(res.getString("instituicao"));
@@ -147,7 +147,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     }
 
     @Override
-    public boolean atualizar(Long id, Estudante estudante) throws BancoDeDadosException {
+    public boolean update(Long id, Estudante estudante) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -220,7 +220,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

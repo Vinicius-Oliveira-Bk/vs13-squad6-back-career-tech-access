@@ -15,7 +15,7 @@ import br.com.dbc.vemser.services.UsuarioService;
 
 public class ClienteRepository implements IRepository<Long, Cliente> {
     UsuarioService us = new UsuarioService();
-    
+
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT VS_13_EQUIPE_6.SEQ_CLIENTE.nextval AS SEQUENCE_CLIENTE FROM DUAL";
@@ -30,11 +30,11 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public Cliente cadastrar(Cliente cliente) throws BancoDeDadosException {
+    public Cliente create(Cliente cliente) throws BancoDeDadosException {
         return null;
     }
 
-    public Cliente cadastrar(Cliente cliente, Long idUsuario) throws BancoDeDadosException {
+    public Cliente create(Cliente cliente, Long idUsuario) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -72,7 +72,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public Cliente listarUm(Long id) throws BancoDeDadosException {
+    public Cliente getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -107,7 +107,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public List<Cliente> listar() throws BancoDeDadosException {
+    public List<Cliente> getAll() throws BancoDeDadosException {
         List<Cliente> clientes = new ArrayList<>();
         Connection con = null;
         try {
@@ -141,7 +141,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public boolean atualizar(Long id, Cliente cliente) throws BancoDeDadosException {
+    public boolean update(Long id, Cliente cliente) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -179,7 +179,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -206,7 +206,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             }
         }
     }
-    
+
     public List<Cliente> getClientesNaoPcd() throws BancoDeDadosException {
         List<Cliente> clientes = new ArrayList<>();
         Connection con = null;

@@ -16,7 +16,7 @@ public class EstudanteService {
                 throw new Exception("\n❌ É preciso anexar o comprovante de matrícula!");
             }
 
-            estudanteRepository.cadastrar(estudante);
+            estudanteRepository.create(estudante);
             System.out.println("\n✅ Estudante adicionado com sucesso!\n");
         } catch (Exception e) {
             System.out.println("❌ ERRO: " + e.getMessage());
@@ -26,12 +26,12 @@ public class EstudanteService {
 
     public void listarUm(Long idEstudante) {
         try {
-            Estudante estudante = estudanteRepository.listarUm(idEstudante);
+            Estudante estudante = estudanteRepository.getById(idEstudante);
 
             if (estudante == null) {
                 System.err.println("\n❌ Estudante não encontrado com o ID: " + idEstudante + "\n");
-            } 
-            
+            }
+
             System.out.println("\n✅ Estudante encontrado!\n");
             System.out.println(estudante.toString());
         } catch (BancoDeDadosException e) {
@@ -41,7 +41,7 @@ public class EstudanteService {
 
     public void listarTodos() {
         try {
-            List<Estudante> listar = estudanteRepository.listar();
+            List<Estudante> listar = estudanteRepository.getAll();
             for (Estudante estudante : listar) {
                 System.out.println(estudante.toString());
             }
@@ -52,7 +52,7 @@ public class EstudanteService {
 
     public void atualizar(Long id, Estudante estudante) {
         try {
-            estudanteRepository.atualizar(id, estudante);
+            estudanteRepository.update(id, estudante);
             System.out.println("\n✅ Estudante editado com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class EstudanteService {
 
     public void remover(Long id) {
         try {
-            estudanteRepository.remover(id);
+            estudanteRepository.delete(id);
             System.out.println("\n✅ Estudante removido com sucesso!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();

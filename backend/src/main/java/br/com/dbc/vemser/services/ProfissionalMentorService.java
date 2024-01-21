@@ -13,7 +13,7 @@ public class ProfissionalMentorService {
 
     public void cadastrar(ProfissionalMentor mentor) {
         try {
-            mentorRepository.cadastrar(mentor);
+            mentorRepository.create(mentor);
             System.out.println("\n✅ Profissional Mentor cadastrado!");
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
@@ -23,7 +23,7 @@ public class ProfissionalMentorService {
     public ProfissionalMentor listarUm(Long id) {
         try {
             if(id == null) System.out.println("\n❌ ID não pode ser nulo!");
-            return mentorRepository.listarUm(id);
+            return mentorRepository.getById(id);
         } catch (BancoDeDadosException e) {
             e.printStackTrace();
         }
@@ -32,7 +32,7 @@ public class ProfissionalMentorService {
 
     public void listarTodos() {
         try {
-             mentorRepository.listar().forEach(System.out::println);
+             mentorRepository.getAll().forEach(System.out::println);
          } catch (BancoDeDadosException e) {
              e.printStackTrace();
          }
@@ -40,7 +40,7 @@ public class ProfissionalMentorService {
 
     public void atualizar(Long id, ProfissionalMentor mentor) {
         try {
-            mentorRepository.atualizar(id, mentor);
+            mentorRepository.update(id, mentor);
             System.out.println("\n✅ Profissional Mentor atualizado!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,7 +49,7 @@ public class ProfissionalMentorService {
 
     public void remover(Long id) {
         try {
-            mentorRepository.remover(id);
+            mentorRepository.delete(id);
             System.out.println("\n✅ Profissional Mentor deletado!");
         } catch (Exception e) {
             e.printStackTrace();

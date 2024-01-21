@@ -28,7 +28,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public Pcd cadastrar(Pcd pcd) throws BancoDeDadosException {
+    public Pcd create(Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -66,7 +66,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public Pcd listarUm(Long id) throws BancoDeDadosException {
+    public Pcd getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -101,7 +101,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public List<Pcd> listar() throws BancoDeDadosException {
+    public List<Pcd> getAll() throws BancoDeDadosException {
         List<Pcd> pcds = new ArrayList<>();
         Connection con = null;
         try {
@@ -138,7 +138,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
 
 
     @Override
-    public boolean atualizar(Long id, Pcd pcd) throws BancoDeDadosException {
+    public boolean update(Long id, Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -178,7 +178,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
