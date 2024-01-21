@@ -8,10 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Contato;
 import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ContatoRepository implements IRepository<Long, Contato> {
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
@@ -31,7 +34,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public Contato cadastrar(Contato contato) throws BancoDeDadosException {
+    public Contato create(Contato contato) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -67,7 +70,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public Contato listarUm(Long id) throws BancoDeDadosException {
+    public Contato getById(Long id) throws BancoDeDadosException {
         Contato contato = null;
         Connection con = null;
         try {
@@ -80,10 +83,11 @@ public class ContatoRepository implements IRepository<Long, Contato> {
                 try (ResultSet res = pstmt.executeQuery()) {
                     if (res.next()) {
                         contato = getContatoFromResultSet(res);
-                        System.out.println(contato);
                     } else {
-                        System.out.println("Nenhum contato encontrado para o Id: " + id);
+                        throw new RegraDeNegocioException("Nenhum contato encontrado para o Id: " + id);
                     }
+                } catch (RegraDeNegocioException e) {
+                    throw new RuntimeException(e);
                 }
             }
             return contato;
@@ -103,7 +107,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public List<Contato> listar() throws BancoDeDadosException {
+    public List<Contato> getAll() throws BancoDeDadosException {
         List<Contato> contatos = new ArrayList<>();
         Connection con = null;
         try {
@@ -133,24 +137,16 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public boolean atualizar(Long id, Contato contato) throws BancoDeDadosException {
+    public boolean update(Long id, Contato contato) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE CONTATO SET \n");
-
-            if (contato.getDescricao() != null) {
-                sql.append(" descricao = ?,");
-            }
-            if (contato.getTelefone() != null) {
-                sql.append(" telefone = ?,");
-            }
-
-            if (contato.getTipo() != null) {
-                sql.append(" tipo = ?,");
-            }
+            sql.append(" descricao = ?,");
+            sql.append(" telefone = ?,");
+            sql.append(" tipo = ?,");
 
             sql.deleteCharAt(sql.length() - 1);
             sql.append(" WHERE id = ? ");
@@ -158,16 +154,9 @@ public class ContatoRepository implements IRepository<Long, Contato> {
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             int index = 1;
-            if (contato.getDescricao() != null) {
-                stmt.setString(index++, contato.getDescricao());
-            }
-            if (contato.getTelefone() != null) {
-                stmt.setString(index++, contato.getTelefone());
-            }
-
-            if (contato.getTipo() != null) {
-                stmt.setInt(index++, contato.getTipo().getValor());
-            }
+            stmt.setString(index++, contato.getDescricao());
+            stmt.setString(index++, contato.getTelefone());
+            stmt.setInt(index++, contato.getTipo().getValor());
 
             stmt.setLong(index++, id);
 
@@ -189,7 +178,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     }
 
     @Override
-    public boolean remover(Long id) throws BancoDeDadosException {
+    public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();

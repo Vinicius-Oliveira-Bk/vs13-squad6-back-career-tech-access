@@ -8,9 +8,9 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 
 public interface IRepository<CHAVE, OBJETO> {
     Long getProximoId(Connection connection) throws SQLException;
-    OBJETO cadastrar(OBJETO objeto) throws BancoDeDadosException;
-    OBJETO listarUm(CHAVE id) throws BancoDeDadosException;
-    List<OBJETO> listar() throws BancoDeDadosException;
-    boolean atualizar(CHAVE id, OBJETO objeto) throws BancoDeDadosException;
-    boolean remover(CHAVE id) throws BancoDeDadosException;
+    OBJETO create(OBJETO objeto) throws BancoDeDadosException;
+    OBJETO getById(CHAVE id) throws BancoDeDadosException;
+    List<OBJETO> getAll() throws BancoDeDadosException;
+    boolean update(CHAVE id, OBJETO objeto) throws BancoDeDadosException;
+    boolean delete(CHAVE id) throws BancoDeDadosException;
 }
