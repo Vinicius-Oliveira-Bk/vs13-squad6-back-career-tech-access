@@ -40,8 +40,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Long proximoId = this.getProximoId(con);
             usuario.setId(proximoId);
 
-            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) " +
+                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -97,7 +97,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 }
             }
         } catch (SQLException e) {
-            // Trate a exceção ou relance-a conforme necessário
             throw new BancoDeDadosException(e);
         } finally {
             try {
@@ -122,7 +121,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
 
             String sql = "SELECT * FROM USUARIO";
 
-            // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
@@ -219,7 +217,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setLong(index++, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("editarUsuario.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -247,9 +244,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
 
             stmt.setLong(1, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("removerUsuarioPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -273,8 +268,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO U " +
-                    "LEFT JOIN PROFISSIONAL_MENTOR P ON (P.ID_USUARIO = U.ID) " +
-                    "WHERE P.ID_USUARIO IS NULL";
+                         "LEFT JOIN PROFISSIONAL_MENTOR P ON (P.ID_USUARIO = U.ID) " +
+                         "WHERE P.ID_USUARIO IS NULL";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -313,8 +308,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO U " +
-                    "LEFT JOIN CLIENTE C ON (C.ID_USUARIO = U.ID) " +
-                    "WHERE C.ID_USUARIO IS NULL";
+                         "LEFT JOIN CLIENTE C ON (C.ID_USUARIO = U.ID) " +
+                         "WHERE C.ID_USUARIO IS NULL";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -344,4 +339,5 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
         }
         return usuarios;
     }
+
 }

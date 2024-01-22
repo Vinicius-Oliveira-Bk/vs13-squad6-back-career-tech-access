@@ -36,7 +36,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO update(Long id, UsuarioRequestDTO usuarioRequestDTO) throws Exception {
-        Usuario buscaContato = getUsuario(id);
+        Usuario buscaUsuario = getUsuario(id);
 
         Usuario usuarioEntity = objectMapper.convertValue(usuarioRequestDTO, Usuario.class);
         usuarioRepository.update(id, usuarioEntity);
@@ -57,13 +57,12 @@ public class UsuarioService {
         return usuarioResponseDTO;
     }
 
-    private Usuario getUsuario(Long id) throws RegraDeNegocioException {
-        try {
-            Usuario usuarioRecuperado = usuarioRepository.getById(id);
-            return usuarioRecuperado;
-        } catch (Exception ex) {
-            throw new RegraDeNegocioException("Nenhum usuário encontrado para o Id: " + id);
-        }
+    private Usuario getUsuario(Long id) throws Exception {
+        Usuario usuarioRecuperado = usuarioRepository.getAll().stream()
+                .filter(usuario -> usuario.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("O Usuário de ID " + id + " não foi encontrado!"));
+        return usuarioRecuperado;
     }
 
 }
