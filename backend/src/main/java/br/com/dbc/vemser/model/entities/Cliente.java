@@ -1,107 +1,21 @@
 package br.com.dbc.vemser.model.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import br.com.dbc.vemser.interfaces.IDocumentacaoPessoal;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
-import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
-    private Usuario usuario;
     private Long id;
-    private PlanoEnum plano;
-    private TipoUsuarioEnum tipoCliente;
-    private String interesses;
-    private String imagemDocumento;
+    private Long idUsuario;
+    private PlanoEnum tipoPlano;
     private Character controleParental;
-    private Character acessoPcd;
-
-    public Cliente() {
-    }
-
-    public Cliente(String nome, String cpf, LocalDate dataDeNascimento, ArrayList<Endereco> enderecos, ArrayList<Contato> contatos, String email, TipoUsuarioEnum tipo, PlanoEnum plano, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
-        super();
-        this.plano = plano;
-        this.interesses = interesses;
-        this.imagemDocumento = imagemDocumento;
-        this.controleParental = controleParental;
-        this.acessoPcd = acessoPcd;
-    }
-
-    public Cliente(Long id, PlanoEnum plano, TipoUsuarioEnum tipoCliente, String interesses, String imagemDocumento, Character controleParental, Character acessoPcd) {
-        this.id = id;
-        this.plano = plano;
-        this.tipoCliente = tipoCliente;
-        this.interesses = interesses;
-        this.imagemDocumento = imagemDocumento;
-        this.controleParental = controleParental;
-        this.acessoPcd = acessoPcd;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public PlanoEnum getPlano() {
-        return plano;
-    }
-
-    public void setPlano(PlanoEnum plano) {
-        this.plano = plano;
-    }
-
-    public TipoUsuarioEnum getTipoCliente() {
-        return tipoCliente;
-    }
-
-    public void setTipoCliente(TipoUsuarioEnum tipoCliente) {
-        this.tipoCliente = tipoCliente;
-    }
-
-    public String getInteresses() {
-        return interesses;
-    }
-
-    public void setInteresses(String interesses) {
-        this.interesses = interesses;
-    }
-
-    public String getImagemDocumento() {
-        return imagemDocumento;
-    }
-
-    public void setImagemDocumento(String imagemDocummento) {
-        this.imagemDocumento = imagemDocummento;
-    }
-
-    public Character getControleParental() {
-        return controleParental;
-    }
-
-    public void setControleParental(Character controleParental) {
-        this.controleParental = controleParental;
-    }
-
-    public Character getAcessoPcd() {
-        return acessoPcd;
-    }
-
-    public void setAcessoPcd(Character acessoPcd) {
-        this.acessoPcd = acessoPcd;
-    }
 
     @Override
     public boolean validarCPF(String cpf) {
@@ -167,13 +81,4 @@ public class Cliente extends Usuario implements IDocumentacaoPessoal {
         return acessoPcd;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\n\tId ....................: " + this.id +
-                "\n\tPlano .................: " + this.plano +
-                "\n\tInteresses ............: " + this.interesses +
-                "\n\tControle Parental .....: " + this.controleParental +
-                "\n\tAcesso Pcd ............: " + this.acessoPcd;
-    }
 }
