@@ -22,7 +22,6 @@ public enum TipoUsuarioEnum {
                 return tipo;
             }
         }
-        System.err.println("Valor inválido: " + valor);
         return null;
     }
 }

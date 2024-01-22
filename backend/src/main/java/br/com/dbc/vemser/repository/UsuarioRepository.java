@@ -12,8 +12,11 @@ import java.util.List;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UsuarioRepository implements IRepository<Long, Usuario> {
+
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT seq_usuario.nextval mysequence from DUAL";
@@ -37,8 +40,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Long proximoId = this.getProximoId(con);
             usuario.setId(proximoId);
 
-            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) "
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO USUARIO (ID, NOME, DATA_NASCIMENTO, CPF, EMAIL, ACESSO_PCD, TIPO_USUARIO, INTERESSES, IMAGEM_DOCUMENTO) " +
+                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -48,7 +51,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setString(4, usuario.getCpf());
             stmt.setString(5, usuario.getEmail());
             stmt.setString(6, String.valueOf(usuario.getAcessoPcd()));
-            stmt.setLong(7, usuario.getTipo().ordinal());
+            stmt.setLong(7, usuario.getTipoUsuario().ordinal());
             stmt.setString(8, usuario.getInteresses());
             stmt.setString(9, usuario.getImagemDocumento());
 
@@ -88,13 +91,12 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                     usuario.setCpf(res.getString("cpf"));
                     usuario.setEmail(res.getString("email"));
                     usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                    usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                    usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                     usuario.setInteresses(res.getString("interesses"));
                     usuario.setImagemDocumento(res.getString("imagem_documento"));
                 }
             }
         } catch (SQLException e) {
-            // Trate a exceção ou relance-a conforme necessário
             throw new BancoDeDadosException(e);
         } finally {
             try {
@@ -119,7 +121,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
 
             String sql = "SELECT * FROM USUARIO";
 
-            // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
@@ -130,7 +131,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -172,7 +173,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != 999) {
                 sql.append(" acesso_pcd = ?,");
             }
-            if (usuario.getTipo() != null) {
+            if (usuario.getTipoUsuario() != null) {
                 sql.append(" tipo_usuario = ?,");
             }
             if (usuario.getInteresses() != null) {
@@ -203,8 +204,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             if (usuario.getAcessoPcd() != null) {
                 stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
             }
-            if (usuario.getTipo() != null) {
-                stmt.setLong(index++, usuario.getTipo().ordinal());
+            if (usuario.getTipoUsuario() != null) {
+                stmt.setLong(index++, usuario.getTipoUsuario().ordinal());
             }
             if (usuario.getInteresses() != null) {
                 stmt.setString(index++, usuario.getInteresses());
@@ -216,7 +217,6 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setLong(index++, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("editarUsuario.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -244,9 +244,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
 
             stmt.setLong(1, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("removerUsuarioPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -270,8 +268,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO U " +
-                    "LEFT JOIN PROFISSIONAL_MENTOR P ON (P.ID_USUARIO = U.ID) " +
-                    "WHERE P.ID_USUARIO IS NULL";
+                         "LEFT JOIN PROFISSIONAL_MENTOR P ON (P.ID_USUARIO = U.ID) " +
+                         "WHERE P.ID_USUARIO IS NULL";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -283,7 +281,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -310,8 +308,8 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO U " +
-                    "LEFT JOIN CLIENTE C ON (C.ID_USUARIO = U.ID) " +
-                    "WHERE C.ID_USUARIO IS NULL";
+                         "LEFT JOIN CLIENTE C ON (C.ID_USUARIO = U.ID) " +
+                         "WHERE C.ID_USUARIO IS NULL";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -323,7 +321,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 usuario.setCpf(res.getString("cpf"));
                 usuario.setEmail(res.getString("email"));
                 usuario.setAcessoPcd(res.getString("acesso_pcd").charAt(0));
-                usuario.setTipo(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
                 usuario.setInteresses(res.getString("interesses"));
                 usuario.setImagemDocumento(res.getString("imagem_documento"));
                 usuarios.add(usuario);
@@ -341,4 +339,5 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
         }
         return usuarios;
     }
+
 }
