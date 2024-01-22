@@ -11,7 +11,9 @@ import java.util.List;
 
 import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class EstudanteRepository implements IRepository<Long, Estudante> {
 
     @Override
