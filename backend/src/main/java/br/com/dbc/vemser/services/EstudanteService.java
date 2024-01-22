@@ -1,70 +1,68 @@
-//package br.com.dbc.vemser.services;
-//
-//import java.util.List;
-//
-//import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-//import br.com.dbc.vemser.model.entities.Estudante;
-//import br.com.dbc.vemser.repository.EstudanteRepository;
-//
-//public class EstudanteService {
-//    private EstudanteRepository estudanteRepository = new EstudanteRepository();
-//
-//    public void cadastrar(Estudante estudante) {
-//        try {
-//
-//            if (estudante.getComprovanteMatricula() == null) {
-//                throw new Exception("\n❌ É preciso anexar o comprovante de matrícula!");
-//            }
-//
-//            estudanteRepository.create(estudante);
-//            System.out.println("\n✅ Estudante adicionado com sucesso!\n");
-//        } catch (Exception e) {
-//            System.out.println("❌ ERRO: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void listarUm(Long idEstudante) {
-//        try {
-//            Estudante estudante = estudanteRepository.getById(idEstudante);
-//
-//            if (estudante == null) {
-//                System.err.println("\n❌ Estudante não encontrado com o ID: " + idEstudante + "\n");
-//            }
-//
-//            System.out.println("\n✅ Estudante encontrado!\n");
-//            System.out.println(estudante.toString());
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void listarTodos() {
-//        try {
-//            List<Estudante> listar = estudanteRepository.getAll();
-//            for (Estudante estudante : listar) {
-//                System.out.println(estudante.toString());
-//            }
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void atualizar(Long id, Estudante estudante) {
-//        try {
-//            estudanteRepository.update(id, estudante);
-//            System.out.println("\n✅ Estudante editado com sucesso!");
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void remover(Long id) {
-//        try {
-//            estudanteRepository.delete(id);
-//            System.out.println("\n✅ Estudante removido com sucesso!");
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
+package br.com.dbc.vemser.services;
+
+import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.EstudanteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.EstudanteResponseDTO;
+import br.com.dbc.vemser.model.entities.Estudante;
+import br.com.dbc.vemser.repository.EstudanteRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+public class EstudanteService {
+
+    private final EstudanteRepository estudanteRepository;
+    private final ObjectMapper objectMapper;
+
+    public EstudanteResponseDTO create(EstudanteRequestDTO estudanteRequestDTO) throws Exception {
+        Estudante estudanteEntity = objectMapper.convertValue(estudanteRequestDTO, Estudante.class);
+        estudanteRepository.create(estudanteEntity);
+        EstudanteResponseDTO estudanteResponseDTO = objectMapper.convertValue(estudanteEntity, EstudanteResponseDTO.class);
+        return estudanteResponseDTO;
+    }
+
+    public List<EstudanteResponseDTO> listAll() throws BancoDeDadosException {
+        List<Estudante> estudanteEntity= estudanteRepository.getAll();
+        List<EstudanteResponseDTO> estudanteResponseDTO = estudanteEntity.stream()
+                .map(estudante -> objectMapper.convertValue(estudante, EstudanteResponseDTO.class))
+                .collect(Collectors.toList());
+        return estudanteResponseDTO;
+    }
+
+    public EstudanteResponseDTO update(Long idEstudante, EstudanteRequestDTO estudanteRequestDTO) throws Exception {
+        Estudante buscaEstudante = getEstudante(idEstudante);
+
+        Estudante estudanteEntity = objectMapper.convertValue(estudanteRequestDTO, Estudante.class);
+        estudanteRepository.update(idEstudante, estudanteEntity);
+        estudanteEntity.setId(idEstudante);
+
+        EstudanteResponseDTO estudanteResponseDTO = objectMapper.convertValue(estudanteEntity, EstudanteResponseDTO.class);
+        return estudanteResponseDTO;
+    }
+
+    public void delete(Long idEstudante) throws Exception {
+        Estudante estudante = getEstudante(idEstudante);
+        estudanteRepository.delete(idEstudante);
+    }
+
+    public EstudanteResponseDTO listById(Long idEstudante) throws Exception {
+        Estudante estudanteEntity = getEstudante(idEstudante);
+        EstudanteResponseDTO estudanteResponseDTO = objectMapper.convertValue(estudanteEntity, EstudanteResponseDTO.class);
+        return estudanteResponseDTO;
+    }
+
+    private Estudante getEstudante(Long idEstudante) throws Exception {
+        Estudante estudanteRecuperado = estudanteRepository.getAll().stream()
+                .filter(estudante -> estudante.getId().equals(idEstudante))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("O Estudante de ID " + idEstudante + " não foi encontrado!"));
+        return estudanteRecuperado;
+    }
+
+}
