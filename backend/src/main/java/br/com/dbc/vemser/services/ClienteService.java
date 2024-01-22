@@ -1,68 +1,80 @@
 package br.com.dbc.vemser.services;
 
-import java.util.List;
-
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.repository.ClienteRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
 public class ClienteService {
-    private ClienteRepository clienteRepository;
 
-    public ClienteService() {
-        clienteRepository = new ClienteRepository();
+    private final ClienteRepository clienteRepository;
+    private final ObjectMapper objectMapper;
+
+
+    public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
+        List<Cliente> clientesEntity= clienteRepository.getAll();
+
+        boolean clienteExistente = clientesEntity.stream()
+                .anyMatch(cliente -> cliente.getIdUsuario().equals(idUsuario));
+
+        if (clienteExistente) {
+            throw new RegraDeNegocioException("Já existe um cliente com o mesmo id_usuario.");
+        }
+
+        Cliente cliente = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
+        clienteRepository.create(cliente, idUsuario);
+        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(cliente, ClienteResponseDTO.class);
+        clienteResponseDTO.setIdUsuario(idUsuario);
+        return clienteResponseDTO;
     }
 
-    public void cadastrar(Cliente cliente, Long idUsuario) {
+    public List<ClienteResponseDTO> listAll() throws BancoDeDadosException {
+        List<Cliente> clientesEntity= clienteRepository.getAll();
+        List<ClienteResponseDTO> clientesResponseDTO = clientesEntity.stream()
+                .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class))
+                .collect(Collectors.toList());
+        return clientesResponseDTO;
+    }
+
+    public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) throws Exception {
+        Cliente buscaCliente = getCliente(id);
+        Cliente clienteEntity = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
+        clienteRepository.update(id, clienteEntity);
+        clienteEntity.setId(id);
+        clienteEntity.setIdUsuario(buscaCliente.getIdUsuario());
+
+        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
+        return clienteResponseDTO;
+    }
+
+    public void delete(Long id) throws Exception {
+        Cliente buscaCliente = getCliente(id);
+        clienteRepository.delete(id);
+    }
+
+    public ClienteResponseDTO listById(Long id) throws Exception {
+        Cliente clienteEntity = getCliente(id);
+        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
+        return clienteResponseDTO;
+    }
+
+    private Cliente getCliente(Long id) throws RegraDeNegocioException {
         try {
-            Cliente clienteAdicionado = clienteRepository.create(cliente, idUsuario);
-            System.out.println("✅ Cliente Adicionado com sucesso! " + clienteAdicionado);
-        } catch (BancoDeDadosException e) {
-            System.out.println("❌ ERRO: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("❌ ERRO: " + e.getMessage());
-            e.printStackTrace();
+            Cliente clienteRecuperado = clienteRepository.getById(id);
+            return clienteRecuperado;
+        } catch (Exception ex) {
+            throw new RegraDeNegocioException("Nenhum cliente encontrado para o Id: " + id);
         }
     }
 
-    public Cliente listarUm(Long idCliente) {
-        try {
-            return clienteRepository.getById(idCliente);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void listarTodos() {
-        try {
-            List<Cliente> listar = clienteRepository.getAll();
-            listar.forEach(System.out::println);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void atualizar(Long id, Cliente cliente) {
-        try {
-            clienteRepository.update(id, cliente);
-            System.out.println("✅ Cliente Editado com Sucesso");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void remover(Long id) {
-        try {
-            clienteRepository.delete(id);
-            System.out.println("✅ Cliente Removido com Sucesso");
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean validarCliente(Cliente cliente) {
-        return true;
-    }
 }

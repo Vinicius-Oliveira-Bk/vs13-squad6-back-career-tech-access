@@ -21,7 +21,6 @@ public enum PlanoEnum {
                 return tipo;
             }
         }
-        System.err.println("Valor inválido: " + valor);
-        return null;
+        throw new IllegalArgumentException("Valor inválido: " + valor);
     }
 }

@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-import br.com.dbc.vemser.services.UsuarioService;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ClienteRepository implements IRepository<Long, Cliente> {
-    UsuarioService us = new UsuarioService();
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -43,7 +44,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             Long novoId = this.getProximoId(con);
             cliente.setId(novoId);
 
-            String sql = "INSERT INTO VS_13_EQUIPE_6.CLIENTE\n" +
+            String sql = "INSERT INTO CLIENTE\n" +
                     "(ID, ID_USUARIO, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
                     "VALUES(?, ?, ?, ?)\n";
 
@@ -51,7 +52,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
 
             stmt.setLong(1, cliente.getId());
             stmt.setLong(2, idUsuario);
-            stmt.setInt(3, cliente.getPlano().getValor());
+            stmt.setInt(3, cliente.getTipoPlano().getValor());
             stmt.setString(4, String.valueOf(cliente.getControleParental()));
 
             int res = stmt.executeUpdate();
@@ -86,14 +87,18 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             if (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
+                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
 
                 return cliente;
+            } else {
+                throw new RegraDeNegocioException("Nenhum cliente encontrado para o Id: " + id);
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (con != null) {
@@ -103,7 +108,6 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
     @Override
@@ -114,15 +118,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM VS_13_EQUIPE_6.CLIENTE";
+            String sql = "SELECT * FROM CLIENTE";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -147,19 +151,17 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE VS_13_EQUIPE_6.CLIENTE SET ");
-            sql.append(" ID_USUARIO = ?,");
-            sql.append(" TIPO_CLIENTE = ?,");
+            sql.append("UPDATE CLIENTE SET ");
+
             sql.append(" TIPO_PLANO = ?, ");
             sql.append(" CONTROLE_PARENTAL = ? ");
             sql.append(" WHERE ID = ?");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setLong(1, cliente.getId());
-            stmt.setString(2, cliente.getPlano().name());
-            stmt.setString(3, String.valueOf(cliente.getControleParental()));
-            stmt.setLong(4, id);
+            stmt.setInt(1, cliente.getTipoPlano().getValor());
+            stmt.setString(2, String.valueOf(cliente.getControleParental()).toUpperCase());
+            stmt.setLong(3, id);
 
             int res = stmt.executeUpdate();
             System.out.println("editarCliente.res=" + res);
@@ -223,8 +225,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -258,8 +260,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
@@ -293,8 +295,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(us.listarUm(res.getLong("ID_USUARIO")));
-                cliente.setPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
+                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
