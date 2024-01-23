@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class EstudanteResponseDTO extends EstudanteRequestDTO {
     private Long id;
-    private Cliente cliente;
+    private ClienteResponseDTO cliente;
 }

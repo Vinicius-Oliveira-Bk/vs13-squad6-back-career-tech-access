@@ -22,10 +22,10 @@ public class EstudanteController {
 
     private final EstudanteService estudanteService;
 
-    @PostMapping
-    public ResponseEntity<EstudanteResponseDTO> create(@Valid @RequestBody EstudanteRequestDTO estudanteRequestDTO) throws Exception {
+    @PostMapping("/{idCliente}")
+    public ResponseEntity<EstudanteResponseDTO> create(@PathVariable Long idCliente, @Valid @RequestBody EstudanteRequestDTO estudanteRequestDTO) throws Exception {
         log.info("Criando estudante...");
-        EstudanteResponseDTO estudanteCriado = estudanteService.create(estudanteRequestDTO);
+        EstudanteResponseDTO estudanteCriado = estudanteService.create(estudanteRequestDTO, idCliente);
         log.info(">>> Estudante criado com sucesso <<<");
         return new ResponseEntity<>(estudanteCriado, HttpStatus.OK);
     }

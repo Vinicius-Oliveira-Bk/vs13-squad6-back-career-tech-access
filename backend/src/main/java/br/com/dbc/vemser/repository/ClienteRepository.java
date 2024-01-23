@@ -12,10 +12,15 @@ import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.services.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class ClienteRepository implements IRepository<Long, Cliente> {
+
+    private final UsuarioService usuarioService;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -45,8 +50,8 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             cliente.setId(novoId);
 
             String sql = "INSERT INTO CLIENTE\n" +
-                    "(ID, ID_USUARIO, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                         "(ID, ID_USUARIO, TIPO_PLANO, CONTROLE_PARENTAL)\n" +
+                         "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -87,7 +92,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             if (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
                 cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
 
@@ -97,7 +102,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
-        } catch (RegraDeNegocioException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             try {
@@ -125,13 +130,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
                 cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (con != null) {
@@ -225,13 +232,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
                 cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (con != null) {
@@ -260,12 +269,12 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
                 cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -295,13 +304,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(res.getLong("ID"));
-                cliente.setIdUsuario(res.getLong("ID_USUARIO"));
+                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
                 cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
                 cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (con != null) {
