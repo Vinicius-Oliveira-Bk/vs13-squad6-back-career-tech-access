@@ -57,7 +57,7 @@ public class UsuarioService {
         return usuarioResponseDTO;
     }
 
-    private Usuario getUsuario(Long id) throws Exception {
+    public Usuario getUsuario(Long id) throws Exception {
         Usuario usuarioRecuperado = usuarioRepository.getAll().stream()
                 .filter(usuario -> usuario.getId().equals(id))
                 .findFirst()

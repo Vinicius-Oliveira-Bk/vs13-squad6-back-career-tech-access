@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClienteResponseDTO {
     private Long id;
-    private Long idUsuario;
+    private UsuarioResponseDTO usuario;
     private PlanoEnum tipoPlano;
     private Character controleParental;
 }

@@ -1,19 +1,19 @@
 package br.com.dbc.vemser.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.Pcd;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.dbc.vemser.model.entities.Pcd;
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-import br.com.dbc.vemser.services.ClienteService;
-
+@RequiredArgsConstructor
+@Repository
 public class PcdRepository implements IRepository<Long, Pcd> {
-    ClienteService cs = new ClienteService();
+
+    private final ClienteRepository clienteRepository;
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_PCD.nextval SEQUENCE_PCD from DUAL";
@@ -80,7 +80,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             if (res.next()) {
                 Pcd pcd = new Pcd();
                 pcd.setId(res.getLong("ID"));
-                pcd.setCliente(cs.listarUm(res.getLong("ID_CLIENTE")));
+                pcd.setCliente(clienteRepository.getById(res.getLong("ID_CLIENTE")));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
 
@@ -88,6 +88,8 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             }
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (con != null) {
@@ -110,13 +112,12 @@ public class PcdRepository implements IRepository<Long, Pcd> {
 
             String sql = "SELECT * FROM PCD";
 
-            // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Pcd pcd = new Pcd();
                 pcd.setId(res.getLong("ID"));
-                pcd.setCliente(cs.listarUm(res.getLong("ID_CLIENTE")));
+                pcd.setCliente(clienteRepository.getById(res.getLong("ID_CLIENTE")));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
                 pcds.add(pcd);
@@ -159,7 +160,6 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             stmt.setString(4, pcd.getCertificadoDeficienciaGov());
             stmt.setLong(5, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("editarPcd.res=" + res);
 

@@ -1,16 +1,14 @@
 package br.com.dbc.vemser.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-
+@Repository
 public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
@@ -29,12 +27,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         }
     }
 
-    @Override
     public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
-        return null;
-    }
-
-    public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.conectar();
@@ -43,13 +36,13 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             profissionalRealocacao.setId(proximoId);
 
             String sql = "INSERT INTO PROFISSIONAL_REALOCACAO\n" +
-                    "(ID, ID_CLIENTE, PROFISSAO, OBJETIVO_PROFISSIONAL)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                         "(ID, ID_CLIENTE, PROFISSAO, OBJETIVO_PROFISSIONAL)\n" +
+                         "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, profissionalRealocacao.getId());
-            stmt.setLong(2, idCliente);
+            stmt.setLong(2, profissionalRealocacao.getCliente().getId());
             stmt.setString(3, profissionalRealocacao.getProfissao());
             stmt.setString(4, profissionalRealocacao.getObjetivoProfissional());
 

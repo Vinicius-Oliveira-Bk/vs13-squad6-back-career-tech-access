@@ -11,8 +11,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClienteRequestDTO {
-    private Long id;
-    private Long idUsuario;
     @NotNull
     private PlanoEnum tipoPlano;
     @NotNull
