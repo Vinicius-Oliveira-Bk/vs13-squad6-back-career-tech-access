@@ -72,13 +72,13 @@ public class Agenda {
         this.statusAgendaEnum = statusAgendaEnum;
     }
 
-    @Override
-    public String toString() {
-        return "\n\tAgenda Id .............: " + this.id +
-               "\n\tMentor ................: " + this.profissionalMentor.getUsuario().getNome() +
-               "\n\tCliente ...............: " + this.cliente.getUsuario().getNome() +
-               "\n\tHorário Inicio ........: " + this.dataHoraInicio.toString() +
-               "\n\tHorário Fim ...........: " + this.dataHoraFim.toString() +
-               "\n\tStatus Agenda .........: " + this.statusAgendaEnum.name();
-    }
+//    @Override
+//    public String toString() {
+//        return "\n\tAgenda Id .............: " + this.id +
+//               "\n\tMentor ................: " + this.profissionalMentor.getUsuario().getNome() +
+//               "\n\tCliente ...............: " + this.cliente.getUsuario().getNome() +
+//               "\n\tHorário Inicio ........: " + this.dataHoraInicio.toString() +
+//               "\n\tHorário Fim ...........: " + this.dataHoraFim.toString() +
+//               "\n\tStatus Agenda .........: " + this.statusAgendaEnum.name();
+//    }
 }

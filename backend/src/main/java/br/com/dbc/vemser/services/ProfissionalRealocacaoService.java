@@ -57,7 +57,7 @@ public class ProfissionalRealocacaoService {
                 profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
                 profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
                 profissionalRealocacao.setEmail(profissionalRealocacaoAtualiza.getEmail());
-                profissionalRealocacao.setPlano(profissionalRealocacaoAtualiza.getPlano());
+//                profissionalRealocacao.setPlano(profissionalRealocacaoAtualiza.getPlano());
                 profissionalRealocacao.setInteresses(profissionalRealocacaoAtualiza.getInteresses());
                 profissionalRealocacao.setImagemDocumento(profissionalRealocacaoAtualiza.getImagemDocumento());
                 profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());

@@ -15,7 +15,11 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.services.UsuarioService;
 
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
-    UsuarioService us = new UsuarioService();
+    private final UsuarioService us;
+
+    public ProfissionalMentorRepository(UsuarioService us) {
+        this.us = us;
+    }
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
