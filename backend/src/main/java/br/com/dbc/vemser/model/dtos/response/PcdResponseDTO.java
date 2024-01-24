@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class PcdResponseDTO extends PcdRequestDTO {
-    private Cliente cliente;
     private Long id;
+    private ClienteResponseDTO cliente;
 }

@@ -4,6 +4,7 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalRealocacaoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalRealocacaoResponseDTO;
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
 import br.com.dbc.vemser.repository.ProfissionalRealocacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +19,14 @@ import java.util.stream.Collectors;
 public class ProfissionalRealocacaoService {
 
     private final ProfissionalRealocacaoRepository profissionalRealocacaoRepository;
+    private final ClienteService clienteService;
     private final ObjectMapper objectMapper;
 
-    public ProfissionalRealocacaoResponseDTO create(ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO) throws Exception {
+    public ProfissionalRealocacaoResponseDTO create(ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO, Long idCliente) throws Exception {
+        Cliente cliente = clienteService.getCliente(idCliente);
+
         ProfissionalRealocacao profissionalRealocacaoEntity = objectMapper.convertValue(profissionalRealocacaoRequestDTO, ProfissionalRealocacao.class);
+        profissionalRealocacaoEntity.setCliente(cliente);
         profissionalRealocacaoRepository.create(profissionalRealocacaoEntity);
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
         return profissionalRealocacaoResponseDTO;
@@ -41,6 +46,8 @@ public class ProfissionalRealocacaoService {
         ProfissionalRealocacao profissionalRealocacaoEntity = objectMapper.convertValue(profissionalRealocacaoRequestDTO, ProfissionalRealocacao.class);
         profissionalRealocacaoRepository.update(idProfissionalRealocacao, profissionalRealocacaoEntity);
         profissionalRealocacaoEntity.setId(idProfissionalRealocacao);
+        profissionalRealocacaoEntity.setUsuario(buscaProfissionalRealocacao.getUsuario());
+        //profissionalRealocacaoEntity.setCliente();
 
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
         return profissionalRealocacaoResponseDTO;
@@ -57,7 +64,7 @@ public class ProfissionalRealocacaoService {
         return profissionalRealocacaoResponseDTO;
     }
 
-    private ProfissionalRealocacao getProfissionalRealocacao(Long idProfissionalRealocacao) throws Exception {
+    public ProfissionalRealocacao getProfissionalRealocacao(Long idProfissionalRealocacao) throws Exception {
         ProfissionalRealocacao profissionalRealocacaoRecuperado = profissionalRealocacaoRepository.getAll().stream()
                 .filter(profissionalRealocacao -> profissionalRealocacao.getId().equals(idProfissionalRealocacao))
                 .findFirst()
@@ -65,77 +72,4 @@ public class ProfissionalRealocacaoService {
         return profissionalRealocacaoRecuperado;
     }
 
-//    private ArrayList<ProfissionalRealocacao> lista = new ArrayList<>();
-//    private ProfissionalRealocacaoRepository profRealocRepository;
-//
-//    public void cadastrar(ProfissionalRealocacao profissionalRealocacao) {
-//        if (profissionalRealocacao == null) {
-//            System.err.println("❌ O usuário não pode ser nulo!");
-//        }
-//
-//        try {
-//            lista.add(profissionalRealocacao);
-//            profRealocRepository.create(profissionalRealocacao);
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println("\n✅ Profissional Realocacao cadastrado!");
-//    }
-//
-//    public void listarUm(Long id) {
-//        try {
-//            profRealocRepository.getById(id);
-//        } catch (BancoDeDadosException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void listarTodos() {
-//        if (lista.isEmpty()) {
-//            System.err.println("❌ Nenhum Profissional Realocacao cadastrado!");
-//            return;
-//        }
-//
-//        for (ProfissionalRealocacao profissionalRealocacao : lista) {
-//            System.out.println(profissionalRealocacao);
-//        }
-//    }
-//
-//    public void atualizar(Long id, ProfissionalRealocacao profissionalRealocacaoAtualiza) {
-//        for (int i = 0; i < lista.size(); i++) {
-//            ProfissionalRealocacao profissionalRealocacao = lista.get(i);
-//
-//            if (profissionalRealocacao.getId() == id) {
-//                profissionalRealocacao.setNome(profissionalRealocacaoAtualiza.getNome());
-//                profissionalRealocacao.setCpf(profissionalRealocacaoAtualiza.getCpf());
-//                profissionalRealocacao.setDataNascimento(profissionalRealocacaoAtualiza.getDataNascimento());
-//                profissionalRealocacao.setEmail(profissionalRealocacaoAtualiza.getEmail());
-//                profissionalRealocacao.setPlano(profissionalRealocacaoAtualiza.getPlano());
-//                profissionalRealocacao.setInteresses(profissionalRealocacaoAtualiza.getInteresses());
-//                profissionalRealocacao.setImagemDocumento(profissionalRealocacaoAtualiza.getImagemDocumento());
-//                profissionalRealocacao.setControleParental(profissionalRealocacaoAtualiza.getControleParental());
-//                profissionalRealocacao.setAcessoPcd(profissionalRealocacaoAtualiza.getAcessoPcd());
-//                profissionalRealocacao.setProfissao(profissionalRealocacaoAtualiza.getProfissao());
-//                profissionalRealocacao.setObjetivoProfissional(profissionalRealocacaoAtualiza.getObjetivoProfissional());
-//                System.out.println("✅ Profissional Realocação atualizado!");
-//                return;
-//            }
-//        }
-//    }
-//
-//    public void remover(Long id) {
-//        try {
-//            ProfissionalRealocacao profissionalRealocacaoDeletar = profRealocRepository.getById(id);
-//
-//            if (profissionalRealocacaoDeletar == null)
-//            System.err.println("❌ Usuário não encontrado!");
-//
-//            lista.remove(profissionalRealocacaoDeletar);
-//            profRealocRepository.delete(profissionalRealocacaoDeletar.getId());
-//            System.out.println("✅ Usuário removido!");
-//        } catch (BancoDeDadosException e) {
-//            System.err.println("❌ Erro ao remover usuário: " + e.getMessage());
-//        }
-//    }
 }

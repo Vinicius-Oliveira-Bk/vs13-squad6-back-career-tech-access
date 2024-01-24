@@ -7,5 +7,6 @@ import lombok.Data;
 
 @Data
 public class ProfissionalRealocacaoResponseDTO extends ProfissionalRealocacaoRequestDTO {
-    private Cliente cliente;
+    private Long id;
+    private ClienteResponseDTO cliente;
 }

@@ -22,9 +22,10 @@ public class ProfissinalRealocacaoController {
 
     private final ProfissionalRealocacaoService profissionalRealocacaoService;
 
-    public ResponseEntity<ProfissionalRealocacaoResponseDTO> create(@Valid @RequestBody ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO) throws Exception {
+    @PostMapping("/{idProfissionalRealocacao}")
+    public ResponseEntity<ProfissionalRealocacaoResponseDTO> create(@PathVariable Long idProfissionalRealocacao, @Valid @RequestBody ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO) throws Exception {
         log.info("Criando profissional realocação...");
-        ProfissionalRealocacaoResponseDTO profissionalRealocacaoCriado = profissionalRealocacaoService.create(profissionalRealocacaoRequestDTO);
+        ProfissionalRealocacaoResponseDTO profissionalRealocacaoCriado = profissionalRealocacaoService.create(profissionalRealocacaoRequestDTO, idProfissionalRealocacao);
         log.info(">>> Profissional realocação criado com sucesso <<<");
         return new ResponseEntity<>(profissionalRealocacaoCriado, HttpStatus.OK);
     }
