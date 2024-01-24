@@ -1,8 +1,0 @@
-br\com\dbc\vemser\services\EmailService.class
-br\com\dbc\vemser\model\entities\Pcd.class
-br\com\dbc\vemser\model\dtos\request\PcdRequestDTO.class
-br\com\dbc\vemser\model\dtos\response\ProfissionalRealocacaoResponseDTO.class
-br\com\dbc\vemser\repository\PcdRepository.class
-br\com\dbc\vemser\model\dtos\response\PcdResponseDTO.class
-br\com\dbc\vemser\model\dtos\request\ProfissionalRealocacaoRequestDTO.class
-br\com\dbc\vemser\services\PcdService.class

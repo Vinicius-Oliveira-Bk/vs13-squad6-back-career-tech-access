@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public enum EmailTemplate {
     CRIAR_USUARIO("Usuário criado com sucesso",
-            "Seu usuário foi criado com sucesso, muito obrigado por escolherem nós como app!",
-            "email-template.html");
+            "Seu usuário foi criado com sucesso, muito obrigado por escolherem nós como app! " +
+                    "<br/ ><br/ > Seu e-mail para uso é: ${email}");
 
     private String tituloEmail;
     private String mensagemTemplate;
-    private String arquivo;
+    private final String arquivo = "email-template.html";
 
 }

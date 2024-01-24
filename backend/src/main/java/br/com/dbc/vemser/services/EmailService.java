@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +52,7 @@ public class EmailService {
             mimeMessageHelper.setText(email, true);
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RegraDeNegocioException("Não foi possível enviar o e-mail");
         }
     }
@@ -59,10 +60,22 @@ public class EmailService {
     private String montarTemplate(Map<String, Object> informacoesEmail, EmailTemplate emailTemplate) throws IOException, TemplateException {
         Template template = fmConfiguration.getTemplate(emailTemplate.getArquivo());
 
-        informacoesEmail.put("mensagem", emailTemplate.getMensagemTemplate());
+        informacoesEmail.put("mensagem", mensagemReplace(emailTemplate.getMensagemTemplate(), informacoesEmail));
         informacoesEmail.put("tituloEmail", emailTemplate.getTituloEmail());
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, informacoesEmail);
+    }
+
+    private String mensagemReplace(String mensagemTemplate, Map<String, Object> informacoesEmail) {
+        String mensagemRetorno = mensagemTemplate;
+
+        for (String key : informacoesEmail.keySet()) {
+            if (informacoesEmail.get(key) != null) {
+                mensagemRetorno = mensagemRetorno.replace("${" + key + "}", informacoesEmail.get(key).toString());
+            }
+        }
+
+        return mensagemRetorno;
     }
 
 }

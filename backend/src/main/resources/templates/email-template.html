@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+            rel="stylesheet"
     />
-    <title>{tituloEmail}</title>
+    <title>${tituloEmail}</title>
     <style>
-      body {
-        margin: 0;
-      }
+        body {
+            margin: 0;
+        }
 
-      * {
-        font-family: "Inter", sans-serif;
-      }
+        * {
+            font-family: "Inter", sans-serif;
+        }
     </style>
-  </head>
-  <body>
-    <div
-      style="
+</head>
+<body>
+<div
+        style="
         padding: 16px;
         height: 95vh;
         display: flex;
@@ -30,40 +30,37 @@
         justify-content: space-around;
         align-items: center;
       "
-    >
-      <div
-        style="
+>
+    <div
+            style="
           width: 80%;
           padding: 32px;
           background-color: #000000;
           border-radius: 16px;
         "
-      ></div>
+    ></div>
 
-      <h1 style="font-size: 32px">
+    <h1 style="font-size: 32px">
         Olá, <strong style="color: #0066ff"> ${nome}</strong>
-      </h1>
+    </h1>
 
-      <p style="font-size: 14px; max-width: 500px; padding: 0 16px">
-        ${mensagem} Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-        Inventore unde pariatur dolorum possimus obcaecati earum facere magnam
-        autem. Officiis, dolorum accusantium autem aliquid nostrum aut veniam ab
-        soluta? Optio, delectus!
-      </p>
+    <p style="font-size: 14px; max-width: 500px; padding: 0 16px">
+        ${mensagem}
+    </p>
 
-      <p style="margin-top: 20px">
+    <p style="margin-top: 20px">
         Caso haja algum problema, contate:
         <a href="mailto:email.email@email.com.br">suporte@career.tech.com</a>
-      </p>
+    </p>
 
-      <div
-        style="
+    <div
+            style="
           width: 80%;
           padding: 32px;
           background-color: #000000;
           border-radius: 16px;
         "
-      ></div>
-    </div>
-  </body>
+    ></div>
+</div>
+</body>
 </html>
