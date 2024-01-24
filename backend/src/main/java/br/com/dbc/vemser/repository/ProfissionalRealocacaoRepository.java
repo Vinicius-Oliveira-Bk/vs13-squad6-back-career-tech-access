@@ -1,7 +1,9 @@
 package br.com.dbc.vemser.repository;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -9,7 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
+
+    private final ClienteRepository clienteRepository;
+
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
@@ -102,21 +108,26 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public List<ProfissionalRealocacao> getAll() throws BancoDeDadosException {
         List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
         Connection con = null;
+
         try {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                ProfissionalRealocacao profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+
+                profissionalRealocacao.setId(res.getLong("id"));
+                profissionalRealocacao.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
+                profissionalRealocacao.setProfissao(res.getString("profissao"));
+                profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+
                 profissionalRealocacaos.add(profissionalRealocacao);
             }
-            return profissionalRealocacaos;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -126,6 +137,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
                 e.printStackTrace();
             }
         }
+        return profissionalRealocacaos;
     }
 
     @Override

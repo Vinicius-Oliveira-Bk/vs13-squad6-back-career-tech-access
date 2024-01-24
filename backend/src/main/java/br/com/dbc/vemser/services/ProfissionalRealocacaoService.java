@@ -4,6 +4,7 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalRealocacaoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalRealocacaoResponseDTO;
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
 import br.com.dbc.vemser.repository.ProfissionalRealocacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +19,14 @@ import java.util.stream.Collectors;
 public class ProfissionalRealocacaoService {
 
     private final ProfissionalRealocacaoRepository profissionalRealocacaoRepository;
+    private final ClienteService clienteService;
     private final ObjectMapper objectMapper;
 
-    public ProfissionalRealocacaoResponseDTO create(ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO) throws Exception {
+    public ProfissionalRealocacaoResponseDTO create(ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO, Long idCliente) throws Exception {
+        Cliente cliente = clienteService.getCliente(idCliente);
+
         ProfissionalRealocacao profissionalRealocacaoEntity = objectMapper.convertValue(profissionalRealocacaoRequestDTO, ProfissionalRealocacao.class);
+        profissionalRealocacaoEntity.setCliente(cliente);
         profissionalRealocacaoRepository.create(profissionalRealocacaoEntity);
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
         return profissionalRealocacaoResponseDTO;
@@ -41,6 +46,8 @@ public class ProfissionalRealocacaoService {
         ProfissionalRealocacao profissionalRealocacaoEntity = objectMapper.convertValue(profissionalRealocacaoRequestDTO, ProfissionalRealocacao.class);
         profissionalRealocacaoRepository.update(idProfissionalRealocacao, profissionalRealocacaoEntity);
         profissionalRealocacaoEntity.setId(idProfissionalRealocacao);
+        profissionalRealocacaoEntity.setUsuario(buscaProfissionalRealocacao.getUsuario());
+        //profissionalRealocacaoEntity.setCliente();
 
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
         return profissionalRealocacaoResponseDTO;
@@ -58,7 +65,7 @@ public class ProfissionalRealocacaoService {
 
     }
 
-    private ProfissionalRealocacao getProfissionalRealocacao(Long idProfissionalRealocacao) throws Exception {
+    public ProfissionalRealocacao getProfissionalRealocacao(Long idProfissionalRealocacao) throws Exception {
         ProfissionalRealocacao profissionalRealocacaoRecuperado = profissionalRealocacaoRepository.getAll().stream()
                 .filter(profissionalRealocacao -> profissionalRealocacao.getId().equals(idProfissionalRealocacao))
                 .findFirst()

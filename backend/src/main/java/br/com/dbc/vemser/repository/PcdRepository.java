@@ -49,7 +49,6 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             stmt.setString(4, pcd.getCertificadoDeficienciaGov());
 
             int res = stmt.executeUpdate();
-            System.out.println("adicionarPcd.res=" + res);
 
             return pcd;
         } catch (SQLException e) {
@@ -120,6 +119,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
                 pcd.setCliente(clienteRepository.getById(res.getLong("ID_CLIENTE")));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
+
                 pcds.add(pcd);
             }
         } catch (SQLException e) {
@@ -161,7 +161,6 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             stmt.setLong(5, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("editarPcd.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -190,7 +189,6 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             stmt.setLong(1, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("removerPcdPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {

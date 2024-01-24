@@ -22,9 +22,10 @@ public class PcdController {
 
     private final PcdService pcdService;
 
-    public ResponseEntity<PcdResponseDTO> create(@Valid @RequestBody PcdRequestDTO pcdRequestDTO) throws Exception {
+    @PostMapping("/{idPcd}")
+    public ResponseEntity<PcdResponseDTO> create(@PathVariable Long idPcd, @Valid @RequestBody PcdRequestDTO pcdRequestDTO) throws Exception {
         log.info("Criando PCD...");
-        PcdResponseDTO pcdCriado = pcdService.create(pcdRequestDTO);
+        PcdResponseDTO pcdCriado = pcdService.create(pcdRequestDTO, idPcd);
         log.info(">>> PCD criado com sucesso <<<");
         return new ResponseEntity<>(pcdCriado, HttpStatus.OK);
     }
