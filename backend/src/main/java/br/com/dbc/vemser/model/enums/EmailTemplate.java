@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EmailTemplate {
-    CRIAR_USUARIO("Usuário criado com sucesso", "aaaaaaaaaaaaaaaaaaaaaaa ${email}",
+    CRIAR_USUARIO("Usuário criado com sucesso",
+            "Seu usuário foi criado com sucesso, muito obrigado por escolherem nós como app!",
             "email-template.html");
 
     private String tituloEmail;
