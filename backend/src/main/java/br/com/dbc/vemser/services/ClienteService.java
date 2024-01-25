@@ -3,7 +3,9 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.repository.ClienteRepository;
@@ -60,14 +62,14 @@ public class ClienteService {
     }
 
     public void delete(Long id) throws Exception {
-        Cliente buscaCliente = getCliente(id);
+        getCliente(id);
         clienteRepository.delete(id);
     }
 
-    public ClienteResponseDTO listById(Long id) throws Exception {
+    public ClienteResponseCompletoDTO listById(Long id) throws Exception {
         Cliente clienteEntity = getCliente(id);
-        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
-        return clienteResponseDTO;
+        ClienteResponseCompletoDTO clienteResponseCompletoDTO = objectMapper.convertValue(clienteEntity, ClienteResponseCompletoDTO.class);
+        return clienteResponseCompletoDTO;
     }
 
     public Cliente getCliente(Long id) throws RegraDeNegocioException {

@@ -68,4 +68,7 @@ public class ContatoService {
         }
     }
 
+    public List<Contato> getContatosByUser(Long idUsuario) throws BancoDeDadosException {
+        return contatoRepository.getAllByUser(idUsuario);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Contato;
+import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
@@ -213,5 +214,37 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         contato.setTelefone(res.getString("telefone"));
         contato.setTipo(TipoEnum.fromValor(res.getInt("tipo")));
         return contato;
+    }
+
+    public List<Contato> getAllByUser(Long idUsuario) throws BancoDeDadosException {
+        List<Contato> contatos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "SELECT C.* FROM CONTATO C JOIN USUARIO_CONTATO UC ON (C.ID = UC.ID_CONTATO) WHERE UC.ID_USUARIO = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, idUsuario);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Contato contato = getContatoFromResultSet(res);
+                contatos.add(contato);
+            }
+            return contatos;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
