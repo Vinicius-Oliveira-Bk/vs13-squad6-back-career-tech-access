@@ -62,6 +62,7 @@ public class ProfissionalRealocacaoService {
         ProfissionalRealocacao profissionalRealocacaoEntity = getProfissionalRealocacao(idProfissionalRealocacao);
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
         return profissionalRealocacaoResponseDTO;
+
     }
 
     public ProfissionalRealocacao getProfissionalRealocacao(Long idProfissionalRealocacao) throws Exception {
@@ -71,5 +72,4 @@ public class ProfissionalRealocacaoService {
                 .orElseThrow(() -> new RegraDeNegocioException("O profissional realocacao de ID " + idProfissionalRealocacao + " não foi encontrado!"));
         return profissionalRealocacaoRecuperado;
     }
-
 }
