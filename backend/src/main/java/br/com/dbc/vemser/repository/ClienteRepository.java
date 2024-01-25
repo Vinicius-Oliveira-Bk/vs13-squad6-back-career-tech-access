@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import br.com.dbc.vemser.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -123,16 +126,38 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             con = ConexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM CLIENTE";
+            String sql = "SELECT \tU.ID \t\t\t\tAS\tID_USUARIO,\n" +
+                    "\t\tU.NOME \t\t\t\tAS\tNOME_USUARIO,\n" +
+                    "\t\tU.DATA_NASCIMENTO \tAS\tDATA_NASCIMENTO_USUARIO,\n" +
+                    "\t\tU.CPF \t\t\t\tAS\tCPF_USUARIO,\n" +
+                    "\t\tU.EMAIL \t\t\tAS\tEMAIL_USUARIO,\n" +
+                    "\t\tU.ACESSO_PCD \t\tAS\tACESSO_PCD_USUARIO,\n" +
+                    "\t\tU.TIPO_USUARIO \t\tAS\tTIPO_USUARIO,\n" +
+                    "\t\tU.INTERESSES \t\tAS\tINTERESSES_USUARIO,\n" +
+                    "\t\tU.IMAGEM_DOCUMENTO \tAS\tIMAGEM_DOCUMENTO_USUARIO, \n" +
+                    "\t\tC.ID \t\t\t\tAS\tID_CLIENTE,\n" +
+                    "\t\tC.TIPO_PLANO \t\tAS\tTIPO_PLANO_CLIENTE,\n" +
+                    "\t\tC.CONTROLE_PARENTAL AS\tCONTROLE_PARENTAL_CLIENTE \n" +
+                    "\tFROM CLIENTE C JOIN USUARIO U ON (C.ID_USUARIO = U.ID)";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
+                Usuario usuario = new Usuario();
                 Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
-                cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+                cliente.setId(res.getLong("ID_CLIENTE"));
+                cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO_CLIENTE")));
+                cliente.setControleParental(res.getString("CONTROLE_PARENTAL_CLIENTE").charAt(0));
+                usuario.setId(res.getLong("id_usuario"));
+                usuario.setNome(res.getString("nome_usuario"));
+                usuario.setDataNascimento(res.getDate("data_nascimento_usuario").toLocalDate());
+                usuario.setCpf(res.getString("cpf_usuario"));
+                usuario.setEmail(res.getString("email_usuario"));
+                usuario.setAcessoPcd(res.getString("acesso_pcd_usuario").charAt(0));
+                usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("tipo_usuario")));
+                usuario.setInteresses(res.getString("interesses_usuario"));
+                usuario.setImagemDocumento(res.getString("imagem_documento_usuario"));
+                cliente.setUsuario(usuario);
                 clientes.add(cliente);
             }
         } catch (SQLException e) {
@@ -214,114 +239,5 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
                 e.printStackTrace();
             }
         }
-    }
-
-    public List<Cliente> getClientesNaoPcd() throws BancoDeDadosException {
-        List<Cliente> clientes = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM CLIENTE C "+
-                            "LEFT JOIN PCD P ON (P.ID_CLIENTE = C.ID) " +
-                            "WHERE P.ID_CLIENTE IS NULL";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
-                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                clientes.add(cliente);
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return clientes;
-    }
-
-    public List<Cliente> getClientesNaoEstudante() throws BancoDeDadosException {
-        List<Cliente> clientes = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM CLIENTE C "+
-                    "LEFT JOIN ESTUDANTE E ON (E.ID_CLIENTE = C.ID) " +
-                    "WHERE E.ID_CLIENTE IS NULL";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
-                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                clientes.add(cliente);
-            }
-        } catch (Exception e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return clientes;
-    }
-
-    public List<Cliente> getClientesNaoProfissionalRealocacao() throws BancoDeDadosException {
-        List<Cliente> clientes = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = ConexaoBancoDeDados.conectar();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM CLIENTE C "+
-                    "LEFT JOIN PROFISSIONAL_REALOCACAO PR ON (PR.ID_CLIENTE = C.ID) " +
-                    "WHERE PR.ID_CLIENTE IS NULL";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(res.getLong("ID"));
-                cliente.setUsuario(usuarioService.getUsuario(res.getLong("ID_USUARIO")));
-                cliente.setTipoPlano(PlanoEnum.valueOf(res.getString("TIPO_PLANO")));
-                cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-                clientes.add(cliente);
-            }
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return clientes;
     }
 }

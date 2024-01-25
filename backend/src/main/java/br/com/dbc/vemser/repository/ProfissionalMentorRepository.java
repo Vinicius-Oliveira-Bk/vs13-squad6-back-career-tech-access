@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreaAtuacaoEnum;

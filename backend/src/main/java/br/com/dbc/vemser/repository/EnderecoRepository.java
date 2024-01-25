@@ -235,4 +235,36 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         endereco.setTipo(TipoEnum.fromValor(res.getInt("tipo")));
         return endereco;
     }
+
+    public List<Endereco> getAllByUser(Long idUsuario) throws BancoDeDadosException {
+        List<Endereco> enderecos = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.conectar();
+
+            String sql = "SELECT E.* FROM ENDERECO E JOIN USUARIO_ENDERECO UE ON (E.ID = UE.ID_ENDERECO) WHERE UE.ID_USUARIO = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setLong(1, idUsuario);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Endereco endereco = getEnderecoFromResultSet(res);
+                enderecos.add(endereco);
+            }
+            return enderecos;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

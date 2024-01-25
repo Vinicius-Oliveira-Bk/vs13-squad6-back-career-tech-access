@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.controllers;
 
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioResponseDTO> listById(@PathVariable Long idUsuario) throws Exception {
+    public ResponseEntity<UsuarioResponseCompletoDTO> listById(@PathVariable Long idUsuario) throws Exception {
         log.info("Buscando usuário...");
-        UsuarioResponseDTO usuario = usuarioService.listById(idUsuario);
+        UsuarioResponseCompletoDTO usuario = usuarioService.listById(idUsuario);
         log.info(">>> Usuário listado <<<");
         return ResponseEntity.ok().body(usuario);
     }
