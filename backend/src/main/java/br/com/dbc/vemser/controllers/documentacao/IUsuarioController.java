@@ -15,6 +15,7 @@ public interface IUsuarioController {
     @Operation(summary = "Criação do usuário", description = "Cria o usuário com os dados informados")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cria o usuário com os dados informados"),
+            @ApiResponse(responseCode = "400", description = "Erro de validação"),
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
@@ -39,6 +40,7 @@ public interface IUsuarioController {
     @Operation(summary = "Atualização do usuário", description = "Atualiza o usuário com os dados informados")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualiza o usuário com os dados informados"),
+            @ApiResponse(responseCode = "400", description = "Erro de validação"),
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
