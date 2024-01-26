@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +34,7 @@ public interface IUsuarioController {
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
-    ResponseEntity<UsuarioResponseDTO> listById(Long idUsuario) throws Exception;
+    ResponseEntity<UsuarioResponseCompletoDTO> listById(Long idUsuario) throws Exception;
 
     @Operation(summary = "Atualização do usuário", description = "Atualiza o usuário com os dados informados")
     @ApiResponses(value = {
