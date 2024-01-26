@@ -13,6 +13,7 @@ import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,15 +24,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AgendaService {
     private final ClienteService clienteService;
+    private final ProfissionalMentorService profissionalMentorService;
     private final ObjectMapper objectMapper;
     private final AgendaRepository agendaRepository;
 
-    public AgendaResponseDTO cadastrarHorario(AgendaRequestDTO agendaRequestDTO) throws Exception {
+    public AgendaResponseDTO cadastrarHorario(Long idProfissionalMentor, AgendaRequestDTO agendaRequestDTO) throws Exception {
         List<Agenda> agendamentos = agendaRepository.getAll();
-        validarHorarioAgendamento(agendaRequestDTO, agendamentos);
+        ProfissionalMentor profissionalMentor = profissionalMentorService.getProfissionalMentor(idProfissionalMentor);
 
         Agenda agenda = objectMapper.convertValue(agendaRequestDTO, Agenda.class);
-
+        agenda.setProfissionalMentor(profissionalMentor);
+        validarHorarioAgendamento(agenda, agendamentos);
         return objectMapper.convertValue(agendaRepository.create(agenda), AgendaResponseDTO.class);
     }
 
@@ -125,48 +128,35 @@ public class AgendaService {
         return agendaRepository.getById(idAgenda);
     }
 
-    public boolean validarHorarioAgendamento(AgendaRequestDTO agendaRequestDTO, List<Agenda> agendamentos) {
+    public boolean validarHorarioAgendamento(Agenda agenda, List<Agenda> agendamentos) throws RegraDeNegocioException {
         for (Agenda agendamento : agendamentos) {
-            //data anterior
-            if (agendaRequestDTO.getDataHoraInicio().isBefore(LocalDateTime.now()) || agendaRequestDTO.getDataHoraFim().isBefore(LocalDateTime.now())) {
-                throw new IllegalArgumentException("❌ Não é possível cadastrar um agendamento em um horário passado, favor verifique.");
+
+            if (!agenda.getProfissionalMentor().equals(agendamento.getProfissionalMentor())) {
+                continue;
+            }
+            //início igual ou maior ao início de outra agenda
+            if ((agenda.getDataHoraInicio().isEqual(agendamento.getDataHoraInicio())
+                    || agenda.getDataHoraInicio().isAfter(agendamento.getDataHoraInicio()))
+                &&
+                    (agenda.getDataHoraInicio().isBefore(agendamento.getDataHoraFim()))) {
+                throw new RegraDeNegocioException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
             }
 
-            //Início no meio de horário já marcado
-            if (agendaRequestDTO.getDataHoraInicio().isBefore(agendamento.getDataHoraFim())
-                    && agendaRequestDTO.getDataHoraInicio().isAfter(agendamento.getDataHoraInicio())) {
-                throw new IllegalArgumentException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
-            }
-
-            //Fim no meio de horário já marcado
-            if (agendaRequestDTO.getDataHoraFim().isBefore(agendamento.getDataHoraFim())
-                    && agendaRequestDTO.getDataHoraFim().isAfter(agendamento.getDataHoraInicio())) {
-                throw new IllegalArgumentException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
-            }
-
-            //Início == início já marcado
-            if (agendaRequestDTO.getDataHoraInicio() == agendamento.getDataHoraInicio() && agendaRequestDTO.getDataHoraFim() == agendamento.getDataHoraFim()) {
-                throw new IllegalArgumentException("❌ Este horário já está cadastrado em sua agenda, favor verificar.");
-            }
-
-            //Fim == fim já marcado
-            if (agendaRequestDTO.getDataHoraInicio() == agendamento.getDataHoraInicio()) {
-                throw new IllegalArgumentException("❌ Já há horário cadastrado com esta data/hora inicial, verifique sua agenda.");
-            }
-
-            //Horário já cadastrado
-            if (agendaRequestDTO.getDataHoraFim() == agendamento.getDataHoraFim()) {
-                throw new IllegalArgumentException("❌ Já há horário cadastrado com esta data/hora final, verifique sua agenda.");
+            //fim igual ou menor ao fim de outra agenda
+            if ((agenda.getDataHoraFim().isEqual(agendamento.getDataHoraFim())
+                    || agenda.getDataHoraFim().isBefore(agendamento.getDataHoraFim()))
+                &&
+                (agenda.getDataHoraFim().isAfter(agendamento.getDataHoraInicio()))) {
+                throw new RegraDeNegocioException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
             }
         }
         return true;
     }
 
     public boolean validarDisponibilidadeAgenda(Agenda agenda) {
-        if (agenda.getCliente() != null) {
+        if (Objects.isNull(agenda.getCliente())) {
             throw new IllegalArgumentException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
-
         return true;
     }
 }

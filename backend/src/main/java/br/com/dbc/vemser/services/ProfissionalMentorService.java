@@ -3,6 +3,7 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.entities.Usuario;
@@ -54,9 +55,9 @@ public class ProfissionalMentorService {
         profissionalMentorRepository.delete(idProfissionalMentor);
     }
 
-    public ProfissionalMentorResponseDTO getById(Long idProfissionalMentor) throws Exception {
-        ProfissionalMentor profissionalMentorRecuperado =getProfissionalMentor(idProfissionalMentor);
-        return objectMapper.convertValue(profissionalMentorRecuperado, ProfissionalMentorResponseDTO.class);
+    public ProfissionalMentorResponseCompletoDTO getById(Long idProfissionalMentor) throws Exception {
+        ProfissionalMentor profissionalMentorRecuperado = getProfissionalMentor(idProfissionalMentor);
+        return objectMapper.convertValue(profissionalMentorRecuperado, ProfissionalMentorResponseCompletoDTO.class);
     }
 
     public ProfissionalMentor getProfissionalMentor(Long idProfissionalMentor) throws Exception {

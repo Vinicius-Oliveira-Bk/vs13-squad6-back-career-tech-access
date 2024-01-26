@@ -50,16 +50,15 @@ public class AgendaRepository {
             agenda.setId(novoId);
 
             String sql = "INSERT INTO AGENDA\n" +
-                         "(ID, ID_CLIENTE, ID_MENTOR, DATA_INICIO, DATA_FIM, STATUS)\n" +
-                         "VALUES(?, ?, ?, ?, ?, ?)\n";
+                         "(ID, ID_MENTOR, DATA_INICIO, DATA_FIM, STATUS)\n" +
+                         "VALUES(?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, agenda.getId().intValue());
-            stmt.setLong(2, agenda.getCliente().getId());
-            stmt.setLong(3, agenda.getProfissionalMentor().getId());
-            stmt.setDate(4, Date.valueOf(agenda.getDataHoraInicio().toString()));
-            stmt.setDate(5, Date.valueOf(agenda.getDataHoraFim().toString()));
-            stmt.setInt(6, agenda.getStatusAgendaEnum().ordinal());
+            stmt.setLong(2, agenda.getProfissionalMentor().getIdProfissionalMentor());
+            stmt.setTimestamp(3, Timestamp.valueOf(agenda.getDataHoraInicio()));
+            stmt.setTimestamp(4, Timestamp.valueOf(agenda.getDataHoraFim()));
+            stmt.setInt(5, agenda.getStatusAgendaEnum().ordinal());
 
             int linhasAfetadas = stmt.executeUpdate();
             System.out.println("Quantidade de linhas inseridas: "+linhasAfetadas);
@@ -115,7 +114,8 @@ public class AgendaRepository {
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setLong(1, id);
-            ResultSet result = stmt.executeQuery(sql);
+
+            ResultSet result = stmt.executeQuery();
             if (result.next()) {
                 Agenda agendamento = new Agenda();
                 agendamento.setId(result.getLong("ID"));

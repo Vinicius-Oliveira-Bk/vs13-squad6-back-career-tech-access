@@ -3,6 +3,7 @@ package br.com.dbc.vemser.controllers;
 import br.com.dbc.vemser.controllers.documentacao.IProfissionalMentorController;
 import br.com.dbc.vemser.controllers.documentacao.IProfissionalRealocacaoController;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import br.com.dbc.vemser.services.ProfissionalMentorService;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,9 @@ public class ProfissionalMentorController implements IProfissionalMentorControll
     }
 
     @GetMapping("/{idProfissionalMentor}")
-    public ResponseEntity<ProfissionalMentorResponseDTO> getById(@PathVariable Long idProfissionalMentor) throws Exception {
+    public ResponseEntity<ProfissionalMentorResponseCompletoDTO> getById(@PathVariable Long idProfissionalMentor) throws Exception {
         log.info("Buscando Profissional Mentor...");
-        ProfissionalMentorResponseDTO profissionalMentor = profissionalMentorService.getById(idProfissionalMentor);
+        ProfissionalMentorResponseCompletoDTO profissionalMentor = profissionalMentorService.getById(idProfissionalMentor);
         log.info(">>> Profissional Mentor listado <<<");
         return ResponseEntity.ok().body(profissionalMentor);
     }

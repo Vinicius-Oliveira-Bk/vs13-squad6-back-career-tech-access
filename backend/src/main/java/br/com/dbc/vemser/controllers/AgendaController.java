@@ -29,10 +29,10 @@ public class AgendaController {
 
     private final AgendaService agendaService;
 
-    @PostMapping
-    public ResponseEntity<AgendaResponseDTO> create(@Valid @RequestBody AgendaRequestDTO agendaRequestDTO) throws Exception {
+    @PostMapping("/{idProfissionalMentor}")
+    public ResponseEntity<AgendaResponseDTO> create(@NotNull @PathVariable("idProfissionalMentor") Long idProfissionalMentor, @Valid @RequestBody AgendaRequestDTO agendaRequestDTO) throws Exception {
         log.info("Disponibilizando Horário...");
-        return new ResponseEntity<>(agendaService.cadastrarHorario(agendaRequestDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(agendaService.cadastrarHorario(idProfissionalMentor, agendaRequestDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("agendar/{idAgenda}/{idCliente}")
