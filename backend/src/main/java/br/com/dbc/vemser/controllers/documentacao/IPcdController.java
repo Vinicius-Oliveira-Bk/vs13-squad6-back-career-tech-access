@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface IPcdController {
 
@@ -21,7 +22,7 @@ public interface IPcdController {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<Iterable<PcdResponseDTO>> listAll() throws Exception;
+    ResponseEntity<List<PcdResponseDTO>> listAll() throws Exception;
 
     @Operation(summary = "Cria um usuário PCD", description = "Cria um usuário PCD")
     @ApiResponses(
