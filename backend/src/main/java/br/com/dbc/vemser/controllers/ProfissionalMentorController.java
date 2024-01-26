@@ -1,5 +1,7 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IProfissionalMentorController;
+import br.com.dbc.vemser.controllers.documentacao.IProfissionalRealocacaoController;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import br.com.dbc.vemser.services.ProfissionalMentorService;
@@ -18,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class ProfissionalMentorController {
+public class ProfissionalMentorController implements IProfissionalMentorController {
 
     private final ProfissionalMentorService profissionalMentorService;
 

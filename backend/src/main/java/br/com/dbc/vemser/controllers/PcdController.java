@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IPcdController;
 import br.com.dbc.vemser.model.dtos.request.PcdRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.PcdResponseDTO;
 import br.com.dbc.vemser.services.PcdService;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class PcdController {
+public class PcdController implements IPcdController {
 
     private final PcdService pcdService;
 
