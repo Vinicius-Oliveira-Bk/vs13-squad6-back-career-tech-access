@@ -3,7 +3,10 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,14 +21,14 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
-
 
     public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
         List<Cliente> clientesEntity= clienteRepository.getAll();
 
         boolean clienteExistente = clientesEntity.stream()
-                .anyMatch(cliente -> cliente.getIdUsuario().equals(idUsuario));
+                .anyMatch(cliente -> cliente.getUsuario().getId().equals(idUsuario));
 
         if (clienteExistente) {
             throw new RegraDeNegocioException("Já existe um cliente com o mesmo id_usuario.");
@@ -34,7 +37,8 @@ public class ClienteService {
         Cliente cliente = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
         clienteRepository.create(cliente, idUsuario);
         ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(cliente, ClienteResponseDTO.class);
-        clienteResponseDTO.setIdUsuario(idUsuario);
+        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
+        clienteResponseDTO.setUsuario(usuarioResponseDTO);
         return clienteResponseDTO;
     }
 
@@ -51,24 +55,24 @@ public class ClienteService {
         Cliente clienteEntity = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
         clienteRepository.update(id, clienteEntity);
         clienteEntity.setId(id);
-        clienteEntity.setIdUsuario(buscaCliente.getIdUsuario());
+        clienteEntity.setUsuario(buscaCliente.getUsuario());
 
         ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
         return clienteResponseDTO;
     }
 
     public void delete(Long id) throws Exception {
-        Cliente buscaCliente = getCliente(id);
+        getCliente(id);
         clienteRepository.delete(id);
     }
 
-    public ClienteResponseDTO listById(Long id) throws Exception {
+    public ClienteResponseCompletoDTO listById(Long id) throws Exception {
         Cliente clienteEntity = getCliente(id);
-        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
-        return clienteResponseDTO;
+        ClienteResponseCompletoDTO clienteResponseCompletoDTO = objectMapper.convertValue(clienteEntity, ClienteResponseCompletoDTO.class);
+        return clienteResponseCompletoDTO;
     }
 
-    private Cliente getCliente(Long id) throws RegraDeNegocioException {
+    public Cliente getCliente(Long id) throws RegraDeNegocioException {
         try {
             Cliente clienteRecuperado = clienteRepository.getById(id);
             return clienteRecuperado;

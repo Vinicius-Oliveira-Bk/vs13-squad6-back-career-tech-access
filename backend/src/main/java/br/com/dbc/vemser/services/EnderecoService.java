@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,10 @@ public class EnderecoService {
         return enderecoResponseDTO;
     }
 
+    public List<Endereco> getEnderecosByUser(Long idUsuario) throws BancoDeDadosException {
+        return enderecoRepository.getAllByUser(idUsuario);
+    }
+
     private Endereco getEndereco(Long id) throws RegraDeNegocioException {
         try {
             Endereco enderecoRecuperado = enderecoRepository.getById(id);
@@ -66,5 +71,4 @@ public class EnderecoService {
             throw new RegraDeNegocioException("Nenhum endereço encontrado para o Id: " + id);
         }
     }
-
 }

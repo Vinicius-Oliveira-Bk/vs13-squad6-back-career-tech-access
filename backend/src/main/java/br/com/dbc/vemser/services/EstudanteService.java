@@ -3,7 +3,9 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.EstudanteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.EstudanteResponseDTO;
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.repository.EstudanteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +20,14 @@ import java.util.stream.Collectors;
 public class EstudanteService {
 
     private final EstudanteRepository estudanteRepository;
+    private final ClienteService clienteService;
     private final ObjectMapper objectMapper;
 
-    public EstudanteResponseDTO create(EstudanteRequestDTO estudanteRequestDTO) throws Exception {
+    public EstudanteResponseDTO create(EstudanteRequestDTO estudanteRequestDTO, Long idCliente) throws Exception {
+        Cliente cliente = clienteService.getCliente(idCliente);
+
         Estudante estudanteEntity = objectMapper.convertValue(estudanteRequestDTO, Estudante.class);
+        estudanteEntity.setCliente(cliente);
         estudanteRepository.create(estudanteEntity);
         EstudanteResponseDTO estudanteResponseDTO = objectMapper.convertValue(estudanteEntity, EstudanteResponseDTO.class);
         return estudanteResponseDTO;

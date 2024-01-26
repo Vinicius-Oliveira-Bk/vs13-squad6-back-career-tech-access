@@ -11,10 +11,15 @@ import java.util.List;
 
 import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class EstudanteRepository implements IRepository<Long, Estudante> {
+
+    private final ClienteRepository clienteRepository;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -34,7 +39,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             estudante.setId(proximoId);
@@ -59,13 +64,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -75,7 +74,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM ESTUDANTE";
@@ -86,7 +85,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 Estudante estudante = new Estudante();
 
                 estudante.setId(res.getLong("id"));
-                estudante.setCliente(new ClienteRepository().getById(res.getLong("id_cliente")));
+                estudante.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -98,13 +97,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
             }
         } catch (SQLException e) {
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return estudantes;
     }
@@ -114,7 +107,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         Estudante estudante = null;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             String sql = "SELECT * FROM ESTUDANTE WHERE id = ?";
 
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -124,7 +117,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 if (res.next()) {
                     estudante = new Estudante();
                     estudante.setId(res.getLong("id"));
-                    estudante.setCliente(new ClienteRepository().getById(res.getLong("id_cliente")));
+                    estudante.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
                     estudante.setMatricula(res.getString("matricula"));
                     estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                     estudante.setInstituicao(res.getString("instituicao"));
@@ -136,13 +129,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e);
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
 
         return estudante;
@@ -153,7 +140,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ESTUDANTE SET \n");
@@ -211,13 +198,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -225,7 +206,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM ESTUDANTE WHERE ID = ?";
 
@@ -239,13 +220,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+                conexaoBancoDeDados.closeConnection(con);
         }
     }
 }

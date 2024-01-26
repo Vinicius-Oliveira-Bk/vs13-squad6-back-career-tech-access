@@ -9,17 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreaAtuacaoEnum;
 import br.com.dbc.vemser.model.enums.NivelExperienciaEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.services.UsuarioService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@RequiredArgsConstructor
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
-    private final UsuarioService us;
 
-    public ProfissionalMentorRepository(UsuarioService us) {
-        this.us = us;
-    }
+    private final UsuarioService usuarioService;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -40,36 +43,30 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
+            mentor.setIdProfissionalMentor(proximoId);
 
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
                     "(ID, ID_USUARIO, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                    "VALUES(?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, proximoId);
             stmt.setLong(2, mentor.getUsuario().getId());
-            stmt.setString(3, String.valueOf(mentor.getAreaAtuacao()));
+            stmt.setInt(3, mentor.getAreaAtuacao().getValor());
             stmt.setString(4, mentor.getCarteiraDeTrabalho());
             stmt.setInt(5, mentor.getNivelExperienciaEnum().getValor());
 
             int res = stmt.executeUpdate();
-            System.out.println("adicionarMentor.res=" + res);
 
             return mentor;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -77,13 +74,11 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     public ProfissionalMentor getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
+            ProfissionalMentor mentor = new ProfissionalMentor();
 
-
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR " +
-                    "JOIN USUARIO ON PROFISSIONAL_MENTOR.ID_USUARIO = USUARIO.ID " +
-                    "JOIN CLIENTE ON USUARIO.ID = CLIENTE.ID_USUARIO WHERE id = ?";
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR PM WHERE PM.ID = ?";
 
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setLong(1, id);
@@ -91,20 +86,13 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             ResultSet res = preparedStatement.executeQuery();
 
             while (res.next()) {
-                ProfissionalMentor mentor = getProfissionalMentorFromResultSet(res);
-                System.out.println(mentor);
+                mentor = getProfissionalMentorFromResultSet(res);
             }
-            return getProfissionalMentorFromResultSet(res);
-        } catch (SQLException e) {
+            return mentor;
+        } catch (Exception e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -114,12 +102,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR " +
-                    "JOIN USUARIO ON PROFISSIONAL_MENTOR.ID_USUARIO = USUARIO.ID " +
-                    "JOIN CLIENTE ON USUARIO.ID = CLIENTE.ID_USUARIO";
+            String sql = "SELECT * FROM PROFISSIONAL_MENTOR PM";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -128,16 +114,10 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
                 mentores.add(mentor);
             }
             return mentores;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -145,38 +125,29 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     public boolean update(Long id, ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE SET PROFISSIONAL_MENTOR");
-            sql.append(" id_usuario = ? ");
-            sql.append(" area_atuacao = ? ");
-            sql.append(" nivel_experiencia = ?,");
-            sql.append(" carteira_trabalho = ?,");
-            sql.append(" WHERE id = ? ");
+            sql.append("UPDATE PROFISSIONAL_MENTOR");
+            sql.append(" SET AREA_ATUACAO = ?, ");
+            sql.append(" NIVEL_EXPERIENCIA = ?,");
+            sql.append(" CARTEIRA_TRABALHO = ?");
+            sql.append(" WHERE ID = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setString(1, String.valueOf(mentor.getAreaAtuacao()));
-            stmt.setLong(2, mentor.getUsuario().getId());
-            stmt.setInt(3, mentor.getNivelExperienciaEnum().getValor());
-            stmt.setString(4, mentor.getCarteiraDeTrabalho());
-            stmt.setLong(5, mentor.getId());
+            stmt.setInt(1, mentor.getAreaAtuacao().getValor());
+            stmt.setInt(2, mentor.getNivelExperienciaEnum().getValor());
+            stmt.setString(3, mentor.getCarteiraDeTrabalho());
+            stmt.setLong(4, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("editarMentor.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -185,7 +156,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM PROFISSIONAL_MENTOR WHERE id = ?";
 
@@ -194,42 +165,29 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             stmt.setLong(1, id);
 
             int res = stmt.executeUpdate();
-            System.out.println("removerMentorPorId.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
-    private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws SQLException {
+    private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws Exception {
+        Usuario usuario = usuarioService.getUsuario(res.getLong("id_usuario"));
+
         ProfissionalMentor mentor = new ProfissionalMentor();
 
-        mentor.setId(res.getLong("id"));
-
+        mentor.setIdProfissionalMentor(res.getLong("id"));
+        mentor.setUsuario(usuario);
         int areaAtuacaoOrdinal = res.getInt("area_atuacao");
         AreaAtuacaoEnum areaAtuacao = AreaAtuacaoEnum.values()[areaAtuacaoOrdinal - 1];
-        if (areaAtuacao == null) {
-            areaAtuacao = AreaAtuacaoEnum.OUTROS;
-        }
-        mentor.setAreaAtuacao(areaAtuacao);
-
+        mentor.setAreaAtuacao(areaAtuacao == null ? AreaAtuacaoEnum.OUTROS : areaAtuacao);
         mentor.setCarteiraDeTrabalho(res.getString("carteira_trabalho"));
-
         int nivelExperienciaOrdinal = res.getInt("nivel_experiencia");
         NivelExperienciaEnum nivelExperiencia = NivelExperienciaEnum.values()[nivelExperienciaOrdinal - 1];
-        if (nivelExperiencia == null) {
-            nivelExperiencia = NivelExperienciaEnum.JUNIOR;
-        }
-        mentor.setNivelExperienciaEnum(nivelExperiencia);
+        mentor.setNivelExperienciaEnum(nivelExperiencia == null ? NivelExperienciaEnum.JUNIOR : nivelExperiencia);
 
         return mentor;
     }

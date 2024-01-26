@@ -27,6 +27,5 @@ public class EstudanteRequestDTO {
     private LocalDate dataInicio;
 
     @NotNull(message = "A data de término não pode ser nula")
-    @Past(message = "A data de término deve ser uma data passada")
     private LocalDate dataTermino;
 }

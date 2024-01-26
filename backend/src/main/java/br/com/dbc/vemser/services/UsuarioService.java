@@ -3,11 +3,13 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,27 +43,24 @@ public class UsuarioService {
         Usuario usuarioEntity = objectMapper.convertValue(usuarioRequestDTO, Usuario.class);
         usuarioRepository.update(id, usuarioEntity);
         usuarioEntity.setId(id);
-
-        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioEntity, UsuarioResponseDTO.class);
-        return usuarioResponseDTO;
+        return objectMapper.convertValue(usuarioEntity, UsuarioResponseDTO.class);
     }
 
     public void delete(Long id) throws Exception {
-        Usuario usuario = getUsuario(id);
+        getUsuario(id);
         usuarioRepository.delete(id);
     }
 
-    public UsuarioResponseDTO listById(Long id) throws Exception {
+    public UsuarioResponseCompletoDTO listById(Long id) throws Exception {
         Usuario usuarioEntity = getUsuario(id);
-        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioEntity, UsuarioResponseDTO.class);
-        return usuarioResponseDTO;
+        return objectMapper.convertValue(usuarioEntity, UsuarioResponseCompletoDTO.class);
     }
 
-    private Usuario getUsuario(Long id) throws Exception {
-        Usuario usuarioRecuperado = usuarioRepository.getAll().stream()
-                .filter(usuario -> usuario.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("O Usuário de ID " + id + " não foi encontrado!"));
+    public Usuario getUsuario(Long id) throws Exception {
+        Usuario usuarioRecuperado = usuarioRepository.getById(id);
+        if (ObjectUtils.isEmpty(usuarioRecuperado)) {
+            throw new RegraDeNegocioException("O Usuário de ID " + id + " não foi encontrado!");
+        }
         return usuarioRecuperado;
     }
 
