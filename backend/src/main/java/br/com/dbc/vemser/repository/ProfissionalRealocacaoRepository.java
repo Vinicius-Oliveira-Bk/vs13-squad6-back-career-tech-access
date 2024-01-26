@@ -1,21 +1,26 @@
 package br.com.dbc.vemser.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-
+@Repository
+@RequiredArgsConstructor
 public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
+
+    private final ClienteRepository clienteRepository;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
             String sql = "SELECT seq_profissional_realocacao.nextval mysequence from DUAL";
+
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
@@ -29,27 +34,22 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         }
     }
 
-    @Override
     public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
-        return null;
-    }
-
-    public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao, Long idCliente) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             profissionalRealocacao.setId(proximoId);
 
             String sql = "INSERT INTO PROFISSIONAL_REALOCACAO\n" +
-                    "(ID, ID_CLIENTE, PROFISSAO, OBJETIVO_PROFISSIONAL)\n" +
-                    "VALUES(?, ?, ?, ?)\n";
+                         "(ID, ID_CLIENTE, PROFISSAO, OBJETIVO_PROFISSIONAL)\n" +
+                         "VALUES(?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setLong(1, profissionalRealocacao.getId());
-            stmt.setLong(2, idCliente);
+            stmt.setLong(2, profissionalRealocacao.getCliente().getId());
             stmt.setString(3, profissionalRealocacao.getProfissao());
             stmt.setString(4, profissionalRealocacao.getObjetivoProfissional());
 
@@ -59,13 +59,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -74,7 +68,8 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         ProfissionalRealocacao profissionalRealocacao = null;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
+
             String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -95,13 +90,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -109,37 +98,37 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public List<ProfissionalRealocacao> getAll() throws BancoDeDadosException {
         List<ProfissionalRealocacao> profissionalRealocacaos = new ArrayList<>();
         Connection con = null;
+
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ID_CLIENTE";
+            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
-                ProfissionalRealocacao profissionalRealocacao = getProfissionalRealocacaoFromResultSet(res);
+                ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+
+                profissionalRealocacao.setId(res.getLong("id"));
+                profissionalRealocacao.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
+                profissionalRealocacao.setProfissao(res.getString("profissao"));
+                profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+
                 profissionalRealocacaos.add(profissionalRealocacao);
             }
-            return profissionalRealocacaos;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
+        return profissionalRealocacaos;
     }
 
     @Override
     public boolean update(Long id, ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE PROFISSIONAL_REALOCACAO SET \n");
@@ -173,13 +162,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -187,7 +170,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
@@ -202,21 +185,17 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
     private ProfissionalRealocacao getProfissionalRealocacaoFromResultSet(ResultSet res) throws SQLException {
         ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+
         profissionalRealocacao.setId(res.getLong("id"));
         profissionalRealocacao.setProfissao(res.getString("profissao"));
         profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+
         return profissionalRealocacao;
     }
 }

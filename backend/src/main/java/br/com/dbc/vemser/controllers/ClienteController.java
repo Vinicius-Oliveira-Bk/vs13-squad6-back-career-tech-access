@@ -2,6 +2,7 @@ package br.com.dbc.vemser.controllers;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.services.ClienteService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ClienteController {
     @PostMapping("/{idUsuario}")
     public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable @NotNull Long idUsuario) throws Exception {
         log.info("Criando cliente...");
-        return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.CREATED);
+        return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.OK);
     }
 
     @GetMapping
@@ -37,7 +38,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{idCliente}")
-    public ResponseEntity<ClienteResponseDTO> listById(@PathVariable Long idCliente) throws Exception {
+    public ResponseEntity<ClienteResponseCompletoDTO> listById(@PathVariable Long idCliente) throws Exception {
         log.info("Buscando cliente...");
         return ResponseEntity.ok().body(clienteService.listById(idCliente));
     }

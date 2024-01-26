@@ -1,18 +1,16 @@
-package br.com.dbc.vemser.model.dtos.request;
+package br.com.dbc.vemser.model.dtos.response;
 
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClienteRequestDTO {
-    @NotNull
+public class ClienteResponseCompletoDTO {
+    private Long id;
+    private UsuarioResponseCompletoDTO usuario;
     private PlanoEnum tipoPlano;
-    @NotNull
     private Character controleParental;
 }

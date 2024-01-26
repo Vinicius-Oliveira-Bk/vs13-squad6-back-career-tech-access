@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cliente extends Usuario implements IDocumentacaoPessoal {
     private Long id;
-    private Long idUsuario;
+    private Usuario usuario;
     private PlanoEnum tipoPlano;
     private Character controleParental;
 
