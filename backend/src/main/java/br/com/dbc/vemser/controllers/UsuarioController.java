@@ -1,6 +1,9 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IUsuarioController;
+import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.services.UsuarioService;
@@ -19,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class UsuarioController {
+public class UsuarioController implements IUsuarioController {
 
     private final UsuarioService usuarioService;
 
@@ -55,7 +58,7 @@ public class UsuarioController {
         return ResponseEntity.ok().body(atualizaUsuario);
     }
 
-    @DeleteMapping("/{idUsuario}")
+    @DeleteMapping("{idUsuario}")
     public ResponseEntity<Void> delete(@PathVariable("idUsuario") Long id) throws Exception {
         log.info("Deletando usuário...");
         usuarioService.delete(id);

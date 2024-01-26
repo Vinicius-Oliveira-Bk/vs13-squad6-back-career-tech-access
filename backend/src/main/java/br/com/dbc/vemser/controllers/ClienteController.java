@@ -28,7 +28,7 @@ public class ClienteController {
     @PostMapping("/{idUsuario}")
     public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable @NotNull Long idUsuario) throws Exception {
         log.info("Criando cliente...");
-        return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.CREATED);
+        return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.OK);
     }
 
     @GetMapping
