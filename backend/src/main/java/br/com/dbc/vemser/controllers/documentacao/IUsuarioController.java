@@ -1,14 +1,21 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
+import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+
 
 public interface IUsuarioController {
 
@@ -19,7 +26,7 @@ public interface IUsuarioController {
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
-    ResponseEntity<UsuarioResponseDTO> create(UsuarioRequestDTO usuarioRequestDTO) throws Exception;
+    ResponseEntity<UsuarioResponseDTO> create(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception;
 
     @Operation(summary = "Listagem de todos os usuários", description = "Lista todos os usuários cadastrados")
     @ApiResponses(value = {
@@ -44,7 +51,7 @@ public interface IUsuarioController {
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
-    ResponseEntity<UsuarioResponseDTO> update(Long id, UsuarioRequestDTO usuarioRequestDTO) throws Exception;
+    ResponseEntity<UsuarioResponseDTO> update(@PathVariable("idUsuario") Long id, @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception;
 
     @Operation(summary = "Exclusão do usuário", description = "Exclui o usuário com o ID informado")
     @ApiResponses(value = {
