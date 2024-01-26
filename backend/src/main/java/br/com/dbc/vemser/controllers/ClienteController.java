@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IClienteController;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequestMapping("/cliente")
 @Validated
 @Slf4j
-public class ClienteController {
+public class ClienteController implements IClienteController {
 
     private final ClienteService clienteService;
 
