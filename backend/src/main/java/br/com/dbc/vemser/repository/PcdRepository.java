@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public class PcdRepository implements IRepository<Long, Pcd> {
 
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     private final ClienteRepository clienteRepository;
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -32,7 +34,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long novoId = this.getProximoId(con);
             pcd.setId(novoId);
@@ -54,13 +56,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -68,7 +64,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     public Pcd getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "SELECT * FROM PCD WHERE ID = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -90,13 +86,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return null;
     }
@@ -106,7 +96,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         List<Pcd> pcds = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM PCD";
@@ -125,13 +115,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return pcds;
     }
@@ -142,7 +126,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     public boolean update(Long id, Pcd pcd) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE PCD SET ");
@@ -166,13 +150,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -180,7 +158,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM PCD WHERE ID = ?";
 
@@ -194,13 +172,7 @@ public class PcdRepository implements IRepository<Long, Pcd> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 }

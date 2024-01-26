@@ -12,14 +12,20 @@ import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class EnderecoRepository implements IRepository<Long, Endereco> {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
             String sql = "SELECT seq_endereco.nextval mysequence from DUAL";
+
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
@@ -37,14 +43,14 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     public Endereco create(Endereco endereco) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             endereco.setId(proximoId);
 
             String sql = "INSERT INTO ENDERECO\n" +
-                    "(ID, LOGRADOURO, NUMERO, COMPLEMENTO, CEP, CIDADE, ESTADO, PAIS, TIPO)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
+                         "(ID, LOGRADOURO, NUMERO, COMPLEMENTO, CEP, CIDADE, ESTADO, PAIS, TIPO)\n" +
+                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -64,13 +70,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -79,7 +79,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         Endereco endereco = null;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             String sql = "SELECT * FROM ENDERECO WHERE ID = ?";
 
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -101,13 +101,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
             e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -116,7 +110,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         List<Endereco> enderecos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM ENDERECO";
@@ -131,13 +125,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -145,7 +133,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     public boolean update(Long id, Endereco endereco) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ENDERECO SET \n");
@@ -183,13 +171,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -197,7 +179,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM ENDERECO WHERE ID = ?";
 
@@ -212,18 +194,13 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
     private Endereco getEnderecoFromResultSet(ResultSet res) throws SQLException {
         Endereco endereco = new Endereco();
+
         endereco.setId(res.getLong("id"));
         endereco.setLogradouro(res.getString("logradouro"));
         endereco.setNumero(res.getString("numero"));
@@ -233,6 +210,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         endereco.setEstado(res.getString("estado"));
         endereco.setPais(res.getString("pais"));
         endereco.setTipo(TipoEnum.fromValor(res.getInt("tipo")));
+
         return endereco;
     }
 
@@ -240,7 +218,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         List<Endereco> enderecos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "SELECT E.* FROM ENDERECO E JOIN USUARIO_ENDERECO UE ON (E.ID = UE.ID_ENDERECO) WHERE UE.ID_USUARIO = ?";
 
@@ -258,13 +236,7 @@ public class EnderecoRepository implements IRepository<Long, Endereco> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 }
