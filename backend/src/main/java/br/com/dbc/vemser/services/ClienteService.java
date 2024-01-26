@@ -81,5 +81,6 @@ public class ClienteService {
         }
     }
 
+    public boolean validarCliente(Cliente cliente) { return true; }
 }
 

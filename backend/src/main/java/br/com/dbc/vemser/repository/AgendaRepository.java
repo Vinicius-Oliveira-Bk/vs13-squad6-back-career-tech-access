@@ -10,20 +10,25 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.services.ClienteService;
 import br.com.dbc.vemser.services.ProfissionalMentorService;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
-@Data
-public class AgendaRepository implements IRepository<Long, Agenda>{
+@RequiredArgsConstructor
+@Repository
+public class AgendaRepository {
     private final ProfissionalMentorService profissionalMentorService;
     private final ClienteService clienteService;
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
-    @Override
     public Long getProximoId(Connection connection) throws SQLException {
 
         String sql = "SELECT SEQ_AGENDA.NEXTVAL AS SEQUENCE_AGENDA FROM DUAL";
@@ -36,7 +41,6 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         return null;
     }
 
-    @Override
     public Agenda create(Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
@@ -51,8 +55,8 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, agenda.getId().intValue());
-            stmt.setInt(2, agenda.getCliente().getId().intValue());
-            stmt.setInt(3, agenda.getProfissionalMentor().getId().intValue());
+            stmt.setLong(2, agenda.getCliente().getId());
+            stmt.setLong(3, agenda.getProfissionalMentor().getId());
             stmt.setDate(4, Date.valueOf(agenda.getDataHoraInicio().toString()));
             stmt.setDate(5, Date.valueOf(agenda.getDataHoraFim().toString()));
             stmt.setInt(6, agenda.getStatusAgendaEnum().ordinal());
@@ -68,8 +72,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         }
     }
 
-    @Override
-    public List getAll() throws BancoDeDadosException {
+    public List<Agenda> getAll() throws Exception {
         List<Agenda> agendamentos = new ArrayList<>();
         Connection con = null;
         try {
@@ -84,8 +87,10 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             while (result.next()) {
                 Agenda agenda = new Agenda();
                 agenda.setId(result.getLong("ID"));
-//                agenda.setCliente(clienteService.listById(result.getLong("ID_CLIENTE")));
-//                agenda.setProfissionalMentor(profissionalMentorService.getProfissionalMentor(result.getLong("ID_MENTOR")));
+                if (result.getLong("ID_CLIENTE") != 0) {
+                    agenda.setCliente(clienteService.getCliente(result.getLong("ID_CLIENTE")));
+                }
+                agenda.setProfissionalMentor(profissionalMentorService.getProfissionalMentor(result.getLong("ID_MENTOR")));
                 agenda.setDataHoraInicio(result.getTimestamp("DATA_INICIO").toLocalDateTime());
                 agenda.setDataHoraFim(result.getTimestamp("DATA_FIM").toLocalDateTime());
                 agenda.setStatusAgendaEnum(StatusAgendaEnum.fromValor(result.getInt("STATUS")));
@@ -93,14 +98,15 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             }
         } catch (SQLException | NullPointerException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             conexaoBancoDeDados.closeConnection(con);
         }
         return agendamentos;
     }
 
-    @Override
-    public Agenda getById(Long id) throws BancoDeDadosException {
+    public Agenda getById(Long id) throws Exception {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.conectar();
@@ -113,8 +119,10 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             if (result.next()) {
                 Agenda agendamento = new Agenda();
                 agendamento.setId(result.getLong("ID"));
-//                agendamento.setCliente(clienteService.listarUm(result.getLong("ID_CLIENTE")));
-//                agendamento.setProfissionalMentor(profissionalMentorService.listarUm(result.getLong("ID_MENTOR")));
+                if (result.getLong("ID_CLIENTE") != 0) {
+                    agendamento.setCliente(clienteService.getCliente(result.getLong("ID_CLIENTE")));
+                }
+                agendamento.setProfissionalMentor(profissionalMentorService.getProfissionalMentor(result.getLong("ID_MENTOR")));
                 agendamento.setDataHoraInicio(result.getTimestamp("DATA_INICIO").toLocalDateTime());
                 agendamento.setDataHoraFim(result.getTimestamp("DATA_FIM").toLocalDateTime());
                 agendamento.setStatusAgendaEnum(StatusAgendaEnum.fromValor(result.getInt("STATUS")));
@@ -123,12 +131,13 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
             return null;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } catch (Exception e) {
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             conexaoBancoDeDados.closeConnection(con);
         }
     }
 
-    @Override
     public boolean update(Long id, Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
@@ -160,7 +169,6 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         }
     }
 
-    @Override
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
