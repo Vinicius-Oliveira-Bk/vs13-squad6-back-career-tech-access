@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IEnderecoControllerDoc;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.EnderecoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping("/endereco")
 @Validated
 @Slf4j
-public class EnderecoController {
+public class EnderecoController implements IEnderecoControllerDoc {
 
     private final EnderecoService enderecoService;
 

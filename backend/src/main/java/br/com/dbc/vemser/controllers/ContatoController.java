@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IContatoControllerDoc;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.ContatoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ContatoResponseDTO;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping("/contato")
 @Validated
 @Slf4j
-public class ContatoController {
+public class ContatoController implements IContatoControllerDoc {
 
     private final ContatoService contatoService;
 
