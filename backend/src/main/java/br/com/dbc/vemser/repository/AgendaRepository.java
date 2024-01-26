@@ -21,10 +21,13 @@ import lombok.Data;
 public class AgendaRepository implements IRepository<Long, Agenda>{
     private final ProfissionalMentorService profissionalMentorService;
     private final ClienteService clienteService;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
+
         String sql = "SELECT SEQ_AGENDA.NEXTVAL AS SEQUENCE_AGENDA FROM DUAL";
+
         Statement stmt = connection.createStatement();
         ResultSet result = stmt.executeQuery(sql);
         if (result.next()) {
@@ -37,13 +40,14 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     public Agenda create(Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
+
             Long novoId = this.getProximoId(con);
             agenda.setId(novoId);
 
             String sql = "INSERT INTO AGENDA\n" +
-                    "(ID, ID_CLIENTE, ID_MENTOR, DATA_INICIO, DATA_FIM, STATUS)\n" +
-                    "VALUES(?, ?, ?, ?, ?, ?)\n";
+                         "(ID, ID_CLIENTE, ID_MENTOR, DATA_INICIO, DATA_FIM, STATUS)\n" +
+                         "VALUES(?, ?, ?, ?, ?, ?)\n";
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, agenda.getId().intValue());
@@ -60,13 +64,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -75,8 +73,10 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         List<Agenda> agendamentos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
+
             String sql = "SELECT * FROM AGENDA";
+
             Statement stmt = con.createStatement();
 
             ResultSet result = stmt.executeQuery(sql);
@@ -94,13 +94,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         } catch (SQLException | NullPointerException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return agendamentos;
     }
@@ -109,7 +103,10 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     public Agenda getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
+            con = conexaoBancoDeDados.conectar();
+
             String sql = "SELECT * FROM AGENDA WHERE ID = ?";
+
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setLong(1, id);
             ResultSet result = stmt.executeQuery(sql);
@@ -127,13 +124,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -141,7 +132,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     public boolean update(Long id, Agenda agenda) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE AGENDA SET ");
@@ -165,13 +156,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -179,7 +164,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM AGENDA WHERE id = ?";
 
@@ -194,13 +179,7 @@ public class AgendaRepository implements IRepository<Long, Agenda>{
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 }

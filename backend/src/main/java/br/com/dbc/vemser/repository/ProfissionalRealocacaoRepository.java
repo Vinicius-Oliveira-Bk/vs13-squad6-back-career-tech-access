@@ -1,7 +1,6 @@
 package br.com.dbc.vemser.repository;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
-import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,11 +14,13 @@ import java.util.List;
 public class ProfissionalRealocacaoRepository implements IRepository<Long, ProfissionalRealocacao> {
 
     private final ClienteRepository clienteRepository;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
             String sql = "SELECT seq_profissional_realocacao.nextval mysequence from DUAL";
+
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
@@ -36,7 +37,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public ProfissionalRealocacao create(ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             profissionalRealocacao.setId(proximoId);
@@ -58,13 +59,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -73,7 +68,8 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         ProfissionalRealocacao profissionalRealocacao = null;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
+
             String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -94,13 +90,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -110,7 +100,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO";
@@ -129,13 +119,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             }
         } catch (SQLException e) {
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return profissionalRealocacaos;
     }
@@ -144,7 +128,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public boolean update(Long id, ProfissionalRealocacao profissionalRealocacao) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE PROFISSIONAL_REALOCACAO SET \n");
@@ -178,13 +162,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -192,7 +170,7 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM PROFISSIONAL_REALOCACAO WHERE ID = ?";
 
@@ -207,21 +185,17 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
     private ProfissionalRealocacao getProfissionalRealocacaoFromResultSet(ResultSet res) throws SQLException {
         ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
+
         profissionalRealocacao.setId(res.getLong("id"));
         profissionalRealocacao.setProfissao(res.getString("profissao"));
         profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+
         return profissionalRealocacao;
     }
 }

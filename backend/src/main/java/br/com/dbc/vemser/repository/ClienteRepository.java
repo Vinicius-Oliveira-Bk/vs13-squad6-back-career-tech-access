@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 public class ClienteRepository implements IRepository<Long, Cliente> {
 
     private final UsuarioService usuarioService;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -47,7 +48,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long novoId = this.getProximoId(con);
             cliente.setId(novoId);
@@ -70,13 +71,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -84,9 +79,10 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     public Cliente getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
+
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setLong(1, id);
 
@@ -108,13 +104,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -123,7 +113,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         List<Cliente> clientes = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT \tU.ID \t\t\t\tAS\tID_USUARIO,\n" +
@@ -165,13 +155,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
         return clientes;
     }
@@ -180,7 +164,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     public boolean update(Long id, Cliente cliente) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE CLIENTE SET ");
@@ -202,13 +186,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -216,7 +194,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM CLIENTE WHERE ID = ?";
 
@@ -231,13 +209,7 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 }

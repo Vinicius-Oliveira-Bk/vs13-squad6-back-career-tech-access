@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
 public class ProfissionalMentorRepository implements IRepository<Long, ProfissionalMentor> {
 
     private final UsuarioService usuarioService;
-
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
     public Long getProximoId(Connection connection) throws SQLException {
@@ -43,10 +43,11 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             mentor.setIdProfissionalMentor(proximoId);
+
             String sql = "INSERT INTO PROFISSIONAL_MENTOR\n" +
                     "(ID, ID_USUARIO, AREA_ATUACAO, CARTEIRA_TRABALHO, NIVEL_EXPERIENCIA)\n" +
                     "VALUES(?, ?, ?, ?, ?)\n";
@@ -65,13 +66,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -79,12 +74,12 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     public ProfissionalMentor getById(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
             ProfissionalMentor mentor = new ProfissionalMentor();
 
-
             String sql = "SELECT * FROM PROFISSIONAL_MENTOR PM WHERE PM.ID = ?";
+
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
@@ -97,13 +92,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         } catch (Exception e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -113,7 +102,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM PROFISSIONAL_MENTOR PM";
@@ -128,13 +117,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         } catch (Exception e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -142,7 +125,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     public boolean update(Long id, ProfissionalMentor mentor) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE PROFISSIONAL_MENTOR");
@@ -164,13 +147,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -179,7 +156,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM PROFISSIONAL_MENTOR WHERE id = ?";
 
@@ -193,18 +170,13 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
     private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws Exception {
         Usuario usuario = usuarioService.getUsuario(res.getLong("id_usuario"));
+
         ProfissionalMentor mentor = new ProfissionalMentor();
 
         mentor.setIdProfissionalMentor(res.getLong("id"));

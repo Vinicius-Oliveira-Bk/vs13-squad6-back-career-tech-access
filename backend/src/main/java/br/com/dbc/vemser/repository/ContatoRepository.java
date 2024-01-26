@@ -13,14 +13,20 @@ import br.com.dbc.vemser.model.entities.Contato;
 import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class ContatoRepository implements IRepository<Long, Contato> {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     @Override
     public Long getProximoId(Connection connection) throws BancoDeDadosException {
         try {
             String sql = "SELECT seq_contato.nextval mysequence from DUAL";
+
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
@@ -38,7 +44,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     public Contato create(Contato contato) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             Long proximoId = this.getProximoId(con);
             contato.setId(proximoId);
@@ -60,13 +66,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -75,7 +75,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         Contato contato = null;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             String sql = "SELECT * FROM CONTATO WHERE ID = ?";
 
             try (PreparedStatement pstmt = con.prepareStatement(sql)) {
@@ -97,13 +97,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
             e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -112,7 +106,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         List<Contato> contatos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM CONTATO";
@@ -127,13 +121,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -141,7 +129,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     public boolean update(Long id, Contato contato) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE CONTATO SET \n");
@@ -168,13 +156,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -182,7 +164,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
     public boolean delete(Long id) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "DELETE FROM CONTATO WHERE ID = ?";
 
@@ -197,13 +179,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 
@@ -220,7 +196,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         List<Contato> contatos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.conectar();
+            con = conexaoBancoDeDados.conectar();
 
             String sql = "SELECT C.* FROM CONTATO C JOIN USUARIO_CONTATO UC ON (C.ID = UC.ID_CONTATO) WHERE UC.ID_USUARIO = ?";
 
@@ -238,13 +214,7 @@ public class ContatoRepository implements IRepository<Long, Contato> {
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            conexaoBancoDeDados.closeConnection(con);
         }
     }
 }
