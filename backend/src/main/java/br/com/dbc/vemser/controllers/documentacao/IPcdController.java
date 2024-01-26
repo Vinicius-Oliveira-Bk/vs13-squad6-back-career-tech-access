@@ -13,6 +13,16 @@ import javax.validation.Valid;
 
 public interface IPcdController {
 
+    @Operation(summary = "Lista todos os usuários PCD", description = "Lista todos os usuários PCD")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Usuários PCD listados com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<Iterable<PcdResponseDTO>> listAll() throws Exception;
+
     @Operation(summary = "Cria um usuário PCD", description = "Cria um usuário PCD")
     @ApiResponses(
             value = {
