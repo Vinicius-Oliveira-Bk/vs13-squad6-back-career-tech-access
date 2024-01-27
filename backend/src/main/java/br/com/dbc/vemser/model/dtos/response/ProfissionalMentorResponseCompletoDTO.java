@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfissionalMentorResponseDTO {
+public class ProfissionalMentorResponseCompletoDTO {
     private Long idProfissionalMentor;
-    private UsuarioResponseDTO usuario;
+    private UsuarioResponseCompletoDTO usuario;
     private AreaAtuacaoEnum areaAtuacao;
     private NivelExperienciaEnum nivelExperienciaEnum;
     private String carteiraDeTrabalho;

@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,7 +45,7 @@ public interface IProfissionalMentorController {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<ProfissionalMentorResponseDTO> getById(@PathVariable Long idProfissionalMentor) throws Exception;
+    ResponseEntity<ProfissionalMentorResponseCompletoDTO> getById(@PathVariable Long idProfissionalMentor) throws Exception;
 
     @Operation(summary = "Atualiza um profissional mentor", description = "Atualiza um profissional mentor do sistema")
     @ApiResponses(
