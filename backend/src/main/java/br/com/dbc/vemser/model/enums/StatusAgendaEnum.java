@@ -3,8 +3,7 @@ package br.com.dbc.vemser.model.enums;
 public enum StatusAgendaEnum {
     DISPONIVEL(1),
     AGENDADO(2),
-    CANCELADO(3),
-    PRESENTE(4);
+    PRESENTE(3);
 
     private final int valor;
 

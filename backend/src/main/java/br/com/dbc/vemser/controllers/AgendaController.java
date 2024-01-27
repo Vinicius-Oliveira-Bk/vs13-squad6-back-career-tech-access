@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
+import br.com.dbc.vemser.controllers.documentacao.IAgendaController;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/agenda")
 @Validated
 @Slf4j
-public class AgendaController {
+public class AgendaController implements IAgendaController {
 
     private final AgendaService agendaService;
 
@@ -35,8 +36,8 @@ public class AgendaController {
         return new ResponseEntity<>(agendaService.cadastrarHorario(idProfissionalMentor, agendaRequestDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("agendar/{idAgenda}/{idCliente}")
-    public ResponseEntity<AgendaResponseDTO> agendarHorario(@PathVariable @NotNull Long idAgenda, @PathVariable @NotNull Long idCliente) throws Exception {
+    @PutMapping("agendar/{idAgenda}/{idCliente}")
+    public ResponseEntity<AgendaResponseDTO> agendarHorario(@PathVariable("idAgenda") @NotNull Long idAgenda, @PathVariable("idCliente") @NotNull Long idCliente) throws Exception {
         log.info("Agendando Cliente...");
         return new ResponseEntity<>(agendaService.agendarHorario(idAgenda, idCliente), HttpStatus.OK);
     }
@@ -48,19 +49,19 @@ public class AgendaController {
     }
 
     @GetMapping("/{idCliente}/cliente")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable @NotNull Long idCliente) throws Exception {
+    public ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception {
         log.info("Buscando horários...");
         return ResponseEntity.ok().body(agendaService.listAllByCliente(idCliente));
     }
 
-    @GetMapping("/{idCliente}/profissional")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable @NotNull Long idProfissional) throws Exception {
+    @GetMapping("/{idProfissional}/profissional")
+    public ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception {
         log.info("Buscando horários...");
         return ResponseEntity.ok().body(agendaService.listAllByProfissional(idProfissional));
     }
 
-    @GetMapping("/{idCliente}/status")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception {
+    @GetMapping("/{statusAgendaEnum}/status")
+    public ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception {
         log.info("Buscando horários...");
         return ResponseEntity.ok().body(agendaService.listAllByStatus(statusAgendaEnum));
     }
@@ -75,6 +76,13 @@ public class AgendaController {
     public ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception {
         log.info("Atualizando horário...");
         return ResponseEntity.ok().body(agendaService.reagendarHorario(id, idNovaAgenda));
+    }
+
+    @PutMapping("cancelar/{idAgenda}")
+    public ResponseEntity<Void> cancelarHorario(@NotNull @PathVariable("idAgenda") Long id) throws Exception {
+        log.info("Cancelando horário...");
+        agendaService.cancelarHorario(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{idAgenda}")

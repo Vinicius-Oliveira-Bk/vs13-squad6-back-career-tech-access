@@ -34,11 +34,12 @@ public class AgendaService {
 
         Agenda agenda = objectMapper.convertValue(agendaRequestDTO, Agenda.class);
         agenda.setProfissionalMentor(profissionalMentor);
+        agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
         validarHorarioAgendamento(agenda, agendamentos);
         return objectMapper.convertValue(agendaRepository.create(agenda), AgendaResponseDTO.class);
     }
 
-    public AgendaResponseDTO agendarHorario(Long idCliente, Long idAgenda) throws Exception {
+    public AgendaResponseDTO agendarHorario(Long idAgenda, Long idCliente) throws Exception {
         Agenda agenda = agendaRepository.getById(idAgenda);
         Cliente cliente = clienteService.getCliente(idCliente);
 
@@ -90,7 +91,8 @@ public class AgendaService {
         List<Agenda> agendamentos = agendaRepository.getAll();
 
         agendamentos = agendamentos.stream()
-                .filter(x -> x.getCliente().getId().equals(idCliente))
+                .filter(x -> Objects.nonNull(x.getCliente()))
+                .filter(y -> y.getCliente().getId().equals(idCliente))
                 .collect(Collectors.toList());
 
         return agendamentos.stream()
@@ -102,7 +104,7 @@ public class AgendaService {
         List<Agenda> agendamentos = agendaRepository.getAll();
 
         agendamentos = agendamentos.stream()
-                .filter(x -> x.getProfissionalMentor().getId().equals(idProfissional))
+                .filter(x -> x.getProfissionalMentor().getIdProfissionalMentor().equals(idProfissional))
                 .collect(Collectors.toList());
 
         return agendamentos.stream()
@@ -116,12 +118,12 @@ public class AgendaService {
     }
 
 
-    public AgendaResponseDTO cancelarHorario(Long idCliente, Long idAgenda) throws Exception {
+    public void cancelarHorario(Long idAgenda) throws Exception {
         Agenda agenda = agendaRepository.getById(idAgenda);
 
         agenda.setCliente(null);
-        agenda.setStatusAgendaEnum(StatusAgendaEnum.CANCELADO);
-        return objectMapper.convertValue(agendaRepository.update(idAgenda, agenda), AgendaResponseDTO.class);
+        agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
+        agendaRepository.update(idAgenda, agenda);
     }
 
     public Agenda getAgenda(Long idAgenda) throws Exception {
@@ -153,9 +155,9 @@ public class AgendaService {
         return true;
     }
 
-    public boolean validarDisponibilidadeAgenda(Agenda agenda) {
-        if (Objects.isNull(agenda.getCliente())) {
-            throw new IllegalArgumentException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
+    public boolean validarDisponibilidadeAgenda(Agenda agenda) throws RegraDeNegocioException {
+        if (Objects.nonNull(agenda.getCliente())) {
+            throw new RegraDeNegocioException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
         return true;
     }

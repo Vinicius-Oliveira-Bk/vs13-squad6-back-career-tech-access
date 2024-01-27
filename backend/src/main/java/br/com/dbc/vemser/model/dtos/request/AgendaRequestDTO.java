@@ -22,6 +22,4 @@ public class AgendaRequestDTO {
     @NotNull(message = "A data de fim deve ser informada.")
     @Future(message = "A data de fim não pode ser menor ou igual sa data atual.")
     private LocalDateTime dataHoraFim;
-    @NotNull(message = "O Status da agenda deve ser informado: DISPONIVEL, AGENDADO, CANCELADO, PRESENTE.")
-    private StatusAgendaEnum statusAgendaEnum;
 }

@@ -54,7 +54,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             stmt.setString(4, usuario.getCpf());
             stmt.setString(5, usuario.getEmail());
             stmt.setString(6, String.valueOf(usuario.getAcessoPcd()));
-            stmt.setLong(7, usuario.getTipoUsuario().ordinal());
+            stmt.setLong(7, usuario.getTipoUsuario().getValor());
             stmt.setString(8, usuario.getInteresses());
             stmt.setString(9, usuario.getImagemDocumento());
 
@@ -194,7 +194,7 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
                 stmt.setString(index++, String.valueOf(usuario.getAcessoPcd()));
             }
             if (usuario.getTipoUsuario() != null) {
-                stmt.setLong(index++, usuario.getTipoUsuario().ordinal());
+                stmt.setLong(index++, usuario.getTipoUsuario().getValor());
             }
             if (usuario.getInteresses() != null) {
                 stmt.setString(index++, usuario.getInteresses());

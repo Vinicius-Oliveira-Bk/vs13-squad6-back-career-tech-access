@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
@@ -58,7 +59,7 @@ public class AgendaRepository {
             stmt.setLong(2, agenda.getProfissionalMentor().getIdProfissionalMentor());
             stmt.setTimestamp(3, Timestamp.valueOf(agenda.getDataHoraInicio()));
             stmt.setTimestamp(4, Timestamp.valueOf(agenda.getDataHoraFim()));
-            stmt.setInt(5, agenda.getStatusAgendaEnum().ordinal());
+            stmt.setInt(5, agenda.getStatusAgendaEnum().getValor());
 
             int linhasAfetadas = stmt.executeUpdate();
             System.out.println("Quantidade de linhas inseridas: "+linhasAfetadas);
@@ -128,7 +129,7 @@ public class AgendaRepository {
                 agendamento.setStatusAgendaEnum(StatusAgendaEnum.fromValor(result.getInt("STATUS")));
                 return agendamento;
             }
-            return null;
+            throw new RegraDeNegocioException("Não há agenda com este id!");
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } catch (Exception e) {
@@ -142,25 +143,42 @@ public class AgendaRepository {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.conectar();
-
+            int result;
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE AGENDA SET ");
-            sql.append(" id_cliente = ?,");
-            sql.append(" data_inicio = ?,");
-            sql.append(" data_fim = ? ");
-            sql.append(" status = ? ");
-            sql.append(" WHERE id = ? ");
+            if (Objects.isNull(agenda.getCliente())) {
+                sql.append("UPDATE AGENDA SET ");
+                sql.append(" id_cliente = null,");
+                sql.append(" data_inicio = ?,");
+                sql.append(" data_fim = ? ,");
+                sql.append(" status = ? ");
+                sql.append(" WHERE id = ? ");
 
-            PreparedStatement stmt = con.prepareStatement(sql.toString());
+                PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setLong(1, agenda.getCliente().getId());
-            stmt.setTimestamp(2, Timestamp.valueOf(agenda.getDataHoraInicio()));
-            stmt.setTimestamp(3, Timestamp.valueOf(agenda.getDataHoraFim()));
-            stmt.setInt(4, agenda.getStatusAgendaEnum().ordinal());
-            stmt.setLong(5, id);
+                stmt.setTimestamp(1, Timestamp.valueOf(agenda.getDataHoraInicio()));
+                stmt.setTimestamp(2, Timestamp.valueOf(agenda.getDataHoraFim()));
+                stmt.setInt(3, agenda.getStatusAgendaEnum().getValor());
+                stmt.setLong(4, id);
 
-            int result = stmt.executeUpdate();
-            System.out.println("Agenda de id: "+id+" atualizada com sucesso. \n" + result);
+                result = stmt.executeUpdate();
+            } else {
+                sql.append("UPDATE AGENDA SET ");
+                sql.append(" id_cliente = ?,");
+                sql.append(" data_inicio = ?,");
+                sql.append(" data_fim = ? ,");
+                sql.append(" status = ? ");
+                sql.append(" WHERE id = ? ");
+
+                PreparedStatement stmt = con.prepareStatement(sql.toString());
+
+                stmt.setLong(1, agenda.getCliente().getId());
+                stmt.setTimestamp(2, Timestamp.valueOf(agenda.getDataHoraInicio()));
+                stmt.setTimestamp(3, Timestamp.valueOf(agenda.getDataHoraFim()));
+                stmt.setInt(4, agenda.getStatusAgendaEnum().getValor());
+                stmt.setLong(5, id);
+                result = stmt.executeUpdate();
+            }
+
             return result > 0;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
@@ -181,7 +199,6 @@ public class AgendaRepository {
             stmt.setLong(1, id);
 
             int result = stmt.executeUpdate();
-            System.out.println("Removido da agenda com id: " + result);
 
             return result > 0;
         } catch (SQLException e) {
