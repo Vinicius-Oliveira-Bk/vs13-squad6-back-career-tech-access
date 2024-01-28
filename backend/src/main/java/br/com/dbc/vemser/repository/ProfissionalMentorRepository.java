@@ -105,7 +105,21 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
             con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_MENTOR PM";
+            String sql = "SELECT PM.ID                AS ID,\n" +
+                    "       PM.AREA_ATUACAO      AS AREA_ATUACAO,\n" +
+                    "       PM.CARTEIRA_TRABALHO AS CARTEIRA_TRABALHO,\n" +
+                    "       PM.NIVEL_EXPERIENCIA AS NIVEL_EXPERIENCIA,\n" +
+                    "       U.ID                 AS ID_USUARIO,\n" +
+                    "       U.NOME               AS NOME,\n" +
+                    "       U.CPF                AS CPF,\n" +
+                    "       U.EMAIL              AS EMAIL,\n" +
+                    "       U.ACESSO_PCD         AS ACESSO_PCD,\n" +
+                    "       U.INTERESSES         AS INTERESSES,\n" +
+                    "       U.IMAGEM_DOCUMENTO   AS IMAGEM_DOCUMENTO,\n" +
+                    "       U.DATA_NASCIMENTO    AS DATA_NASCIMENTO,\n" +
+                    "       U.TIPO_USUARIO       AS TIPO_USUARIO\n" +
+                    "FROM PROFISSIONAL_MENTOR PM\n" +
+                    "         JOIN USUARIO U ON U.ID = PM.ID_USUARIO";
 
             ResultSet res = stmt.executeQuery(sql);
 
@@ -175,7 +189,7 @@ public class ProfissionalMentorRepository implements IRepository<Long, Profissio
     }
 
     private ProfissionalMentor getProfissionalMentorFromResultSet(ResultSet res) throws Exception {
-        Usuario usuario = usuarioService.getUsuario(res.getLong("id_usuario"));
+        Usuario usuario = UsuarioRepository.getUsuarioByResultSet(res);
 
         ProfissionalMentor mentor = new ProfissionalMentor();
 
