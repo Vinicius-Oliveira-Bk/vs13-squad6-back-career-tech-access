@@ -11,7 +11,7 @@ public enum EmailTemplate {
                     "<br/ ><br/ > Seu e-mail para uso é: ${email}"),
     AGENDAR_HORARIO("Agendamento realizado com sucesso",
                           "Seu agendamento foi realizado com sucesso, muito obrigado por escolherem nós como app! " +
-                          "<br/ ><br/ > Seu horário é: ${dataHoraInicio} até ${dataHoraFim} com o profissional ${nome}.");
+                          "<br/ ><br/ > Seu horário é: ${dataHoraInicio} até ${dataHoraFim} com o profissional ${nomeProfissional}.");
 
     private String tituloEmail;
     private String mensagemTemplate;

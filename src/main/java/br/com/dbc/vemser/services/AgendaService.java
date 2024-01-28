@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.mappers.EmailMapper;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
+import br.com.dbc.vemser.model.dtos.request.AgendarEmailDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
@@ -52,9 +54,9 @@ public class AgendaService {
         agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
 
         agendaRepository.update(idAgenda, agenda);
-        AgendaResponseDTO agendaResponseDTO = objectMapper.convertValue(agenda, AgendaResponseDTO.class);
-        emailService.sendEmail(agendaResponseDTO, cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
-        return agendaResponseDTO;
+
+        emailService.sendEmail(EmailMapper.agendaToAgendaEmailDTO(agenda), cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
+        return objectMapper.convertValue(agenda, AgendaResponseDTO.class);
     }
 
     public AgendaResponseDTO reagendarHorario(Long idAgendaAtual, Long idNovaAgenda) throws Exception {
