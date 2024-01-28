@@ -14,6 +14,7 @@ import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
+import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ public class AgendaService {
     private final ProfissionalMentorService profissionalMentorService;
     private final ObjectMapper objectMapper;
     private final AgendaRepository agendaRepository;
+    private final EmailService emailService;
 
     public AgendaResponseDTO cadastrarHorario(Long idProfissionalMentor, AgendaRequestDTO agendaRequestDTO) throws Exception {
         List<Agenda> agendamentos = agendaRepository.getAll();
@@ -49,7 +51,10 @@ public class AgendaService {
         agenda.setCliente(cliente);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
 
-        return objectMapper.convertValue(agendaRepository.update(idAgenda, agenda), AgendaResponseDTO.class);
+        agendaRepository.update(idAgenda, agenda);
+        AgendaResponseDTO agendaResponseDTO = objectMapper.convertValue(agenda, AgendaResponseDTO.class);
+        emailService.sendEmail(agendaResponseDTO, cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
+        return agendaResponseDTO;
     }
 
     public AgendaResponseDTO reagendarHorario(Long idAgendaAtual, Long idNovaAgenda) throws Exception {

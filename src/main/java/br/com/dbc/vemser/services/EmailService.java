@@ -34,14 +34,12 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String emailRemetente;
 
-    public void sendEmail(Object objetoEmail, EmailTemplate emailTemplate) throws RegraDeNegocioException {
+    public void sendEmail(Object objetoEmail, String emailDestinatario, EmailTemplate emailTemplate) throws RegraDeNegocioException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             Map<String, Object> informacoesEmail = objectMapper.convertValue(objetoEmail, HashMap.class);
-
-            String emailDestinatario = informacoesEmail.get(EMAIL_DESTINATARIO).toString();
 
             mimeMessageHelper.setFrom(emailRemetente);
             mimeMessageHelper.setTo(emailDestinatario);
