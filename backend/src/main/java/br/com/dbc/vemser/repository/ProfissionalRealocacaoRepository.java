@@ -103,21 +103,39 @@ public class ProfissionalRealocacaoRepository implements IRepository<Long, Profi
             con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PROFISSIONAL_REALOCACAO";
+            String sql = "SELECT PR.ID                    AS ID_PROFISSIONAL_REALOCACAO,\n" +
+                    "       PR.PROFISSAO             AS PROFISSAO,\n" +
+                    "       PR.OBJETIVO_PROFISSIONAL AS OBJETIVO_PROFISSIONAL,\n" +
+                    "       C1.ID                    AS ID_CLIENTE,\n" +
+                    "       C1.TIPO_PLANO            AS TIPO_PLANO,\n" +
+                    "       C1.CONTROLE_PARENTAL     AS CONTROLE_PARENTAL,\n" +
+                    "       U.ID                     AS ID_USUARIO,\n" +
+                    "       U.NOME                   AS NOME,\n" +
+                    "       U.CPF                    AS CPF,\n" +
+                    "       U.EMAIL                  AS EMAIL,\n" +
+                    "       U.ACESSO_PCD             AS ACESSO_PCD,\n" +
+                    "       U.INTERESSES             AS INTERESSES,\n" +
+                    "       U.IMAGEM_DOCUMENTO       AS IMAGEM_DOCUMENTO,\n" +
+                    "       U.DATA_NASCIMENTO        AS DATA_NASCIMENTO,\n" +
+                    "       U.TIPO_USUARIO           AS TIPO_USUARIO\n" +
+                    "FROM PROFISSIONAL_REALOCACAO PR\n" +
+                    "         JOIN CLIENTE C1 ON C1.ID = PR.ID_CLIENTE\n" +
+                    "         JOIN USUARIO U ON U.ID = C1.ID_USUARIO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 ProfissionalRealocacao profissionalRealocacao = new ProfissionalRealocacao();
 
-                profissionalRealocacao.setId(res.getLong("id"));
-                profissionalRealocacao.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
+                profissionalRealocacao.setId(res.getLong("id_profissional_realocacao"));
                 profissionalRealocacao.setProfissao(res.getString("profissao"));
                 profissionalRealocacao.setObjetivoProfissional(res.getString("objetivo_profissional"));
+                profissionalRealocacao.setCliente(ClienteRepository.getClienteByResulSet(res));
 
                 profissionalRealocacaos.add(profissionalRealocacao);
             }
         } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             conexaoBancoDeDados.closeConnection(con);
         }
