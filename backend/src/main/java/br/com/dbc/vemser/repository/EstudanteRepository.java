@@ -9,8 +9,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.enums.PlanoEnum;
+import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -77,15 +81,39 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
             con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM ESTUDANTE";
+            String sql = "SELECT E.ID AS ID_ESTUDANTE," +
+                    " E.MATRICULA AS MATRICULA," +
+                    " E.COMPROVANTE_MATRICULA AS COMPROVANTE_MATRICULA," +
+                    " E.MATRICULA AS MATRICULA," +
+                    " E.INSTITUICAO AS INSTITUICAO," +
+                    " E.CURSO AS CURSO," +
+                    " E.DATA_INICIO AS DATA_INICIO," +
+                    " E.DATA_TERMINO AS DATA_TERMINO," +
+                    " CLI.ID AS ID_CLIENTE," +
+                    " CLI.TIPO_PLANO AS TIPO_PLANO," +
+                    " CLI.CONTROLE_PARENTAL AS CONTROLE_PARENTAL," +
+                    " U.ID AS ID_USUARIO," +
+                    " U.NOME AS NOME," +
+                    " U.EMAIL AS EMAIL," +
+                    " U.CPF AS CPF," +
+                    " U.ACESSO_PCD AS ACESSO_PCD," +
+                    " U.TIPO_USUARIO AS TIPO_USUARIO," +
+                    " U.INTERESSES AS INTERESSES," +
+                    " U.IMAGEM_DOCUMENTO AS IMAGEM_DOCUMENTO," +
+                    " U.DATA_NASCIMENTO AS DATA_NASCIMENTO" +
+                    " FROM ESTUDANTE E" +
+                    " JOIN CLIENTE CLI" +
+                    " ON CLI.ID = E.ID_CLIENTE" +
+                    " JOIN USUARIO U" +
+                    " ON U.ID = CLI.ID_USUARIO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Estudante estudante = new Estudante();
 
-                estudante.setId(res.getLong("id"));
-                estudante.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
+                estudante.setId(res.getLong("id_estudante"));
+                estudante.setCliente(getClienteByResulSet(res));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -101,6 +129,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         }
         return estudantes;
     }
+
 
     @Override
     public Estudante getById(Long id) throws BancoDeDadosException {
@@ -223,4 +252,32 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 conexaoBancoDeDados.closeConnection(con);
         }
     }
+
+    private Cliente getClienteByResulSet(ResultSet res) throws SQLException {
+        Cliente cliente = new Cliente();
+
+        cliente.setId(res.getLong("ID_CLIENTE"));
+        cliente.setUsuario(getUsuarioByResultSet(res));
+        cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
+        cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+
+        return cliente;
+    }
+
+    private Usuario getUsuarioByResultSet(ResultSet res) throws SQLException {
+        Usuario usuario = new Usuario();
+
+        usuario.setId(res.getLong("ID_USUARIO"));
+        usuario.setEmail(res.getString("EMAIL"));
+        usuario.setNome(res.getString("NOME"));
+        usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("TIPO_USUARIO")));
+        usuario.setCpf(res.getString("CPF"));
+        usuario.setAcessoPcd(res.getString("ACESSO_PCD").charAt(0));
+        usuario.setInteresses(res.getString("INTERESSES"));
+        usuario.setImagemDocumento(res.getString("IMAGEM_DOCUMENTO"));
+        usuario.setDataNascimento(res.getDate("DATA_NASCIMENTO").toLocalDate());
+
+        return usuario;
+    }
+
 }
