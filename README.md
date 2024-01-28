@@ -26,22 +26,7 @@
 ## Tecnologias e técnicas utilizadas
 
 <details>
-  <summary>Para o front-end</summary><br />
-   - HTML
-   <br>
-   - CSS
-   <br>
-   - Javascript
-   <br>
-   - Typescript
-   <br>
-   - React
-   <br>
-   - Redux
-</details>
-
-<details>
-  <summary>Para o back-end</summary><br />
+  <summary>Back-end</summary><br />
    - Paradigma utilizado: POO
    <br>
    - Java
@@ -56,8 +41,6 @@
 <details>
   <summary>Banco de Dados</summary><br />
    - Oracle
-   <br>
-   - Mongo DB
 </details>
 
 ## Integrantes do Grupo
@@ -112,6 +95,14 @@
           </sub>
         </a>
       </td>
+      <td align="center">
+        <a href="https://github.com/lucarauj](https://github.com/diuliano-vargas-silveira">
+          <img src="https://avatars.githubusercontent.com/u/57240410?v=4" width="100px;" alt="Foto de Diuliano no GitHub"/><br>
+          <sub>
+            <b>Diuliano</b>
+          </sub>
+        </a>
+       </td>
     </tr>
   </table>
 
