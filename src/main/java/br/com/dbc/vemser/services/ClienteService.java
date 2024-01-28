@@ -8,6 +8,7 @@ import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final UsuarioService usuarioService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
@@ -39,6 +41,7 @@ public class ClienteService {
         ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(cliente, ClienteResponseDTO.class);
         UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
         clienteResponseDTO.setUsuario(usuarioResponseDTO);
+        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return clienteResponseDTO;
     }
 
