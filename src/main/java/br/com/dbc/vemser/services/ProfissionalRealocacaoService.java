@@ -6,6 +6,7 @@ import br.com.dbc.vemser.model.dtos.request.ProfissionalRealocacaoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalRealocacaoResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalRealocacao;
+import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalRealocacaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class ProfissionalRealocacaoService {
 
     private final ProfissionalRealocacaoRepository profissionalRealocacaoRepository;
     private final ClienteService clienteService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public ProfissionalRealocacaoResponseDTO create(ProfissionalRealocacaoRequestDTO profissionalRealocacaoRequestDTO, Long idCliente) throws Exception {
@@ -29,6 +31,7 @@ public class ProfissionalRealocacaoService {
         profissionalRealocacaoEntity.setCliente(cliente);
         profissionalRealocacaoRepository.create(profissionalRealocacaoEntity);
         ProfissionalRealocacaoResponseDTO profissionalRealocacaoResponseDTO = objectMapper.convertValue(profissionalRealocacaoEntity, ProfissionalRealocacaoResponseDTO.class);
+        emailService.sendEmail(profissionalRealocacaoResponseDTO.getCliente().getUsuario(), profissionalRealocacaoResponseDTO.getCliente().getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return profissionalRealocacaoResponseDTO;
     }
 
