@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface IClienteController {
@@ -24,8 +26,7 @@ public interface IClienteController {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<ClienteResponseDTO> create(ClienteRequestDTO clienteRequestDTO,
-                                              Long idUsuario) throws Exception;
+    ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable @NotNull Long idUsuario) throws Exception;
 
     @Operation(summary = "Lista todos os clientes", description = "Lista todos os clientes cadastrados")
     @ApiResponses(
@@ -56,8 +57,7 @@ public interface IClienteController {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<ClienteResponseDTO> update(Long idCliente,
-                                              ClienteRequestDTO clienteRequestDTO) throws Exception;
+    ResponseEntity<ClienteResponseDTO> update(@PathVariable("idCliente") Long id, @Valid @RequestBody ClienteRequestDTO clienteRequestDTO) throws Exception;
 
     @Operation(summary = "Exclui um cliente", description = "Exclui um cliente recebendo o id de um usuário")
     @ApiResponses(
