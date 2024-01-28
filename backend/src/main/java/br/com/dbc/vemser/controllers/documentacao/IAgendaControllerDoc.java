@@ -1,27 +1,19 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
-import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
-import br.com.dbc.vemser.services.AgendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public interface IAgendaController {
+public interface IAgendaControllerDoc {
 
     @Operation(summary = "Cria um horário", description = "Cria um horário na agenda de um profissional")
     @ApiResponses(

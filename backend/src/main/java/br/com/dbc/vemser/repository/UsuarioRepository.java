@@ -236,4 +236,20 @@ public class UsuarioRepository implements IRepository<Long, Usuario> {
             conexaoBancoDeDados.closeConnection(con);
         }
     }
+
+    public static Usuario getUsuarioByResultSet(ResultSet res) throws SQLException {
+        Usuario usuario = new Usuario();
+
+        usuario.setId(res.getLong("ID_USUARIO"));
+        usuario.setEmail(res.getString("EMAIL"));
+        usuario.setNome(res.getString("NOME"));
+        usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("TIPO_USUARIO")));
+        usuario.setCpf(res.getString("CPF"));
+        usuario.setAcessoPcd(res.getString("ACESSO_PCD").charAt(0));
+        usuario.setInteresses(res.getString("INTERESSES"));
+        usuario.setImagemDocumento(res.getString("IMAGEM_DOCUMENTO"));
+        usuario.setDataNascimento(res.getDate("DATA_NASCIMENTO").toLocalDate());
+
+        return usuario;
+    }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 
-public interface IEstudanteController {
+public interface IEstudanteControllerDoc {
 
     @Operation(summary = "Cria um estudante", description = "Cria um estudante")
     @ApiResponses(
@@ -36,7 +36,7 @@ public interface IEstudanteController {
     )
     ResponseEntity<List<EstudanteResponseDTO>> listAll() throws Exception;
 
-    @Operation(summary = "Lista um estudante", description = "Lista um estudante")
+    @Operation(summary = "Lista todos estudantes", description = "Lista todos estudantes do servidor")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Estudante listado com sucesso"),

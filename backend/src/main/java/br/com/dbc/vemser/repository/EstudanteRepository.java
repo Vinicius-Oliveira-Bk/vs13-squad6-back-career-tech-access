@@ -113,7 +113,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 Estudante estudante = new Estudante();
 
                 estudante.setId(res.getLong("id_estudante"));
-                estudante.setCliente(getClienteByResulSet(res));
+                estudante.setCliente(ClienteRepository.getClienteByResulSet(res));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -251,33 +251,6 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         } finally {
                 conexaoBancoDeDados.closeConnection(con);
         }
-    }
-
-    private Cliente getClienteByResulSet(ResultSet res) throws SQLException {
-        Cliente cliente = new Cliente();
-
-        cliente.setId(res.getLong("ID_CLIENTE"));
-        cliente.setUsuario(getUsuarioByResultSet(res));
-        cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
-        cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
-
-        return cliente;
-    }
-
-    private Usuario getUsuarioByResultSet(ResultSet res) throws SQLException {
-        Usuario usuario = new Usuario();
-
-        usuario.setId(res.getLong("ID_USUARIO"));
-        usuario.setEmail(res.getString("EMAIL"));
-        usuario.setNome(res.getString("NOME"));
-        usuario.setTipoUsuario(TipoUsuarioEnum.fromValor(res.getInt("TIPO_USUARIO")));
-        usuario.setCpf(res.getString("CPF"));
-        usuario.setAcessoPcd(res.getString("ACESSO_PCD").charAt(0));
-        usuario.setInteresses(res.getString("INTERESSES"));
-        usuario.setImagemDocumento(res.getString("IMAGEM_DOCUMENTO"));
-        usuario.setDataNascimento(res.getDate("DATA_NASCIMENTO").toLocalDate());
-
-        return usuario;
     }
 
 }

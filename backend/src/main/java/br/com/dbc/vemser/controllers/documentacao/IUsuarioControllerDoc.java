@@ -1,8 +1,6 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
-import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,11 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
-public interface IUsuarioController {
+public interface IUsuarioControllerDoc {
 
     @Operation(summary = "Criação do usuário", description = "Cria o usuário com os dados informados")
     @ApiResponses(value = {

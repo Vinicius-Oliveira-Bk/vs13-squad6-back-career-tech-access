@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 
-public interface IPcdController {
+public interface IPcdControllerDoc {
 
     @Operation(summary = "Lista todos os usuários PCD", description = "Lista todos os usuários PCD")
     @ApiResponses(
