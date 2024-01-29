@@ -212,4 +212,15 @@ public class ClienteRepository implements IRepository<Long, Cliente> {
             conexaoBancoDeDados.closeConnection(con);
         }
     }
+
+    public static Cliente getClienteByResulSet(ResultSet res) throws SQLException {
+        Cliente cliente = new Cliente();
+
+        cliente.setId(res.getLong("ID_CLIENTE"));
+        cliente.setUsuario(UsuarioRepository.getUsuarioByResultSet(res));
+        cliente.setTipoPlano(PlanoEnum.fromValor(res.getInt("TIPO_PLANO")));
+        cliente.setControleParental(res.getString("CONTROLE_PARENTAL").charAt(0));
+
+        return cliente;
+    }
 }

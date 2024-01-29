@@ -1,9 +1,7 @@
 package br.com.dbc.vemser.controllers;
 
-import br.com.dbc.vemser.controllers.documentacao.IUsuarioController;
-import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.controllers.documentacao.IUsuarioControllerDoc;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.services.UsuarioService;
@@ -22,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class UsuarioController implements IUsuarioController {
+public class UsuarioController implements IUsuarioControllerDoc {
 
     private final UsuarioService usuarioService;
 

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public interface IAgendaController {
+public interface IAgendaControllerDoc {
 
     @Operation(summary = "Cria um horário", description = "Cria um horário na agenda de um profissional")
     @ApiResponses(

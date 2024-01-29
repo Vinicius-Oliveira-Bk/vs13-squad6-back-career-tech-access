@@ -9,8 +9,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.Estudante;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.enums.PlanoEnum;
+import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -77,15 +81,39 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
             con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM ESTUDANTE";
+            String sql = "SELECT E.ID AS ID_ESTUDANTE," +
+                    " E.MATRICULA AS MATRICULA," +
+                    " E.COMPROVANTE_MATRICULA AS COMPROVANTE_MATRICULA," +
+                    " E.MATRICULA AS MATRICULA," +
+                    " E.INSTITUICAO AS INSTITUICAO," +
+                    " E.CURSO AS CURSO," +
+                    " E.DATA_INICIO AS DATA_INICIO," +
+                    " E.DATA_TERMINO AS DATA_TERMINO," +
+                    " CLI.ID AS ID_CLIENTE," +
+                    " CLI.TIPO_PLANO AS TIPO_PLANO," +
+                    " CLI.CONTROLE_PARENTAL AS CONTROLE_PARENTAL," +
+                    " U.ID AS ID_USUARIO," +
+                    " U.NOME AS NOME," +
+                    " U.EMAIL AS EMAIL," +
+                    " U.CPF AS CPF," +
+                    " U.ACESSO_PCD AS ACESSO_PCD," +
+                    " U.TIPO_USUARIO AS TIPO_USUARIO," +
+                    " U.INTERESSES AS INTERESSES," +
+                    " U.IMAGEM_DOCUMENTO AS IMAGEM_DOCUMENTO," +
+                    " U.DATA_NASCIMENTO AS DATA_NASCIMENTO" +
+                    " FROM ESTUDANTE E" +
+                    " JOIN CLIENTE CLI" +
+                    " ON CLI.ID = E.ID_CLIENTE" +
+                    " JOIN USUARIO U" +
+                    " ON U.ID = CLI.ID_USUARIO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Estudante estudante = new Estudante();
 
-                estudante.setId(res.getLong("id"));
-                estudante.setCliente(clienteRepository.getById(res.getLong("id_cliente")));
+                estudante.setId(res.getLong("id_estudante"));
+                estudante.setCliente(ClienteRepository.getClienteByResulSet(res));
                 estudante.setMatricula(res.getString("matricula"));
                 estudante.setComprovanteMatricula(res.getString("comprovante_matricula"));
                 estudante.setInstituicao(res.getString("instituicao"));
@@ -101,6 +129,7 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
         }
         return estudantes;
     }
+
 
     @Override
     public Estudante getById(Long id) throws BancoDeDadosException {
@@ -223,4 +252,5 @@ public class EstudanteRepository implements IRepository<Long, Estudante> {
                 conexaoBancoDeDados.closeConnection(con);
         }
     }
+
 }

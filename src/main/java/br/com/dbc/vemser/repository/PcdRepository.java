@@ -99,14 +99,31 @@ public class PcdRepository implements IRepository<Long, Pcd> {
             con = conexaoBancoDeDados.conectar();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM PCD";
+            String sql = "SELECT  P.ID AS ID_PCD,\n" +
+                    "        P.TIPO_DEFICIENCIA AS TIPO_DEFICIENCIA,\n" +
+                    "        P.CERTIFICADO_DEFICIENCIA_GOV AS CERTIFICADO_DEFICIENCIA_GOV,\n" +
+                    "        C1.ID AS ID_CLIENTE,\n" +
+                    "        C1.TIPO_PLANO AS TIPO_PLANO,\n" +
+                    "        C1.CONTROLE_PARENTAL AS CONTROLE_PARENTAL,\n" +
+                    "        U.ID AS ID_USUARIO,\n" +
+                    "        U.NOME AS NOME,\n" +
+                    "        U.CPF AS CPF,\n" +
+                    "        U.EMAIL AS EMAIL,\n" +
+                    "        U.ACESSO_PCD AS ACESSO_PCD,\n" +
+                    "        U.INTERESSES AS INTERESSES,\n" +
+                    "        U.IMAGEM_DOCUMENTO AS IMAGEM_DOCUMENTO,\n" +
+                    "        U.DATA_NASCIMENTO AS DATA_NASCIMENTO,\n" +
+                    "        U.TIPO_USUARIO AS TIPO_USUARIO\n" +
+                    "FROM PCD P\n" +
+                    "         JOIN CLIENTE C1 on C1.ID = P.ID_CLIENTE\n" +
+                    "         JOIN USUARIO U on U.ID = C1.ID_USUARIO";
 
             ResultSet res = stmt.executeQuery(sql);
 
             while (res.next()) {
                 Pcd pcd = new Pcd();
-                pcd.setId(res.getLong("ID"));
-                pcd.setCliente(clienteRepository.getById(res.getLong("ID_CLIENTE")));
+                pcd.setId(res.getLong("ID_PCD"));
+                pcd.setCliente(ClienteRepository.getClienteByResulSet(res));
                 pcd.setTipoDeficiencia(res.getString("TIPO_DEFICIENCIA"));
                 pcd.setCertificadoDeficienciaGov(res.getString("CERTIFICADO_DEFICIENCIA_GOV"));
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 
-public interface IProfissionalRealocacaoController {
+public interface IProfissionalRealocacaoControllerDoc {
 
     @Operation(summary = "Lista todos profissionais realocação", description = "Lista todos profissionais realocação do sistema")
     @ApiResponses(

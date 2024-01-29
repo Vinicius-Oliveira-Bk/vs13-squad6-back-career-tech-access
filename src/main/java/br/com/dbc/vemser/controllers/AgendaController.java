@@ -1,15 +1,10 @@
 package br.com.dbc.vemser.controllers;
 
-import br.com.dbc.vemser.controllers.documentacao.IAgendaController;
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
+import br.com.dbc.vemser.controllers.documentacao.IAgendaControllerDoc;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
-import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.services.AgendaService;
-import br.com.dbc.vemser.services.ClienteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +21,7 @@ import java.util.List;
 @RequestMapping("/agenda")
 @Validated
 @Slf4j
-public class AgendaController implements IAgendaController {
+public class AgendaController implements IAgendaControllerDoc {
 
     private final AgendaService agendaService;
 

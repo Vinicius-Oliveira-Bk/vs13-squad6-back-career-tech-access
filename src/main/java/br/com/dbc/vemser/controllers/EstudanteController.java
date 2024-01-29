@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.controllers;
 
-import br.com.dbc.vemser.controllers.documentacao.IEstudanteController;
+import br.com.dbc.vemser.controllers.documentacao.IEstudanteControllerDoc;
 import br.com.dbc.vemser.model.dtos.request.EstudanteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.EstudanteResponseDTO;
 import br.com.dbc.vemser.services.EstudanteService;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
-public class EstudanteController implements IEstudanteController {
+public class EstudanteController implements IEstudanteControllerDoc {
 
     private final EstudanteService estudanteService;
 
