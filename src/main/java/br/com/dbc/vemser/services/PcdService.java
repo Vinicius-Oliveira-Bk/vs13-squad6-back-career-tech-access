@@ -6,6 +6,7 @@ import br.com.dbc.vemser.model.dtos.request.PcdRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.PcdResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.Pcd;
+import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.PcdRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class PcdService {
 
     private final PcdRepository pcdRepository;
     private final ClienteService clienteService;
+    private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
     public PcdResponseDTO create(PcdRequestDTO pcdRequestDTO, Long idCliente) throws Exception {
@@ -29,6 +31,7 @@ public class PcdService {
         pcdEntity.setCliente(cliente);
         pcdRepository.create(pcdEntity);
         PcdResponseDTO pcdResponseDTO = objectMapper.convertValue(pcdEntity, PcdResponseDTO.class);
+        emailService.sendEmail(pcdResponseDTO.getCliente().getUsuario(), pcdResponseDTO.getCliente().getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return pcdResponseDTO;
     }
 

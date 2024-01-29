@@ -7,6 +7,7 @@ import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoD
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalMentorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,15 @@ public class ProfissionalMentorService {
     private final ProfissionalMentorRepository profissionalMentorRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
+    private final EmailService emailService;
+
     public ProfissionalMentorResponseDTO create(Long idUsuario, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
         Usuario usuario = usuarioService.getUsuario(idUsuario);
         ProfissionalMentor profissionalMentorEntity = objectMapper.convertValue(profissionalMentorRequestDTO, ProfissionalMentor.class);
         profissionalMentorEntity.setUsuario(usuario);
         profissionalMentorRepository.create(profissionalMentorEntity);
         ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentorEntity, ProfissionalMentorResponseDTO.class);
+        emailService.sendEmail(profissionalMentorResponseDTO.getUsuario(), profissionalMentorResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return profissionalMentorResponseDTO;
     }
 

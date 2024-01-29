@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public interface IClienteController {
+public interface IClienteControllerDoc {
 
     @Operation(summary = "Cria um cliente", description = "Cria um cliente recebendo o id de um usuário")
     @ApiResponses(

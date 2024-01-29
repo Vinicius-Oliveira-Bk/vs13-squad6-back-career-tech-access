@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 
-public interface IProfissionalMentorController {
+public interface IProfissionalMentorControllerDoc {
 
     @Operation(summary = "Cria um profissional mentor", description = "Cria um profissional mentor")
     @ApiResponses(
