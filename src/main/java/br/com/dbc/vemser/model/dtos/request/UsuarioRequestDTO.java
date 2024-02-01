@@ -1,15 +1,10 @@
 package br.com.dbc.vemser.model.dtos.request;
 
-import br.com.dbc.vemser.model.entities.Contato;
-import br.com.dbc.vemser.model.entities.Endereco;
-import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class UsuarioRequestDTO {

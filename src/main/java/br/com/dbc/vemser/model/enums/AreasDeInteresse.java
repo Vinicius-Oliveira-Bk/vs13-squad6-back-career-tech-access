@@ -1,6 +1,9 @@
 package br.com.dbc.vemser.model.enums;
 
-public enum AreaAtuacaoEnum {
+import lombok.Getter;
+
+@Getter
+public enum AreasDeInteresse {
     TI(1),
     SAUDE(2),
     EDUCACAO(3),
@@ -17,16 +20,12 @@ public enum AreaAtuacaoEnum {
 
     private final int valor;
 
-    AreaAtuacaoEnum(int valor) {
+    AreasDeInteresse(int valor) {
         this.valor = valor;
     }
 
-    public int getValor() {
-        return valor;
-    }
-
-    public static AreaAtuacaoEnum fromValor(int valor) {
-        for (AreaAtuacaoEnum tipo : values()) {
+    public static AreasDeInteresse fromValor(int valor) {
+        for (AreasDeInteresse tipo : values()) {
             if (tipo.getValor() == valor) {
                 return tipo;
             }

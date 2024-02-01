@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum NivelExperienciaEnum {
     JUNIOR(1),
     PLENO(2),
@@ -9,10 +12,6 @@ public enum NivelExperienciaEnum {
 
     NivelExperienciaEnum(int valor) {
         this.valor = valor;
-    }
-
-    public int getValor() {
-        return valor;
     }
 
     public static NivelExperienciaEnum fromValor(int valor) {
