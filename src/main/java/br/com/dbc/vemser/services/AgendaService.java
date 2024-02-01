@@ -1,24 +1,18 @@
 package br.com.dbc.vemser.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.EmailMapper;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
-import br.com.dbc.vemser.model.dtos.request.AgendarEmailDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
-import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

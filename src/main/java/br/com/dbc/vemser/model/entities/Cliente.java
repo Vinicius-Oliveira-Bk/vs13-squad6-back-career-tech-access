@@ -1,22 +1,70 @@
 package br.com.dbc.vemser.model.entities;
 
-import java.time.LocalDate;
-
 import br.com.dbc.vemser.interfaces.IDocumentacaoPessoal;
+import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-@Data
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente extends Usuario implements IDocumentacaoPessoal {
+@Entity(name = "CLIENTE")
+public class Cliente implements IDocumentacaoPessoal {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CLIENTE")
+    @SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "tipo_plano")
     private PlanoEnum tipoPlano;
+    @Column(name = "controle_parental")
     private Character controleParental;
+    @Column(name = "eh_estudante")
+    private Character ehEstudante;
+    @Column(name = "eh_profissional_realocacao")
+    private Character ehProfissionalRealocacao;
+    //profissionalRealocacao
+    @Column(name = "profissional")
+    private String profissao;
+    @Column(name = "objetivo_profissional")
+    private String objetivoProfissional;
+    //estudante
+    @Column(name = "matricula")
+    private String matricula;
+    @Column(name = "comprovante_matricula")
+    private String comprovanteMatricula;
+    @Column(name = "instituicao")
+    private String instituicao;
+    @Column(name = "curso")
+    private String curso;
+    @Column(name = "data_inicio")
+    private LocalDate dataInicio;
+    @Column(name = "data_termino")
+    private LocalDate dataTermino;
 
+    //TODO: TESTAR, SE DER PAU, INVERTE O NAME PRA REFERENCEDCOLUMNNAME
+    @ElementCollection(targetClass = AreasDeInteresse.class)
+    @JoinTable(name = "AREA_INTERESSE",
+            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id_cliente"))
+    @Column(name = "interesse", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Collection<AreasDeInteresse> interesses;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+    private List<Agenda> agendas;
     @Override
     public boolean validarCPF(String cpf) {
         String cpfNumerico = cpf.replaceAll("[^\\d]", "");

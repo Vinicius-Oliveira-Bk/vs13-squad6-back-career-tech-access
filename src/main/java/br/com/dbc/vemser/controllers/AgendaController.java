@@ -5,6 +5,7 @@ import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.services.AgendaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/agenda")
+@Tag(name = "Agenda")
 @Validated
 @Slf4j
 public class AgendaController implements IAgendaControllerDoc {
