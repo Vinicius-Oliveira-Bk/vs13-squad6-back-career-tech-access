@@ -3,6 +3,7 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.EmailMapper;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
+import br.com.dbc.vemser.model.dtos.request.AgendarEmailDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,9 +53,23 @@ public class AgendaService {
         agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
 
         agendaRepository.save(agenda);
-
-        emailService.sendEmail(EmailMapper.agendaToAgendaEmailDTO(agenda), cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
+        AgendarEmailDTO agendarEmailDTO = criarObjetoEmail(agenda);
+        emailService.sendEmail(agendarEmailDTO, cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
         return objectMapper.convertValue(agenda, AgendaResponseDTO.class);
+    }
+
+    private AgendarEmailDTO criarObjetoEmail(Agenda agenda) {
+        AgendarEmailDTO agendarEmailDTO = new AgendarEmailDTO();
+        DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("hh:mm");
+        agendarEmailDTO.setNome(agenda.getCliente().getUsuario().getNome());
+        agendarEmailDTO.setEmailCliente(agenda.getCliente().getUsuario().getEmail());
+        agendarEmailDTO.setNomeProfissional(agenda.getProfissionalMentor().getUsuario().getNome());
+        agendarEmailDTO.setDataInicio(agenda.getDataHoraInicio().format(formatterData));
+        agendarEmailDTO.setDataFim(agenda.getDataHoraFim().format(formatterData));
+        agendarEmailDTO.setHoraInicio(agenda.getDataHoraInicio().format(formatterHora));
+        agendarEmailDTO.setHoraFim(agenda.getDataHoraFim().format(formatterHora));
+        return agendarEmailDTO;
     }
 
     public AgendaResponseDTO reagendarHorario(Long idAgendaAtual, Long idNovaAgenda) throws Exception {
@@ -116,8 +132,9 @@ public class AgendaService {
     }
 
 
-    public void cancelarHorario(Long idAgenda) {
-        Agenda agenda = agendaRepository.getById(idAgenda);
+    public void cancelarHorario(Long idAgenda) throws RegraDeNegocioException {
+        Agenda agenda = agendaRepository.findById(idAgenda)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
 
         agenda.setCliente(null);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
@@ -135,6 +152,15 @@ public class AgendaService {
             if (!agenda.getProfissionalMentor().equals(agendamento.getProfissionalMentor())) {
                 continue;
             }
+
+            if (agenda.getDataHoraInicio().isEqual(agenda.getDataHoraFim())) {
+                throw new RegraDeNegocioException("❌ Não é possível agendar com mesma data e horário em início e fim.");
+            }
+
+            if (agenda.getDataHoraFim().isBefore(agenda.getDataHoraInicio())) {
+                throw new RegraDeNegocioException("❌ Não é possível agendar se a data de fim for menor que a data de início.");
+            }
+
             //início igual ou maior ao início de outra agenda
             if ((agenda.getDataHoraInicio().isEqual(agendamento.getDataHoraInicio())
                     || agenda.getDataHoraInicio().isAfter(agendamento.getDataHoraInicio()))
