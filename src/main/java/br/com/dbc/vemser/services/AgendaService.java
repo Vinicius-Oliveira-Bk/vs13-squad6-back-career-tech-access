@@ -132,8 +132,9 @@ public class AgendaService {
     }
 
 
-    public void cancelarHorario(Long idAgenda) {
-        Agenda agenda = agendaRepository.getById(idAgenda);
+    public void cancelarHorario(Long idAgenda) throws RegraDeNegocioException {
+        Agenda agenda = agendaRepository.findById(idAgenda)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
 
         agenda.setCliente(null);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
