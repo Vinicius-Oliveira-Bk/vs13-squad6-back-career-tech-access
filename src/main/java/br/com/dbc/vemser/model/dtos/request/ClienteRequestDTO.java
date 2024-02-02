@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.model.dtos.request;
 
 import br.com.dbc.vemser.model.entities.AreaInteresse;
+import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -48,7 +49,7 @@ public class ClienteRequestDTO {
     @Size(max = 255)
     private String curso;
     @Schema(description = "Informar interesses", required = true, example = "TI")
-    private List<AreaInteresse> interesses;
+    private List<AreasDeInteresse> interesses;
     @Schema(description = "Informar data de início do curso (yyyy-mm-dd)", required = true, example = "2022-06-01")
     @Past
     private LocalDate dataInicio;

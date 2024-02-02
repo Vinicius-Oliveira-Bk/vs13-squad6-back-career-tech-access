@@ -2,13 +2,14 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
-import br.com.dbc.vemser.model.entities.Cliente;
-import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,20 +31,27 @@ public class ClienteService {
 
     public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
         List<Cliente> clientesEntity= clienteRepository.findAll();
+
         Usuario usuario = usuarioService.getUsuario(idUsuario);
+
         boolean clienteExistente = clientesEntity.stream()
                 .anyMatch(cliente -> cliente.getUsuario().getId().equals(idUsuario));
 
         if (clienteExistente) {
             throw new RegraDeNegocioException("Já existe um cliente com o mesmo id_usuario.");
         }
-        Cliente cliente = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
+
+        Cliente cliente = ClienteMapper.clienteRequestDTOtoEntity(clienteRequestDTO);
+
         cliente.setUsuario(usuario);
-        clienteRepository.save(cliente);
+        Cliente criado = clienteRepository.save(cliente);
+
+        criado.setInteresses(listAreaDeInteresseToAreaInteresse(clienteRequestDTO.getInteresses(), cliente));
+        clienteRepository.save(criado);
 
         ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(cliente, ClienteResponseDTO.class);
-//        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
-//        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+
         return clienteResponseDTO;
     }
 
@@ -52,11 +60,13 @@ public class ClienteService {
         List<ClienteResponseDTO> clientesResponseDTO = clientesEntity.stream()
                 .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class))
                 .toList();
+
         return clientesResponseDTO;
     }
 
     public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) throws Exception {
         Cliente buscaCliente = getCliente(id);
+
         buscaCliente.setTipoPlano(clienteRequestDTO.getTipoPlano());
         buscaCliente.setControleParental(clienteRequestDTO.getControleParental());
         buscaCliente.setEhEstudante(clienteRequestDTO.getEhEstudante());
@@ -67,7 +77,7 @@ public class ClienteService {
         buscaCliente.setComprovanteMatricula(clienteRequestDTO.getComprovanteMatricula());
         buscaCliente.setInstituicao(clienteRequestDTO.getInstituicao());
         buscaCliente.setCurso(clienteRequestDTO.getCurso());
-        buscaCliente.setInteresses(clienteRequestDTO.getInteresses());
+        buscaCliente.setInteresses(listAreaDeInteresseToAreaInteresse(clienteRequestDTO.getInteresses(), buscaCliente));
         buscaCliente.setDataInicio(clienteRequestDTO.getDataInicio());
         buscaCliente.setDataTermino(clienteRequestDTO.getDataTermino());
         clienteRepository.save(buscaCliente);
@@ -91,5 +101,19 @@ public class ClienteService {
     }
 
     public boolean validarCliente(Cliente cliente) { return true; }
+
+
+    private List<AreaInteresse> listAreaDeInteresseToAreaInteresse(List<AreasDeInteresse> areaInteresses, Cliente cliente) {
+        return areaInteresses.stream()
+                .map(areasDeInteresse -> {
+                    AreaInteresse areaInteresse = new AreaInteresse();
+
+                    areaInteresse.setCliente(cliente);
+                    areaInteresse.setInteresse(areasDeInteresse);
+
+                    return areaInteresse;
+                })
+                .collect(Collectors.toList());
+    }
 }
 

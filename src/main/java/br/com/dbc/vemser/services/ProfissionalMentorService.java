@@ -2,13 +2,13 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.mappers.ProfissionalMentorMapper;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
-import br.com.dbc.vemser.model.entities.Cliente;
-import br.com.dbc.vemser.model.entities.ProfissionalMentor;
-import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalMentorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,13 +36,18 @@ public class ProfissionalMentorService {
         if (mentorExiste) {
             throw new RegraDeNegocioException("Já existe um mentor com o mesmo id_usuario.");
         }
-        ProfissionalMentor profissionalMentor = objectMapper.convertValue(profissionalMentorRequestDTO, ProfissionalMentor.class);
+        ProfissionalMentor profissionalMentor = ProfissionalMentorMapper.profissionalMentorToEntity(profissionalMentorRequestDTO);
+
         profissionalMentor.setUsuario(usuario);
-        profissionalMentorRepository.save(profissionalMentor);
+        ProfissionalMentor criado = profissionalMentorRepository.save(profissionalMentor);
+
+        criado.setAtuacoes(listAreaInteresseToAreaAtuacao(profissionalMentorRequestDTO.getAtuacoes(), criado));
+
+        profissionalMentorRepository.save(criado);
 
         ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class);
-//        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
-//        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+        emailService.sendEmail(profissionalMentorResponseDTO.getUsuario(), profissionalMentorResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+
         return profissionalMentorResponseDTO;
     }
 
@@ -56,7 +61,8 @@ public class ProfissionalMentorService {
 
     public ProfissionalMentorResponseDTO update(Long idProfissionalMentor, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
-        prof.setAtuacoes(profissionalMentorRequestDTO.getAtuacoes());
+
+        prof.setAtuacoes(listAreaInteresseToAreaAtuacao(profissionalMentorRequestDTO.getAtuacoes(), prof));
         prof.setCarteiraDeTrabalho(profissionalMentorRequestDTO.getCarteiraDeTrabalho());
         prof.setNivelExperienciaEnum(profissionalMentorRequestDTO.getNivelExperienciaEnum());
         profissionalMentorRepository.save(prof);
@@ -76,5 +82,18 @@ public class ProfissionalMentorService {
     public ProfissionalMentor getProfissionalMentor(Long idProfissionalMentor) throws Exception {
         return profissionalMentorRepository.findById(idProfissionalMentor)
                 .orElseThrow(() -> new RegraDeNegocioException("O Profissional Mentor de ID " + idProfissionalMentor + " não foi encontrado!"));
+    }
+
+    private List<AreaAtuacao> listAreaInteresseToAreaAtuacao(List<AreasDeInteresse> areaInteresses, ProfissionalMentor profissionalMentor) {
+        return areaInteresses.stream()
+                .map(areaInteresse -> {
+                    AreaAtuacao areaAtuacao = new AreaAtuacao();
+
+                    areaAtuacao.setProfissionalMentor(profissionalMentor);
+                    areaAtuacao.setInteresse(areaInteresse);
+
+                    return areaAtuacao;
+                })
+                .collect(Collectors.toList());
     }
 }
