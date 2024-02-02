@@ -8,6 +8,9 @@ import br.com.dbc.vemser.services.AgendaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,12 +30,6 @@ public class AgendaController implements IAgendaControllerDoc {
 
     private final AgendaService agendaService;
 
-//    @GetMapping("/lista-paginada-ordenada-teste")
-//    public Page<PessoaEntity> listPaginadaOrnenadaPorCpf(@PageableDefault(size = 10, page = 10, sort = {"nome"}) Pageable pageable) {
-//        Page<PessoaEntity> all = pessoaRepository.findAll(pageable);
-//        return all;
-//    }
-
     @PostMapping("/{idProfissionalMentor}")
     public ResponseEntity<AgendaResponseDTO> create(@NotNull @PathVariable("idProfissionalMentor") Long idProfissionalMentor, @Valid @RequestBody AgendaRequestDTO agendaRequestDTO) throws Exception {
         log.info("Disponibilizando Horário...");
@@ -46,9 +43,9 @@ public class AgendaController implements IAgendaControllerDoc {
     }
 
     @GetMapping
-    public ResponseEntity<List<AgendaResponseDTO>> listAll() throws Exception {
+    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception {
         log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAll());
+        return ResponseEntity.ok().body(agendaService.listAll(pageable));
     }
 
     @GetMapping("/{idCliente}/cliente")

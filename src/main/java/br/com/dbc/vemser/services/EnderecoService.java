@@ -9,6 +9,8 @@ import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.repository.EnderecoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +36,9 @@ public class EnderecoService {
         return enderecoResponseDTO;
     }
 
-    public List<EnderecoResponseDTO> listAll() throws BancoDeDadosException {
-        List<Endereco> enderecosEntity= enderecoRepository.findAll();
-        return enderecosEntity.stream()
-                .map(enderecoEntity -> objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class))
-                .collect(Collectors.toList());
+    public Page<EnderecoResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<Endereco> enderecosEntity= enderecoRepository.findAll(pageable);
+        return enderecosEntity.map(enderecoEntity -> objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class));
     }
 
     public EnderecoResponseDTO update(Long id, EnderecoRequestDTO enderecoRequestDTO) throws Exception {

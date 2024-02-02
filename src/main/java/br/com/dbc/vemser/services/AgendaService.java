@@ -12,6 +12,8 @@ import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,12 +84,9 @@ public class AgendaService {
                 .collect(Collectors.toList());
     }
 
-    public List<AgendaResponseDTO> listAll() throws Exception {
-        List<Agenda> agendamentos = agendaRepository.findAll();
-
-        return agendamentos.stream()
-                .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
-                .collect(Collectors.toList());
+    public Page<AgendaResponseDTO> listAll(Pageable pageable) throws Exception {
+        Page<Agenda> agendamentos = agendaRepository.findAll(pageable);
+        return agendamentos.map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class));
     }
 
     public List<AgendaResponseDTO> listAllByCliente(Long idCliente) throws Exception {

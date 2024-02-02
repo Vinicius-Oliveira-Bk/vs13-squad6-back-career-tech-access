@@ -17,7 +17,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info().title("Career Tech Acess")
                         .description("Documentação da api do CTA")
-                        .version("v1.0.0")
+                        .version("v1.1.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName));
     }
