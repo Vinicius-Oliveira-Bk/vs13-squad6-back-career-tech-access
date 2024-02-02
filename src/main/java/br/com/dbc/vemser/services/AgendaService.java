@@ -1,9 +1,5 @@
 package br.com.dbc.vemser.services;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.EmailMapper;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
@@ -17,6 +13,10 @@ import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -44,7 +44,6 @@ public class AgendaService {
         Cliente cliente = clienteService.getCliente(idCliente);
 
         validarDisponibilidadeAgenda(agenda);
-        clienteService.validarCliente(cliente);
 
         agenda.setCliente(cliente);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
@@ -142,7 +141,7 @@ public class AgendaService {
                     || agenda.getDataHoraInicio().isAfter(agendamento.getDataHoraInicio()))
                 &&
                     (agenda.getDataHoraInicio().isBefore(agendamento.getDataHoraFim()))) {
-                throw new RegraDeNegocioException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
+                throw new RegraDeNegocioException("❌ O profissional já possui agendamento neste horário, agendamento cancelado.");
             }
 
             //fim igual ou menor ao fim de outra agenda
@@ -150,7 +149,7 @@ public class AgendaService {
                     || agenda.getDataHoraFim().isBefore(agendamento.getDataHoraFim()))
                 &&
                 (agenda.getDataHoraFim().isAfter(agendamento.getDataHoraInicio()))) {
-                throw new RegraDeNegocioException("❌ Não é possível cadastrar neste horário, está havendo 'intercessão de horários'.");
+                throw new RegraDeNegocioException("❌ O profissional já possui agendamento neste horário, agendamento cancelado.");
             }
         }
         return true;

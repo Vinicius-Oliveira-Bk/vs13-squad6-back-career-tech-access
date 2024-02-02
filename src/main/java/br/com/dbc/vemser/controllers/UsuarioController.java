@@ -5,6 +5,7 @@ import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.services.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
+@Tag(name = "Usuario")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
@@ -63,5 +65,4 @@ public class UsuarioController implements IUsuarioControllerDoc {
         log.info(">>> Usuário deletado com sucesso <<<");
         return ResponseEntity.ok().build();
     }
-
 }

@@ -4,10 +4,11 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.ProfissionalMentorMapper;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
-import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
-import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.entities.AreaAtuacao;
+import br.com.dbc.vemser.model.entities.ProfissionalMentor;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalMentorRepository;
@@ -46,7 +47,7 @@ public class ProfissionalMentorService {
         profissionalMentorRepository.save(criado);
 
         ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class);
-        emailService.sendEmail(profissionalMentorResponseDTO.getUsuario(), profissionalMentorResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+        emailService.sendEmail(criado.getUsuario(), criado.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
 
         return profissionalMentorResponseDTO;
     }

@@ -6,9 +6,9 @@ import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
-import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
-import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
-import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.entities.AreaInteresse;
+import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ClienteRepository;
@@ -99,8 +99,6 @@ public class ClienteService {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
-
-    public boolean validarCliente(Cliente cliente) { return true; }
 
 
     private List<AreaInteresse> listAreaDeInteresseToAreaInteresse(List<AreasDeInteresse> areaInteresses, Cliente cliente) {

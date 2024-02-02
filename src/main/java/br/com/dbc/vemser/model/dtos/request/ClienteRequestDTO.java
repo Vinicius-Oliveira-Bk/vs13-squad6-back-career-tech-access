@@ -1,13 +1,10 @@
 package br.com.dbc.vemser.model.dtos.request;
 
-import br.com.dbc.vemser.model.entities.AreaInteresse;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -48,7 +45,7 @@ public class ClienteRequestDTO {
     @Schema(description = "Informar Curso", required = true, example = "Bacharelado em Matemática")
     @Size(max = 255)
     private String curso;
-    @Schema(description = "Informar interesses", required = true, example = "TI")
+    @Schema(description = "Informar interesses", required = true, example = "[\"TI\", \"SAUDE\"]")
     private List<AreasDeInteresse> interesses;
     @Schema(description = "Informar data de início do curso (yyyy-mm-dd)", required = true, example = "2022-06-01")
     @Past

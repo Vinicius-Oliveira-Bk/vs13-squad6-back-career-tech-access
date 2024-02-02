@@ -30,5 +30,5 @@ public class Contato {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
-    private Usuario pessoa;
+    private Usuario usuario;
 }
