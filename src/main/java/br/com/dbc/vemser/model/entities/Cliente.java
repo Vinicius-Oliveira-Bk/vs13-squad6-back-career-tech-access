@@ -59,7 +59,7 @@ public class Cliente implements IDocumentacaoPessoal {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente", cascade = CascadeType.ALL)
     @Enumerated(EnumType.ORDINAL)
     private List<AreaInteresse> interesses;
 

@@ -22,14 +22,13 @@ public class AreaAtuacao {
     @SequenceGenerator(name = "SEQ_AREA_ATUACAO", sequenceName = "SEQ_AREA_ATUACAO", allocationSize = 1)
     @Column(name = "id")
     private Long id;
-    @Column(name = "id_cliente")
-    private Long idMentor;
+
     @Column(name = "interesse")
     @Enumerated(EnumType.ORDINAL)
     private AreasDeInteresse interesse;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id_mentor", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_profissional", referencedColumnName = "id")
     private ProfissionalMentor profissionalMentor;
 }

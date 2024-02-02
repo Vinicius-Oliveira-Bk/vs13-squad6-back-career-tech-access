@@ -34,7 +34,7 @@ public class ProfissionalMentor {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor")
     private List<Agenda> agendas;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor", cascade = CascadeType.ALL)
     @Enumerated(EnumType.ORDINAL)
     private List<AreaAtuacao> atuacoes;
 }
