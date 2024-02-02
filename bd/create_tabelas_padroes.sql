@@ -12,7 +12,6 @@ CREATE TABLE USUARIO (
 	eh_pcd CHAR(1) NOT NULL CHECK (eh_pcd IN ('S', 'N')),
 	tipo_deficiencia VARCHAR2(255),
 	certificado_deficiencia_gov VARCHAR2 (255),
-	tipo_usuario NUMBER NOT NULL,
 	imagem_documento VARCHAR2(255),
 	CONSTRAINT PK_USUARIO PRIMARY KEY(ID)
 );

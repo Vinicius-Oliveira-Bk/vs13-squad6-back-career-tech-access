@@ -27,6 +27,12 @@ public class AgendaController implements IAgendaControllerDoc {
 
     private final AgendaService agendaService;
 
+//    @GetMapping("/lista-paginada-ordenada-teste")
+//    public Page<PessoaEntity> listPaginadaOrnenadaPorCpf(@PageableDefault(size = 10, page = 10, sort = {"nome"}) Pageable pageable) {
+//        Page<PessoaEntity> all = pessoaRepository.findAll(pageable);
+//        return all;
+//    }
+
     @PostMapping("/{idProfissionalMentor}")
     public ResponseEntity<AgendaResponseDTO> create(@NotNull @PathVariable("idProfissionalMentor") Long idProfissionalMentor, @Valid @RequestBody AgendaRequestDTO agendaRequestDTO) throws Exception {
         log.info("Disponibilizando Horário...");

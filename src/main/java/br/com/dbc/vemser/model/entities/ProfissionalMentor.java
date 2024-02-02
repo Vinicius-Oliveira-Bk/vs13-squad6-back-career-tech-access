@@ -27,7 +27,6 @@ public class ProfissionalMentor {
     @Column(name = "carteira_trabalho")
     private String carteiraDeTrabalho;
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
@@ -35,11 +34,7 @@ public class ProfissionalMentor {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor")
     private List<Agenda> agendas;
 
-    //TODO: TESTAR, SE DER PAU, INVERTE O NAME PRA REFERENCEDCOLUMNNAME
-    @ElementCollection(targetClass = AreasDeInteresse.class)
-    @JoinTable(name = "AREA_ATUACAO",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id_profissional"))
-        @Column(name = "interesse", nullable = false)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor")
     @Enumerated(EnumType.ORDINAL)
-    Collection<AreasDeInteresse> areaAtuacao;
+    private List<AreaAtuacao> atuacoes;
 }

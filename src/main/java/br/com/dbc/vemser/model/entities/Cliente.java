@@ -4,7 +4,10 @@ import br.com.dbc.vemser.interfaces.IDocumentacaoPessoal;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,9 +26,6 @@ public class Cliente implements IDocumentacaoPessoal {
     @SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", allocationSize = 1)
     @Column(name = "id")
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
-    private Usuario usuario;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "tipo_plano")
     private PlanoEnum tipoPlano;
@@ -36,7 +36,7 @@ public class Cliente implements IDocumentacaoPessoal {
     @Column(name = "eh_profissional_realocacao")
     private Character ehProfissionalRealocacao;
     //profissionalRealocacao
-    @Column(name = "profissional")
+    @Column(name = "profissao")
     private String profissao;
     @Column(name = "objetivo_profissional")
     private String objetivoProfissional;
@@ -54,13 +54,14 @@ public class Cliente implements IDocumentacaoPessoal {
     @Column(name = "data_termino")
     private LocalDate dataTermino;
 
-    //TODO: TESTAR, SE DER PAU, INVERTE O NAME PRA REFERENCEDCOLUMNNAME
-    @ElementCollection(targetClass = AreasDeInteresse.class)
-    @JoinTable(name = "AREA_INTERESSE",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "id_cliente"))
-    @Column(name = "interesse", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    private Usuario usuario;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
     @Enumerated(EnumType.ORDINAL)
-    private Collection<AreasDeInteresse> interesses;
+    private List<AreaInteresse> interesses;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")

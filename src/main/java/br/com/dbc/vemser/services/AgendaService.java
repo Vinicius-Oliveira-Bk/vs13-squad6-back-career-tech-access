@@ -13,6 +13,7 @@ import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
+import br.com.dbc.vemser.repository.AgendaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,20 +26,21 @@ public class AgendaService {
     private final ObjectMapper objectMapper;
     private final AgendaRepository agendaRepository;
     private final EmailService emailService;
+    private final String RESOURCE_NOT_FOUND = "Não foi encontrada nenhuma agenda com este filtro.";
 
     public AgendaResponseDTO cadastrarHorario(Long idProfissionalMentor, AgendaRequestDTO agendaRequestDTO) throws Exception {
-        List<Agenda> agendamentos = agendaRepository.getAll();
+        List<Agenda> agendamentos = agendaRepository.findAll();
         ProfissionalMentor profissionalMentor = profissionalMentorService.getProfissionalMentor(idProfissionalMentor);
 
         Agenda agenda = objectMapper.convertValue(agendaRequestDTO, Agenda.class);
         agenda.setProfissionalMentor(profissionalMentor);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
         validarHorarioAgendamento(agenda, agendamentos);
-        return objectMapper.convertValue(agendaRepository.create(agenda), AgendaResponseDTO.class);
+        return objectMapper.convertValue(agendaRepository.save(agenda), AgendaResponseDTO.class);
     }
 
     public AgendaResponseDTO agendarHorario(Long idAgenda, Long idCliente) throws Exception {
-        Agenda agenda = agendaRepository.getById(idAgenda);
+        Agenda agenda = getAgenda(idAgenda);
         Cliente cliente = clienteService.getCliente(idCliente);
 
         validarDisponibilidadeAgenda(agenda);
@@ -47,88 +49,86 @@ public class AgendaService {
         agenda.setCliente(cliente);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
 
-        agendaRepository.update(idAgenda, agenda);
+        agendaRepository.save(agenda);
 
         emailService.sendEmail(EmailMapper.agendaToAgendaEmailDTO(agenda), cliente.getUsuario().getEmail(), EmailTemplate.AGENDAR_HORARIO);
         return objectMapper.convertValue(agenda, AgendaResponseDTO.class);
     }
 
     public AgendaResponseDTO reagendarHorario(Long idAgendaAtual, Long idNovaAgenda) throws Exception {
-            Agenda agenda = agendaRepository.getById(idAgendaAtual);
-            Agenda novaAgenda = agendaRepository.getById(idNovaAgenda);
+            Agenda agenda = getAgenda(idAgendaAtual);
+            Agenda novaAgenda = getAgenda(idNovaAgenda);
 
             validarDisponibilidadeAgenda(novaAgenda);
 
             novaAgenda.setCliente(agenda.getCliente());
             novaAgenda.setStatusAgendaEnum(StatusAgendaEnum.AGENDADO);
+
             agenda.setCliente(null);
             agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
-            agendaRepository.update(idNovaAgenda, novaAgenda);
-            agendaRepository.update(idAgendaAtual, agenda);
+
+            agendaRepository.save(novaAgenda);
+            agendaRepository.save(agenda);
             return objectMapper.convertValue(novaAgenda, AgendaResponseDTO.class);
     }
 
     public AgendaResponseDTO getById(Long idAgenda) throws Exception {
-        return objectMapper.convertValue(agendaRepository.getById(idAgenda), AgendaResponseDTO.class);
+        return objectMapper.convertValue(getAgenda(idAgenda), AgendaResponseDTO.class);
     }
 
     public List<AgendaResponseDTO> listAllByStatus(StatusAgendaEnum statusAgendaEnum) throws Exception {
-        return listAll()
-                .stream()
-                .filter(x -> x.getStatusAgendaEnum()
-                        .equals(statusAgendaEnum))
+        List<Agenda> agendamentos = agendaRepository.findByStatusAgendaEnum(statusAgendaEnum);
+        return agendamentos.stream()
+                .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
     public List<AgendaResponseDTO> listAll() throws Exception {
-            List<Agenda> agendamentos = agendaRepository.getAll();
+        List<Agenda> agendamentos = agendaRepository.findAll();
 
-            return agendamentos.stream()
-                    .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
-                    .collect(Collectors.toList());
+        return agendamentos.stream()
+                .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     public List<AgendaResponseDTO> listAllByCliente(Long idCliente) throws Exception {
-        List<Agenda> agendamentos = agendaRepository.getAll();
+        List<Agenda> agendamentos = agendaRepository.findByCliente_Id(idCliente);
 
         agendamentos = agendamentos.stream()
                 .filter(x -> Objects.nonNull(x.getCliente()))
                 .filter(y -> y.getCliente().getId().equals(idCliente))
-                .collect(Collectors.toList());
+                .toList();
 
         return agendamentos.stream()
                 .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<AgendaResponseDTO> listAllByProfissional(Long idProfissional) throws Exception {
-        List<Agenda> agendamentos = agendaRepository.getAll();
-
-        agendamentos = agendamentos.stream()
-                .filter(x -> x.getProfissionalMentor().getIdProfissionalMentor().equals(idProfissional))
-                .collect(Collectors.toList());
+        List<Agenda> agendamentos = agendaRepository.findByProfissionalMentor_Id(idProfissional);
 
         return agendamentos.stream()
                 .map(agendamento -> objectMapper.convertValue(agendamento, AgendaResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void delete(Long idAgenda) throws Exception {
-        getAgenda(idAgenda);
-        agendaRepository.delete(idAgenda);
+        Agenda agenda = getAgenda(idAgenda);
+        agendaRepository.delete(agenda);
     }
 
 
-    public void cancelarHorario(Long idAgenda) throws Exception {
+    public void cancelarHorario(Long idAgenda) {
         Agenda agenda = agendaRepository.getById(idAgenda);
 
         agenda.setCliente(null);
         agenda.setStatusAgendaEnum(StatusAgendaEnum.DISPONIVEL);
-        agendaRepository.update(idAgenda, agenda);
+        agendaRepository.save(agenda);
     }
 
     public Agenda getAgenda(Long idAgenda) throws Exception {
-        return agendaRepository.getById(idAgenda);
+        return agendaRepository.findById(idAgenda)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
     public boolean validarHorarioAgendamento(Agenda agenda, List<Agenda> agendamentos) throws RegraDeNegocioException {

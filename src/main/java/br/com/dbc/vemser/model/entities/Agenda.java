@@ -23,6 +23,7 @@ public class Agenda {
     @Column(name = "data_fim")
     private LocalDateTime dataHoraFim;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status")
     private StatusAgendaEnum statusAgendaEnum;
 
     @ManyToOne

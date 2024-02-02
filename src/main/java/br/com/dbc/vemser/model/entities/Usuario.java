@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.model.entities;
 
-import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,8 +38,6 @@ public class Usuario {
     private String tipoDeficiencia;
     @Column(name = "certificado_deficiencia_gov")
     private String certificadoDeficienciaGov;
-    @Column(name = "tipo_usuario")
-    private TipoUsuarioEnum tipoUsuario;
     @Column(name = "imagem_documento")
     private String imagemDocumento;
 
@@ -54,9 +52,11 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "id_endereco")
     )private List<Endereco> enderecos;
 
-    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private ProfissionalMentor profissionalMentor;
 
-    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Cliente cliente;
 }

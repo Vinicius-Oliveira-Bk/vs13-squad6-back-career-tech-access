@@ -3,8 +3,10 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
+import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
@@ -26,49 +28,53 @@ public class ProfissionalMentorService {
     private final EmailService emailService;
 
     public ProfissionalMentorResponseDTO create(Long idUsuario, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
+        List<ProfissionalMentor> mentores = profissionalMentorRepository.findAll();
         Usuario usuario = usuarioService.getUsuario(idUsuario);
-        ProfissionalMentor profissionalMentorEntity = objectMapper.convertValue(profissionalMentorRequestDTO, ProfissionalMentor.class);
-        profissionalMentorEntity.setUsuario(usuario);
-        profissionalMentorRepository.create(profissionalMentorEntity);
-        ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentorEntity, ProfissionalMentorResponseDTO.class);
-        emailService.sendEmail(profissionalMentorResponseDTO.getUsuario(), profissionalMentorResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+        boolean mentorExiste = mentores.stream()
+                .anyMatch(mentor -> mentor.getUsuario().getId().equals(idUsuario));
+
+        if (mentorExiste) {
+            throw new RegraDeNegocioException("Já existe um mentor com o mesmo id_usuario.");
+        }
+        ProfissionalMentor profissionalMentor = objectMapper.convertValue(profissionalMentorRequestDTO, ProfissionalMentor.class);
+        profissionalMentor.setUsuario(usuario);
+        profissionalMentorRepository.save(profissionalMentor);
+
+        ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class);
+//        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
+//        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return profissionalMentorResponseDTO;
     }
 
     public List<ProfissionalMentorResponseDTO> listAll() throws BancoDeDadosException {
-        List<ProfissionalMentor> profissionalMentorEntity= profissionalMentorRepository.getAll();
-        List<ProfissionalMentorResponseDTO> profissionalMentorResponseDTO = profissionalMentorEntity.stream()
+        List<ProfissionalMentor> profissionalMentorEntity= profissionalMentorRepository.findAll();
+
+        return profissionalMentorEntity.stream()
                 .map(profissionalMentor -> objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class))
-                .collect(Collectors.toList());
-        return profissionalMentorResponseDTO;
+                .toList();
     }
 
     public ProfissionalMentorResponseDTO update(Long idProfissionalMentor, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
-        ProfissionalMentor profissionalMentorEntity = objectMapper.convertValue(profissionalMentorRequestDTO, ProfissionalMentor.class);
-        profissionalMentorRepository.update(idProfissionalMentor, profissionalMentorEntity);
-        profissionalMentorEntity.setIdProfissionalMentor(idProfissionalMentor);
-        profissionalMentorEntity.setUsuario(prof.getUsuario());
+        prof.setAtuacoes(profissionalMentorRequestDTO.getAtuacoes());
+        prof.setCarteiraDeTrabalho(profissionalMentorRequestDTO.getCarteiraDeTrabalho());
+        prof.setNivelExperienciaEnum(profissionalMentorRequestDTO.getNivelExperienciaEnum());
+        profissionalMentorRepository.save(prof);
 
-        ProfissionalMentorResponseDTO profissionalMentorResponseDTO = objectMapper.convertValue(profissionalMentorEntity, ProfissionalMentorResponseDTO.class);
-        return profissionalMentorResponseDTO;
+        return objectMapper.convertValue(prof, ProfissionalMentorResponseDTO.class);
     }
 
     public void delete(Long idProfissionalMentor) throws Exception {
-        getProfissionalMentor(idProfissionalMentor);
-        profissionalMentorRepository.delete(idProfissionalMentor);
+        ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
+        profissionalMentorRepository.delete(prof);
     }
 
     public ProfissionalMentorResponseCompletoDTO getById(Long idProfissionalMentor) throws Exception {
-        ProfissionalMentor profissionalMentorRecuperado = getProfissionalMentor(idProfissionalMentor);
-        return objectMapper.convertValue(profissionalMentorRecuperado, ProfissionalMentorResponseCompletoDTO.class);
+        return objectMapper.convertValue(getProfissionalMentor(idProfissionalMentor), ProfissionalMentorResponseCompletoDTO.class);
     }
 
     public ProfissionalMentor getProfissionalMentor(Long idProfissionalMentor) throws Exception {
-        ProfissionalMentor profissionalMentorRecuperado = profissionalMentorRepository.getAll().stream()
-                .filter(profissionalMentor -> profissionalMentor.getIdProfissionalMentor().equals(idProfissionalMentor))
-                .findFirst()
+        return profissionalMentorRepository.findById(idProfissionalMentor)
                 .orElseThrow(() -> new RegraDeNegocioException("O Profissional Mentor de ID " + idProfissionalMentor + " não foi encontrado!"));
-        return profissionalMentorRecuperado;
     }
 }
