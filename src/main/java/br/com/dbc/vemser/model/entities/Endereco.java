@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -40,6 +41,6 @@ public class Endereco {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "enderecos", cascade = CascadeType.ALL)
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList();
 
 }

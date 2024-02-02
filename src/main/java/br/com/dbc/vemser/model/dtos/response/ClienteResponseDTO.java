@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.model.dtos.response;
 
-import br.com.dbc.vemser.model.entities.AreaAtuacao;
 import br.com.dbc.vemser.model.entities.AreaInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import lombok.Data;

@@ -5,6 +5,7 @@ import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
+import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.UsuarioRepository;
@@ -26,9 +27,10 @@ public class UsuarioService {
 
     public UsuarioResponseDTO create(UsuarioRequestDTO usuarioRequestDTO) throws Exception {
         Usuario usuarioEntity = objectMapper.convertValue(usuarioRequestDTO, Usuario.class);
+        usuarioExistenteCreate(usuarioRequestDTO);
         usuarioRepository.save(usuarioEntity);
         UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioEntity, UsuarioResponseDTO.class);
-//        emailService.sendEmail(usuarioResponseDTO, usuarioResponseDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
+        emailService.sendEmail(usuarioResponseDTO, usuarioResponseDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
         return usuarioResponseDTO;
     }
 
@@ -42,6 +44,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO update(Long id, UsuarioRequestDTO usuarioRequestDTO) throws Exception {
         Usuario buscaUsuario = getUsuario(id);
+        usuarioExistenteUpdate(buscaUsuario, usuarioRequestDTO);
         buscaUsuario.setNome(usuarioRequestDTO.getNome());
         buscaUsuario.setDataNascimento(usuarioRequestDTO.getDataNascimento());
         buscaUsuario.setCpf(usuarioRequestDTO.getCpf());
@@ -69,4 +72,32 @@ public class UsuarioService {
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
+    public void removerEndereco(Usuario usuario, Endereco endereco) {
+        usuario.getEnderecos().remove(endereco);
+        usuarioRepository.save(usuario);
+    }
+
+    public boolean usuarioExistenteCreate(UsuarioRequestDTO newUser) throws RegraDeNegocioException {
+        if (usuarioRepository.findByCpf(newUser.getCpf()) != null) {
+            throw new RegraDeNegocioException("Já existe um usuário com este CPF.");
+        }
+        if (usuarioRepository.findByEmail(newUser.getEmail()) != null) {
+            throw new RegraDeNegocioException("Já existe um usuário com este Email.");
+        }
+        return true;
+    }
+
+    public boolean usuarioExistenteUpdate(Usuario oldUser, UsuarioRequestDTO newUser) throws RegraDeNegocioException {
+        if (!oldUser.getCpf().equals(newUser.getCpf())) {
+            if (usuarioRepository.findByCpf(newUser.getCpf()) != null) {
+                throw new RegraDeNegocioException("Já existe um usuário com este CPF.");
+            }
+        }
+        if (!oldUser.getEmail().equals(newUser.getEmail())) {
+            if (usuarioRepository.findByEmail(newUser.getEmail()) != null) {
+                throw new RegraDeNegocioException("Já existe um usuário com este Email.");
+            }
+        }
+        return true;
+    }
 }

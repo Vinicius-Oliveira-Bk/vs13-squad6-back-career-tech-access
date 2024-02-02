@@ -8,8 +8,7 @@ import java.util.List;
 
 @Data
 public class ProfissionalMentorResponseDTO {
-    private Long idProfissionalMentor;
-    private UsuarioResponseDTO usuario;
+    private Long id;
     private List<AreaAtuacao> atuacoes;
     private NivelExperienciaEnum nivelExperienciaEnum;
     private String carteiraDeTrabalho;

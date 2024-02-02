@@ -1,14 +1,13 @@
 package br.com.dbc.vemser.model.entities;
 
-import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.NivelExperienciaEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -27,10 +26,12 @@ public class ProfissionalMentor {
     @Column(name = "carteira_trabalho")
     private String carteiraDeTrabalho;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profissionalMentor")
     private List<Agenda> agendas;
 

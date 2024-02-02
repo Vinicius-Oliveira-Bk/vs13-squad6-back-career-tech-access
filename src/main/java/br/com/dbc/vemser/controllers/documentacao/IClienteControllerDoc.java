@@ -46,7 +46,7 @@ public interface IClienteControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    public ResponseEntity<ClienteResponseCompletoDTO> listById(@PathVariable Long idCliente) throws Exception;
+    ResponseEntity<ClienteResponseCompletoDTO> listById(@PathVariable Long idCliente) throws Exception;
 
     @Operation(summary = "Atualiza um cliente", description = "Atualiza um cliente recebendo o id de um usuário")
     @ApiResponses(

@@ -6,6 +6,7 @@ import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.services.ClienteService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cliente")
+@Tag(name = "Cliente")
 @Validated
 @Slf4j
 public class ClienteController implements IClienteControllerDoc {
@@ -27,7 +29,7 @@ public class ClienteController implements IClienteControllerDoc {
     private final ClienteService clienteService;
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable @NotNull Long idUsuario) throws Exception {
+    public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable("idUsuario") @NotNull Long idUsuario) throws Exception {
         log.info("Criando cliente...");
         return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.OK);
     }

@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.model.dtos.request;
 
-import br.com.dbc.vemser.model.entities.AreaAtuacao;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.NivelExperienciaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ProfissionalMentorRequestDTO {
 
     @NotNull(message = "A área de atuação deve ser informada, escolha entre: TI, SAUDE, EDUCACAO, FINANCAS, MARKETING, JURIDICO, ENGENHARIA, DESIGN, COMERCIO, MEIO_AMBIENTE, CONSULTORIA, RH, OUTROS.")
-    @Schema(description = "Coleção de áreas de atuação", required = true, example = "")
+    @Schema(description = "Coleção de áreas de atuação", required = true, example = "[\"TI\", \"SAUDE\"]")
     private List<AreasDeInteresse> atuacoes;
 
     @NotNull(message = "O nível de experiência deve ser informado, escolha entre: JUNIOR, PLENO OU SENIOR.")

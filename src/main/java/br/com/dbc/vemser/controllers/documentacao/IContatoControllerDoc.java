@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface IContatoControllerDoc {
@@ -24,7 +25,7 @@ public interface IContatoControllerDoc {
             }
     )
     @PostMapping
-    public ResponseEntity<ContatoResponseDTO> create(@Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception;
+    ResponseEntity<ContatoResponseDTO> create(@NotNull @PathVariable("idUsuario") Long idUsuario, @Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception;
 
     @Operation(summary = "Listar contatos", description = "Lista todos os contatos do banco")
     @ApiResponses(
@@ -35,7 +36,7 @@ public interface IContatoControllerDoc {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ContatoResponseDTO>> listAll() throws BancoDeDadosException;
+    ResponseEntity<List<ContatoResponseDTO>> listAll() throws BancoDeDadosException;
 
     @Operation(summary = "Atualizar contato", description = "Atualiza um contato no banco através do id de contato")
     @ApiResponses(
@@ -46,7 +47,7 @@ public interface IContatoControllerDoc {
             }
     )
     @PutMapping("/{idContato}")
-    public ResponseEntity<ContatoResponseDTO> update(@PathVariable("idContato") Long id, @Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception;
+    ResponseEntity<ContatoResponseDTO> update(@PathVariable("idContato") Long id, @Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception;
 
     @Operation(summary = "Listar os contatos de um usuário", description = "Lista o(s) contato(s) de um usuário específico do banco")
     @ApiResponses(
@@ -58,7 +59,7 @@ public interface IContatoControllerDoc {
             }
     )
     @GetMapping("/{idContato}")
-    public ResponseEntity<ContatoResponseDTO> listById(@PathVariable Long idContato) throws Exception;
+    ResponseEntity<ContatoResponseDTO> listById(@PathVariable Long idContato) throws Exception;
 
     @Operation(summary = "Remover contato", description = "Remove um contato do banco pelo id do contato")
     @ApiResponses(
@@ -69,6 +70,6 @@ public interface IContatoControllerDoc {
             }
     )
     @DeleteMapping("/{idContato}")
-    public ResponseEntity<Void> delete(@PathVariable("idContato") Long id) throws Exception;
+    ResponseEntity<Void> delete(@PathVariable("idContato") Long id) throws Exception;
 
 }

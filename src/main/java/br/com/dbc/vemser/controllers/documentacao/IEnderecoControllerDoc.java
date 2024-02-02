@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface IEnderecoControllerDoc {
@@ -22,8 +23,8 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @PostMapping
-    public ResponseEntity<EnderecoResponseDTO> create(@Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
+    @PostMapping("/{idUsuario}")
+    ResponseEntity<EnderecoResponseDTO> create(@NotNull @PathVariable("idUsuario") Long idUsuario, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
 
     @Operation(summary = "Listar endereços", description = "Lista todos os endereços do banco")
     @ApiResponses(
@@ -35,7 +36,7 @@ public interface IEnderecoControllerDoc {
             }
     )
     @GetMapping
-    public ResponseEntity<List<EnderecoResponseDTO>> listAll() throws BancoDeDadosException;
+    ResponseEntity<List<EnderecoResponseDTO>> listAll() throws BancoDeDadosException;
 
     @Operation(summary = "Listar um endereço", description = "Lista o endereço do banco pela sua id")
     @ApiResponses(
@@ -46,7 +47,7 @@ public interface IEnderecoControllerDoc {
             }
     )
     @GetMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception;
+    ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception;
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço no banco")
     @ApiResponses(
@@ -58,7 +59,7 @@ public interface IEnderecoControllerDoc {
             }
     )
     @PutMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoResponseDTO> update(@PathVariable("idEndereco") Long id, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
+    ResponseEntity<EnderecoResponseDTO> update(@PathVariable("idEndereco") Long id, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço do banco pelo id do endereço")
     @ApiResponses(
@@ -69,7 +70,7 @@ public interface IEnderecoControllerDoc {
             }
     )
     @DeleteMapping("/{idEndereco}")
-    public ResponseEntity<Void> delete(@PathVariable("idEndereco") Long id) throws Exception;
+    ResponseEntity<Void> delete(@PathVariable("idEndereco") Long id) throws Exception;
 
 
 
