@@ -5,8 +5,12 @@ import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.services.AgendaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/agenda")
+@Tag(name = "Agenda")
 @Validated
 @Slf4j
 public class AgendaController implements IAgendaControllerDoc {
@@ -38,9 +43,9 @@ public class AgendaController implements IAgendaControllerDoc {
     }
 
     @GetMapping
-    public ResponseEntity<List<AgendaResponseDTO>> listAll() throws Exception {
+    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception {
         log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAll());
+        return ResponseEntity.ok().body(agendaService.listAll(pageable));
     }
 
     @GetMapping("/{idCliente}/cliente")

@@ -5,12 +5,14 @@ import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.EnderecoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
 import br.com.dbc.vemser.model.entities.Endereco;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.repository.EnderecoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,55 +22,59 @@ public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
     private final ObjectMapper objectMapper;
+    private final UsuarioService usuarioService;
+    private final String RESOURCE_NOT_FOUND = "Não foi encontrado nenhum endereço com este filtro.";
 
-
-    public EnderecoResponseDTO create(EnderecoRequestDTO enderecoRequestDTO) throws Exception {
+    public EnderecoResponseDTO create(Long idUsuario, EnderecoRequestDTO enderecoRequestDTO) throws Exception {
         Endereco endereco = objectMapper.convertValue(enderecoRequestDTO, Endereco.class);
-        enderecoRepository.create(endereco);
+        Usuario usuario = usuarioService.getUsuario(idUsuario);
+
+        usuario.getEnderecos().add(endereco);
+        endereco.getUsuarios().add(usuario);
+        enderecoRepository.save(endereco);
         EnderecoResponseDTO enderecoResponseDTO = objectMapper.convertValue(endereco, EnderecoResponseDTO.class);
         return enderecoResponseDTO;
     }
 
-    public List<EnderecoResponseDTO> listAll() throws BancoDeDadosException {
-        List<Endereco> enderecosEntity= enderecoRepository.getAll();
-        List<EnderecoResponseDTO> enderecosResponseDTO = enderecosEntity.stream()
-                .map(enderecoEntity -> objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class))
-                .collect(Collectors.toList());
-        return enderecosResponseDTO;
+    public Page<EnderecoResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<Endereco> enderecosEntity= enderecoRepository.findAll(pageable);
+        return enderecosEntity.map(enderecoEntity -> objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class));
     }
 
     public EnderecoResponseDTO update(Long id, EnderecoRequestDTO enderecoRequestDTO) throws Exception {
         Endereco buscaEndereco = getEndereco(id);
+        buscaEndereco.setCep(enderecoRequestDTO.getCep());
+        buscaEndereco.setCidade(enderecoRequestDTO.getCidade());
+        buscaEndereco.setEstado(enderecoRequestDTO.getEstado());
+        buscaEndereco.setPais(enderecoRequestDTO.getPais());
+        buscaEndereco.setNumero(enderecoRequestDTO.getNumero());
+        buscaEndereco.setComplemento(enderecoRequestDTO.getComplemento());
+        buscaEndereco.setTipo(enderecoRequestDTO.getTipo());
+        buscaEndereco.setLogradouro(enderecoRequestDTO.getLogradouro());
+        enderecoRepository.save(buscaEndereco);
 
-        Endereco enderecoEntity = objectMapper.convertValue(enderecoRequestDTO, Endereco.class);
-        enderecoRepository.update(id, enderecoEntity);
-        enderecoEntity.setId(id);
+        return objectMapper.convertValue(buscaEndereco, EnderecoResponseDTO.class);
 
-        EnderecoResponseDTO enderecoResponseDTO = objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class);
-        return enderecoResponseDTO;
     }
 
     public void delete(Long id) throws Exception {
         Endereco buscaEndereco = getEndereco(id);
-        enderecoRepository.delete(id);
+        buscaEndereco.getUsuarios()
+                .forEach(usuario -> usuarioService.removerEndereco(usuario, buscaEndereco));
+        buscaEndereco.setUsuarios(null);
+        enderecoRepository.delete(buscaEndereco);
     }
 
     public EnderecoResponseDTO listById(Long id) throws Exception {
-        Endereco enderecoEntity = getEndereco(id);
-        EnderecoResponseDTO enderecoResponseDTO = objectMapper.convertValue(enderecoEntity, EnderecoResponseDTO.class);
-        return enderecoResponseDTO;
+        return objectMapper.convertValue(getEndereco(id), EnderecoResponseDTO.class);
     }
 
     public List<Endereco> getEnderecosByUser(Long idUsuario) throws BancoDeDadosException {
-        return enderecoRepository.getAllByUser(idUsuario);
+        return enderecoRepository.findByUsuarios_Id(idUsuario);
     }
 
     private Endereco getEndereco(Long id) throws RegraDeNegocioException {
-        try {
-            Endereco enderecoRecuperado = enderecoRepository.getById(id);
-            return enderecoRecuperado;
-        } catch (Exception ex) {
-            throw new RegraDeNegocioException("Nenhum endereço encontrado para o Id: " + id);
-        }
+        return enderecoRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 }

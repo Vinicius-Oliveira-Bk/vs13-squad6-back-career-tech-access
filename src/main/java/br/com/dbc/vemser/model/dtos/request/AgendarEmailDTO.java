@@ -9,6 +9,8 @@ public class AgendarEmailDTO {
     private String nome;
     private String nomeProfissional;
     private String emailCliente;
-    private LocalDateTime dataHoraInicio;
-    private LocalDateTime dataHoraFim;
+    private String dataInicio;
+    private String dataFim;
+    private String horaInicio;
+    private String horaFim;
 }

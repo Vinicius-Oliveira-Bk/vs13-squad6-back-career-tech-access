@@ -6,6 +6,9 @@ import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +38,7 @@ public interface IProfissionalMentorControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<List<ProfissionalMentorResponseDTO>> listAll() throws Exception;
+    public ResponseEntity<Page<ProfissionalMentorResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws Exception;
 
     @Operation(summary = "Lista um profissional mentor", description = "Lista um profissional mentor do sistema")
     @ApiResponses(

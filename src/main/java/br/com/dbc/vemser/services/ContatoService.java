@@ -6,9 +6,12 @@ import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ContatoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ContatoResponseDTO;
 import br.com.dbc.vemser.model.entities.Contato;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,55 +23,48 @@ public class ContatoService {
 
     private final ContatoRepository contatoRepository;
     private final ObjectMapper objectMapper;
+    private final UsuarioService usuarioService;
+    private final String RESOURCE_NOT_FOUND = "Não foi encontrado nenhum contato com este filtro.";
 
-
-    public ContatoResponseDTO create(ContatoRequestDTO contatoRequestDTO) throws Exception {
+    public ContatoResponseDTO create(Long idUsuario, ContatoRequestDTO contatoRequestDTO) throws Exception {
         Contato contato = objectMapper.convertValue(contatoRequestDTO, Contato.class);
-        contatoRepository.create(contato);
+        Usuario usuario = usuarioService.getUsuario(idUsuario);
+        contato.setUsuario(usuario);
+            contatoRepository.save(contato);
         ContatoResponseDTO contatoResponseDTO = objectMapper.convertValue(contato, ContatoResponseDTO.class);
         return contatoResponseDTO;
     }
 
-    public List<ContatoResponseDTO> listAll() throws BancoDeDadosException {
-        List<Contato> contatosEntity= contatoRepository.getAll();
-        List<ContatoResponseDTO> contatosResponseDTO = contatosEntity.stream()
-                .map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class))
-                .collect(Collectors.toList());
-        return contatosResponseDTO;
+    public Page<ContatoResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<Contato> contatosEntity= contatoRepository.findAll(pageable);
+        return contatosEntity.map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class));
     }
 
     public ContatoResponseDTO update(Long id, ContatoRequestDTO contatoRequestDTO) throws Exception {
         Contato buscaContato = getContato(id);
+        buscaContato.setTipo(contatoRequestDTO.getTipo());
+        buscaContato.setTelefone(contatoRequestDTO.getTelefone());
+        buscaContato.setDescricao(contatoRequestDTO.getDescricao());
+        contatoRepository.save(buscaContato);
 
-        Contato contatoEntity = objectMapper.convertValue(contatoRequestDTO, Contato.class);
-        contatoRepository.update(id, contatoEntity);
-        contatoEntity.setId(id);
-
-        ContatoResponseDTO contatoResponseDTO = objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class);
-        return contatoResponseDTO;
+        return objectMapper.convertValue(buscaContato, ContatoResponseDTO.class);
     }
 
     public void delete(Long id) throws Exception {
         Contato buscaContato = getContato(id);
-        contatoRepository.delete(id);
+        contatoRepository.delete(buscaContato);
     }
 
     public ContatoResponseDTO listById(Long id) throws Exception {
-        Contato contatoEntity = getContato(id);
-        ContatoResponseDTO contatoResponseDTO = objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class);
-        return contatoResponseDTO;
+        return objectMapper.convertValue(getContato(id), ContatoResponseDTO.class);
     }
 
     private Contato getContato(Long id) throws RegraDeNegocioException {
-        try {
-            Contato contatoRecuperado = contatoRepository.getById(id);
-            return contatoRecuperado;
-        } catch (Exception ex) {
-            throw new RegraDeNegocioException("Nenhum contato encontrado para o Id: " + id);
-        }
+        return contatoRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
     public List<Contato> getContatosByUser(Long idUsuario) throws BancoDeDadosException {
-        return contatoRepository.getAllByUser(idUsuario);
+        return contatoRepository.findByUsuario_Id(idUsuario);
     }
 }

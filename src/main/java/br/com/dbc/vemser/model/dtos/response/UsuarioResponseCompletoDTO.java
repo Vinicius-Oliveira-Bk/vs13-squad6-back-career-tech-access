@@ -1,15 +1,22 @@
 package br.com.dbc.vemser.model.dtos.response;
 
-import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
-import br.com.dbc.vemser.model.entities.Contato;
-import br.com.dbc.vemser.model.entities.Endereco;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class UsuarioResponseCompletoDTO extends UsuarioRequestDTO {
+public class UsuarioResponseCompletoDTO {
     private Long id;
-    private List<Contato> contatos;
-    private List<Endereco> enderecos;
+    private String nome;
+    private LocalDate dataNascimento;
+    private String cpf;
+    private String email;
+    private String senha;
+    private Character ehPcd;
+    private String tipoDeficiencia;
+    private String certificadoDeficienciaGov;
+    private String imagemDocumento;
+    private List<ContatoResponseDTO> contatos;
+    private List<EnderecoResponseDTO> enderecos;
 }

@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum PlanoEnum {
     GRATUITO(1),
     BASICO(2),
@@ -9,10 +12,6 @@ public enum PlanoEnum {
 
     PlanoEnum(int valor) {
         this.valor = valor;
-    }
-
-    public int getValor() {
-        return valor;
     }
 
     public static PlanoEnum fromValor(int valor) {

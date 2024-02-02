@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TipoEnum {
     RESIDENCIAL(1),
     COMERCIAL(2);
@@ -8,10 +11,6 @@ public enum TipoEnum {
 
     TipoEnum(int valor) {
         this.valor = valor;
-    }
-
-    public int getValor() {
-        return valor;
     }
 
     public static TipoEnum fromValor(int valor) {

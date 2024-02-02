@@ -1,84 +1,80 @@
 package br.com.dbc.vemser.model.entities;
 
-import java.time.LocalDate;
-
-import br.com.dbc.vemser.interfaces.IDocumentacaoPessoal;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
+
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente extends Usuario implements IDocumentacaoPessoal {
+@Entity(name = "CLIENTE")
+public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CLIENTE")
+    @SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private Usuario usuario;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "tipo_plano")
     private PlanoEnum tipoPlano;
+
+    @Column(name = "controle_parental")
     private Character controleParental;
 
-    @Override
-    public boolean validarCPF(String cpf) {
-        String cpfNumerico = cpf.replaceAll("[^\\d]", "");
+    @Column(name = "eh_estudante")
+    private Character ehEstudante;
 
-        if (cpfNumerico.length() == 11) {
-            return true;
-        } else {
-            System.err.println("Erro: CPF deve conter exatamente 11 dígitos.");
-            return false;
-        }
-    }
+    @Column(name = "eh_profissional_realocacao")
+    private Character ehProfissionalRealocacao;
 
-    @Override
-    public boolean validarIdade(LocalDate dataNascimento, boolean cadastroResponsavel) {
-        LocalDate dataAtual = LocalDate.now();
-        LocalDate dataDezoitoAnosAtras = dataAtual.minusYears(18);
+    //profissionalRealocacao
+    @Column(name = "profissao")
+    private String profissao;
 
-        if (!dataNascimento.isAfter(dataDezoitoAnosAtras)) {
-            return true;
-        } else {
-            if (!cadastroResponsavel) {
-                // Realizar o cadastro do responsável
-                System.err.println("É necessário cadastrar o responsável antes de prosseguir.");
-                return false;
-            }
-            return true;
-        }
-    }
+    @Column(name = "objetivo_profissional")
+    private String objetivoProfissional;
 
-    @Override
-    public boolean validarPlano(String plano) {
-        return plano != null && !plano.isEmpty();
-    }
+    //estudante
+    @Column(name = "matricula")
+    private String matricula;
 
-    @Override
-    public boolean validarInteresses(String interesses) {
-        return interesses != null && !interesses.isEmpty();
-    }
+    @Column(name = "comprovante_matricula")
+    private String comprovanteMatricula;
 
-    @Override
-    public boolean validarImagemDocumento(String imagemDocumento) {
-        return imagemDocumento != null && !imagemDocumento.isEmpty();
-    }
+    @Column(name = "instituicao")
+    private String instituicao;
 
-    @Override
-    public Character validarControleParental(boolean controleParental) {
-        return null;
-    }
+    @Column(name = "curso")
+    private String curso;
 
-    @Override
-    public Character validarAcessoPcd(boolean acessoPcd) {
-        return null;
-    }
+    @Column(name = "data_inicio")
+    private LocalDate dataInicio;
 
-    @Override
-    public Character validarControleParental(Character controleParental) {
-        return controleParental;
-    }
+    @Column(name = "data_termino")
+    private LocalDate dataTermino;
 
-    @Override
-    public Character validarAcessoPcd(Character acessoPcd) {
-        return acessoPcd;
-    }
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    private Usuario usuario;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente", cascade = CascadeType.ALL)
+    @Enumerated(EnumType.ORDINAL)
+    private List<AreaInteresse> interesses;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+    private List<Agenda> agendas;
 
 }

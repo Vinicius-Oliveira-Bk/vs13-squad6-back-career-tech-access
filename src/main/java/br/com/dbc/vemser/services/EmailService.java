@@ -17,13 +17,10 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-
-    private static final String EMAIL_DESTINATARIO = "email";
 
     private final JavaMailSender emailSender;
 

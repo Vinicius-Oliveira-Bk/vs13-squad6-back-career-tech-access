@@ -5,8 +5,12 @@ import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.services.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@Tag(name = "Usuário")
 public class UsuarioController implements IUsuarioControllerDoc {
 
     private final UsuarioService usuarioService;
@@ -33,11 +38,11 @@ public class UsuarioController implements IUsuarioControllerDoc {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDTO>> listAll() throws Exception {
+    public ResponseEntity<Page<UsuarioResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"nome"}) Pageable pageable) throws Exception {
         log.info("Buscando usuarios...");
-        List<UsuarioResponseDTO> listaUsuario = usuarioService.listAll();
+        Page<UsuarioResponseDTO> paginaUsuarios = usuarioService.listAll(pageable);
         log.info(">>> Usuários listados <<<");
-        return ResponseEntity.ok().body(listaUsuario);
+        return ResponseEntity.ok().body(paginaUsuarios);
     }
 
     @GetMapping("/{idUsuario}")
@@ -63,5 +68,4 @@ public class UsuarioController implements IUsuarioControllerDoc {
         log.info(">>> Usuário deletado com sucesso <<<");
         return ResponseEntity.ok().build();
     }
-
 }

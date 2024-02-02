@@ -6,11 +6,15 @@ import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 public interface IEnderecoControllerDoc {
 
@@ -22,8 +26,7 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @PostMapping
-    public ResponseEntity<EnderecoResponseDTO> create(@Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
+    ResponseEntity<EnderecoResponseDTO> create(@NotNull @PathVariable("idUsuario") Long idUsuario, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
 
     @Operation(summary = "Listar endereços", description = "Lista todos os endereços do banco")
     @ApiResponses(
@@ -34,8 +37,7 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @GetMapping
-    public ResponseEntity<List<EnderecoResponseDTO>> listAll() throws BancoDeDadosException;
+    ResponseEntity<Page<EnderecoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws BancoDeDadosException;
 
     @Operation(summary = "Listar um endereço", description = "Lista o endereço do banco pela sua id")
     @ApiResponses(
@@ -45,8 +47,7 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @GetMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception;
+    ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception;
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço no banco")
     @ApiResponses(
@@ -57,8 +58,7 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @PutMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoResponseDTO> update(@PathVariable("idEndereco") Long id, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
+    ResponseEntity<EnderecoResponseDTO> update(@PathVariable("idEndereco") Long id, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception;
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço do banco pelo id do endereço")
     @ApiResponses(
@@ -68,8 +68,7 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    @DeleteMapping("/{idEndereco}")
-    public ResponseEntity<Void> delete(@PathVariable("idEndereco") Long id) throws Exception;
+    ResponseEntity<Void> delete(@PathVariable("idEndereco") Long id) throws Exception;
 
 
 

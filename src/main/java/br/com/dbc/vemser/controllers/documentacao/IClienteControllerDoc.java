@@ -7,6 +7,9 @@ import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +39,7 @@ public interface IClienteControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<List<ClienteResponseDTO>> listAll() throws BancoDeDadosException;
+    public ResponseEntity<Page<ClienteResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"usuario_nome"}) Pageable pageable) throws BancoDeDadosException;
 
     @Operation(summary = "Lista o cliente pelo ID", description = "Lista o cliente cadastrado pelo ID informado")
     @ApiResponses(
@@ -46,7 +49,7 @@ public interface IClienteControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    public ResponseEntity<ClienteResponseCompletoDTO> listById(@PathVariable Long idCliente) throws Exception;
+    ResponseEntity<ClienteResponseCompletoDTO> listById(@PathVariable Long idCliente) throws Exception;
 
     @Operation(summary = "Atualiza um cliente", description = "Atualiza um cliente recebendo o id de um usuário")
     @ApiResponses(

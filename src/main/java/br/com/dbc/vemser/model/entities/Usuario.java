@@ -1,27 +1,63 @@
 package br.com.dbc.vemser.model.entities;
 
-import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "USUARIO")
 public class Usuario {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USUARIO")
+    @SequenceGenerator(name = "SEQ_USUARIO", sequenceName = "SEQ_USUARIO", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
+    @Column(name = "cpf")
     private String cpf;
+    @Column(name = "email")
     private String email;
-    private Character acessoPcd;
-    private TipoUsuarioEnum tipoUsuario;
-    private String interesses;
-    private List<Contato> contatos;
-    private List<Endereco> enderecos;
+    @Column(name = "senha")
+    private String senha;
+    @Column(name = "eh_pcd")
+    private Character ehPcd;
+    @Column(name = "tipo_deficiencia")
+    private String tipoDeficiencia;
+    @Column(name = "certificado_deficiencia_gov")
+    private String certificadoDeficienciaGov;
+    @Column(name = "imagem_documento")
     private String imagemDocumento;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contato> contatos = new ArrayList<>();
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USUARIO_ENDERECO",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_endereco")
+    )private List<Endereco> enderecos = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private ProfissionalMentor profissionalMentor;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Cliente cliente;
 }

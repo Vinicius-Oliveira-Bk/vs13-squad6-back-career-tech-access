@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum StatusAgendaEnum {
     DISPONIVEL(1),
     AGENDADO(2),
@@ -9,10 +12,6 @@ public enum StatusAgendaEnum {
 
     StatusAgendaEnum(int valor) {
         this.valor = valor;
-    }
-
-    public int getValor() {
-        return valor;
     }
 
     public static StatusAgendaEnum fromValor(int valor) {
