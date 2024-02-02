@@ -6,6 +6,9 @@ import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +50,7 @@ public interface IAgendaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<List<AgendaResponseDTO>> listAll() throws Exception;
+    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception;
 
     @Operation(summary = "Cancela um horário", description = "Cancela o agendamento e volta a situação do horário para disponível.")
     @ApiResponses(

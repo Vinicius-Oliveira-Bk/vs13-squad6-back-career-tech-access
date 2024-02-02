@@ -14,6 +14,8 @@ import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,12 +57,9 @@ public class ClienteService {
         return clienteResponseDTO;
     }
 
-    public List<ClienteResponseDTO> listAll() throws BancoDeDadosException {
-        List<Cliente> clientesEntity= clienteRepository.findAll();
-        List<ClienteResponseDTO> clientesResponseDTO = clientesEntity.stream()
-                .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class))
-                .toList();
-
+    public Page<ClienteResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<Cliente> clientesEntity= clienteRepository.findAll(pageable);
+        Page<ClienteResponseDTO> clientesResponseDTO = clientesEntity.map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class));
         return clientesResponseDTO;
     }
 

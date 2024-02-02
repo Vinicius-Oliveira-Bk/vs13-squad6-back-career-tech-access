@@ -24,31 +24,43 @@ public class Cliente {
     @SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", allocationSize = 1)
     @Column(name = "id")
     private Long id;
+
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "tipo_plano")
     private PlanoEnum tipoPlano;
+
     @Column(name = "controle_parental")
     private Character controleParental;
+
     @Column(name = "eh_estudante")
     private Character ehEstudante;
+
     @Column(name = "eh_profissional_realocacao")
     private Character ehProfissionalRealocacao;
+
     //profissionalRealocacao
     @Column(name = "profissao")
     private String profissao;
+
     @Column(name = "objetivo_profissional")
     private String objetivoProfissional;
+
     //estudante
     @Column(name = "matricula")
     private String matricula;
+
     @Column(name = "comprovante_matricula")
     private String comprovanteMatricula;
+
     @Column(name = "instituicao")
     private String instituicao;
+
     @Column(name = "curso")
     private String curso;
+
     @Column(name = "data_inicio")
     private LocalDate dataInicio;
+
     @Column(name = "data_termino")
     private LocalDate dataTermino;
 

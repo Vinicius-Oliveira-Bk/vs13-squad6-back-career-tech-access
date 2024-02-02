@@ -6,6 +6,9 @@ import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +34,7 @@ public interface IUsuarioControllerDoc {
             @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
     })
-    ResponseEntity<List<UsuarioResponseDTO>> listAll() throws Exception;
+    ResponseEntity<Page<UsuarioResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"nome"}) Pageable pageable) throws Exception;
 
     @Operation(summary = "Lista o usuário pelo ID", description = "Lista o usuário cadastrado pelo ID informado")
     @ApiResponses(value = {

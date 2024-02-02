@@ -14,6 +14,8 @@ import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalMentorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,12 +54,10 @@ public class ProfissionalMentorService {
         return profissionalMentorResponseDTO;
     }
 
-    public List<ProfissionalMentorResponseDTO> listAll() throws BancoDeDadosException {
-        List<ProfissionalMentor> profissionalMentorEntity= profissionalMentorRepository.findAll();
+    public Page<ProfissionalMentorResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<ProfissionalMentor> profissionalMentorEntity= profissionalMentorRepository.findAll(pageable);
 
-        return profissionalMentorEntity.stream()
-                .map(profissionalMentor -> objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class))
-                .toList();
+        return profissionalMentorEntity.map(profissionalMentor -> objectMapper.convertValue(profissionalMentor, ProfissionalMentorResponseDTO.class));
     }
 
     public ProfissionalMentorResponseDTO update(Long idProfissionalMentor, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {

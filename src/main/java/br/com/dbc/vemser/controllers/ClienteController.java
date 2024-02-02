@@ -9,6 +9,9 @@ import br.com.dbc.vemser.services.ClienteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,9 +38,9 @@ public class ClienteController implements IClienteControllerDoc {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteResponseDTO>> listAll() throws BancoDeDadosException {
+    public ResponseEntity<Page<ClienteResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"usuario_nome"}) Pageable pageable) throws BancoDeDadosException {
         log.info("Buscando clientes...");
-        return ResponseEntity.ok().body(clienteService.listAll());
+        return ResponseEntity.ok().body(clienteService.listAll(pageable));
     }
 
     @GetMapping("/{idCliente}")

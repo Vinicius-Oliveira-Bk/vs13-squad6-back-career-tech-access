@@ -10,6 +10,8 @@ import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,11 +35,9 @@ public class ContatoService {
         return contatoResponseDTO;
     }
 
-    public List<ContatoResponseDTO> listAll() throws BancoDeDadosException {
-        List<Contato> contatosEntity= contatoRepository.findAll();
-        return contatosEntity.stream()
-                .map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class))
-                .collect(Collectors.toList());
+    public Page<ContatoResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
+        Page<Contato> contatosEntity= contatoRepository.findAll(pageable);
+        return contatosEntity.map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class));
     }
 
     public ContatoResponseDTO update(Long id, ContatoRequestDTO contatoRequestDTO) throws Exception {

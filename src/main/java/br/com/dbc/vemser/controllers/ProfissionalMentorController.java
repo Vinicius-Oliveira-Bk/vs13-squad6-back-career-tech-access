@@ -8,6 +8,9 @@ import br.com.dbc.vemser.services.ProfissionalMentorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,11 +38,11 @@ public class ProfissionalMentorController implements IProfissionalMentorControll
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfissionalMentorResponseDTO>> listAll() throws Exception {
+    public ResponseEntity<Page<ProfissionalMentorResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws Exception {
         log.info("Buscando Profissional Mentor...");
-        List<ProfissionalMentorResponseDTO> listaProfissionalMentor = profissionalMentorService.listAll();
+        Page<ProfissionalMentorResponseDTO> paginaProfissionalMentor = profissionalMentorService.listAll(pageable);
         log.info(">>> Profissionais Mentores listados <<<");
-        return ResponseEntity.ok().body(listaProfissionalMentor);
+        return ResponseEntity.ok().body(paginaProfissionalMentor);
     }
 
     @GetMapping("/{idProfissionalMentor}")
