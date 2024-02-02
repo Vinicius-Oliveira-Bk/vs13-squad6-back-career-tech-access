@@ -8,6 +8,7 @@ import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,63 +26,68 @@ public class ClienteService {
     private final UsuarioService usuarioService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
+    private final String RESOURCE_NOT_FOUND = "Não foi possível encontrar clientes com este filtro.";
 
     public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
-        List<Cliente> clientesEntity= clienteRepository.getAll();
-
+        List<Cliente> clientesEntity= clienteRepository.findAll();
+        Usuario usuario = usuarioService.getUsuario(idUsuario);
         boolean clienteExistente = clientesEntity.stream()
                 .anyMatch(cliente -> cliente.getUsuario().getId().equals(idUsuario));
 
         if (clienteExistente) {
             throw new RegraDeNegocioException("Já existe um cliente com o mesmo id_usuario.");
         }
-
         Cliente cliente = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
-        clienteRepository.create(cliente, idUsuario);
+        cliente.setUsuario(usuario);
+        clienteRepository.save(cliente);
+
         ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(cliente, ClienteResponseDTO.class);
-        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
-        clienteResponseDTO.setUsuario(usuarioResponseDTO);
-        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
+//        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioService.getUsuario(idUsuario), UsuarioResponseDTO.class);
+//        emailService.sendEmail(clienteResponseDTO.getUsuario(), clienteResponseDTO.getUsuario().getEmail(), EmailTemplate.CRIAR_USUARIO);
         return clienteResponseDTO;
     }
 
     public List<ClienteResponseDTO> listAll() throws BancoDeDadosException {
-        List<Cliente> clientesEntity= clienteRepository.getAll();
+        List<Cliente> clientesEntity= clienteRepository.findAll();
         List<ClienteResponseDTO> clientesResponseDTO = clientesEntity.stream()
                 .map(clienteEntity -> objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class))
-                .collect(Collectors.toList());
+                .toList();
         return clientesResponseDTO;
     }
 
     public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) throws Exception {
         Cliente buscaCliente = getCliente(id);
-        Cliente clienteEntity = objectMapper.convertValue(clienteRequestDTO, Cliente.class);
-        clienteRepository.update(id, clienteEntity);
-        clienteEntity.setId(id);
-        clienteEntity.setUsuario(buscaCliente.getUsuario());
+        buscaCliente.setTipoPlano(clienteRequestDTO.getTipoPlano());
+        buscaCliente.setControleParental(clienteRequestDTO.getControleParental());
+        buscaCliente.setEhEstudante(clienteRequestDTO.getEhEstudante());
+        buscaCliente.setEhProfissionalRealocacao(clienteRequestDTO.getEhProfissionalRealocacao());
+        buscaCliente.setProfissao(clienteRequestDTO.getProfissao());
+        buscaCliente.setObjetivoProfissional(clienteRequestDTO.getObjetivoProfissional());
+        buscaCliente.setMatricula(clienteRequestDTO.getMatricula());
+        buscaCliente.setComprovanteMatricula(clienteRequestDTO.getComprovanteMatricula());
+        buscaCliente.setInstituicao(clienteRequestDTO.getInstituicao());
+        buscaCliente.setCurso(clienteRequestDTO.getCurso());
+        buscaCliente.setInteresses(clienteRequestDTO.getInteresses());
+        buscaCliente.setDataInicio(clienteRequestDTO.getDataInicio());
+        buscaCliente.setDataTermino(clienteRequestDTO.getDataTermino());
+        clienteRepository.save(buscaCliente);
 
-        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(clienteEntity, ClienteResponseDTO.class);
+        ClienteResponseDTO clienteResponseDTO = objectMapper.convertValue(buscaCliente, ClienteResponseDTO.class);
         return clienteResponseDTO;
     }
 
     public void delete(Long id) throws Exception {
-        getCliente(id);
-        clienteRepository.delete(id);
+        Cliente cliente = getCliente(id);
+        clienteRepository.delete(cliente);
     }
 
     public ClienteResponseCompletoDTO listById(Long id) throws Exception {
-        Cliente clienteEntity = getCliente(id);
-        ClienteResponseCompletoDTO clienteResponseCompletoDTO = objectMapper.convertValue(clienteEntity, ClienteResponseCompletoDTO.class);
-        return clienteResponseCompletoDTO;
+        return objectMapper.convertValue(getCliente(id), ClienteResponseCompletoDTO.class);
     }
 
     public Cliente getCliente(Long id) throws RegraDeNegocioException {
-        try {
-            Cliente clienteRecuperado = clienteRepository.getById(id);
-            return clienteRecuperado;
-        } catch (Exception ex) {
-            throw new RegraDeNegocioException("Nenhum cliente encontrado para o Id: " + id);
-        }
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
     public boolean validarCliente(Cliente cliente) { return true; }

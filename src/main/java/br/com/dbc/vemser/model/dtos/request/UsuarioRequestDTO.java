@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.model.dtos.request;
 
-import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -9,30 +9,41 @@ import java.time.LocalDate;
 @Data
 public class UsuarioRequestDTO {
 
-    private Long id;
-
     @NotBlank(message = "O campo não pode ser nulo, vazio ou conter apenas espaços em branco")
+    @Schema(description = "Informe o nome", required = true, example = "Gabriel Silva")
     private String nome;
 
     @NotNull(message = "A data de nascimento não pode ser nula")
     @Past(message = "A data de nascimento deve ser uma data passada")
+    @Schema(description = "Data de Nascimento", required = true, example = "1990-01-30")
     private LocalDate dataNascimento;
 
     @NotBlank(message = "O campo não pode ser nulo, vazio ou conter apenas espaços em branco")
     @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos numéricos")
+    @Schema(description = "Informe o cpf sem pontuações", required = true, example = "32165498712")
     private String cpf;
 
     @NotNull(message = "O email não pode ser nulo")
     @Email(message = "Email inválido. Formato: email@provedor")
+    @Schema(description = "Informe o e-mail", required = true, example = "seuemail@dominio.com")
     private String email;
 
+    @NotNull(message = "A senha não pode ser nula")
+    @NotEmpty(message = "A senha não pode estar em branco")
+    @Size(min = 8)
+    @Schema(description = "Informe sua senha", required = true, example = "senha123")
+    private String senha;
+
     @NotNull(message = "Acesso PCD inválido! O campo deve ser: 'S' ou 'N'")
-    private Character acessoPcd;
+    @Schema(description = "Informe se é uma pessoa com deficiência (s/n)", required = true, example = "S")
+    private Character ehPcd;
 
+    @Schema(description = "Tipo de deficiência que possuim", required = true, example = "Paralização das pernas")
+    private String tipoDeficiencia;
 
-    @NotNull(message = "Tipo de usuário inválido. Escolha: MENTOR, ESTUDANTE, PCD OU PROFISSIONAL_RELOCACAO ")
-    private TipoUsuarioEnum tipoUsuario;
+    @Schema(description = "Comprovante de deficiência", required = true, example = "http://comprovante.com")
+    private String certificadoDeficienciaGov;
 
-    private String interesses;
+    @Schema(description = "Link da imagem do documento", required = true, example = "http://imagemDocumento.com")
     private String imagemDocumento;
 }

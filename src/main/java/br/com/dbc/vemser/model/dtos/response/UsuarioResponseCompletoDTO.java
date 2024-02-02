@@ -1,8 +1,5 @@
 package br.com.dbc.vemser.model.dtos.response;
 
-import br.com.dbc.vemser.model.entities.Contato;
-import br.com.dbc.vemser.model.entities.Endereco;
-import br.com.dbc.vemser.model.enums.TipoUsuarioEnum;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,10 +12,11 @@ public class UsuarioResponseCompletoDTO {
     private LocalDate dataNascimento;
     private String cpf;
     private String email;
-    private Character acessoPcd;
-    private TipoUsuarioEnum tipoUsuario;
-    private String interesses;
+    private String senha;
+    private Character ehPcd;
+    private String tipoDeficiencia;
+    private String certificadoDeficienciaGov;
     private String imagemDocumento;
-    private List<Contato> contatos;
-    private List<Endereco> enderecos;
+    private List<ContatoResponseDTO> contatos;
+    private List<EnderecoResponseDTO> enderecos;
 }
