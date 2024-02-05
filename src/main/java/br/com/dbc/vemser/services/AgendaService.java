@@ -1,10 +1,12 @@
 package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.mappers.AgendaMapper;
 import br.com.dbc.vemser.mappers.EmailMapper;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.AgendarEmailDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.RelatorioAgendaDTO;
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Cliente;
 import br.com.dbc.vemser.model.entities.ProfissionalMentor;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -185,5 +188,11 @@ public class AgendaService {
             throw new RegraDeNegocioException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
         return true;
+    }
+
+    public Set<RelatorioAgendaDTO> relatorioAgenda(Long idAgenda) {
+        idAgenda = idAgenda == null ? -1 : idAgenda;
+
+        return agendaRepository.relatorioAgenda(idAgenda).stream().map(AgendaMapper::agendaToRelatorioAgendaDTO).collect(Collectors.toSet());
     }
 }

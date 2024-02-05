@@ -3,6 +3,8 @@ package br.com.dbc.vemser.controllers;
 import br.com.dbc.vemser.controllers.documentacao.IAgendaControllerDoc;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.RelatorioAgendaDTO;
+import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import br.com.dbc.vemser.services.AgendaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -90,6 +93,12 @@ public class AgendaController implements IAgendaControllerDoc {
         log.info("Deletando horário...");
         agendaService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/relatorio")
+    public ResponseEntity<Set<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda) {
+        log.info("Gerando relatório...");
+        return ResponseEntity.ok().body(agendaService.relatorioAgenda(idAgenda));
     }
 }
 

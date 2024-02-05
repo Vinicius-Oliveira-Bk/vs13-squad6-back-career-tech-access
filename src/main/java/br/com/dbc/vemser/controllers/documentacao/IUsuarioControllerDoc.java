@@ -12,9 +12,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 
 public interface IUsuarioControllerDoc {
@@ -61,4 +63,11 @@ public interface IUsuarioControllerDoc {
     })
     ResponseEntity<Void> delete(Long id) throws Exception;
 
+    @Operation(summary = "Relatório de usuários", description = "Relatório de usuários cadastrados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Relatório de usuários cadastrados"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+    })
+    ResponseEntity<Set<UsuarioResponseDTO>> relatorio(@RequestParam(required = false) Long idUsuario);
 }
