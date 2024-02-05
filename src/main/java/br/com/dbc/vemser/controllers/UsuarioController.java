@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/usuario")
@@ -67,5 +68,13 @@ public class UsuarioController implements IUsuarioControllerDoc {
         usuarioService.delete(id);
         log.info(">>> Usuário deletado com sucesso <<<");
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/relatorio")
+    public ResponseEntity<Set<UsuarioResponseDTO>> relatorio(@RequestParam(required = false) Long idUsuario) {
+        log.info("Gerando relatório de usuários...");
+        Set<UsuarioResponseDTO> relatorio = usuarioService.relatorioUsuario(idUsuario);
+        log.info(">>> Relatório gerado <<<");
+        return ResponseEntity.ok().body(relatorio);
     }
 }

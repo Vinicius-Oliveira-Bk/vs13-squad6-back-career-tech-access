@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -100,4 +101,13 @@ public class UsuarioService {
         }
         return true;
     }
+
+    public Set<UsuarioResponseDTO> relatorioUsuario(Long idUsuario) {
+        if (idUsuario == null) {
+            idUsuario = -1L;
+        }
+
+        return usuarioRepository.relatorioUsuario(idUsuario).stream().map(usuario -> objectMapper.convertValue(usuario, UsuarioResponseDTO.class)).collect(Collectors.toSet());
+    }
+
 }

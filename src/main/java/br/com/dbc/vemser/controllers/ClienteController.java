@@ -61,5 +61,6 @@ public class ClienteController implements IClienteControllerDoc {
         clienteService.delete(id);
         return ResponseEntity.ok().build();
     }
+
 }
 
