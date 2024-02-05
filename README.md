@@ -6,22 +6,9 @@
 
 🌐 O <strong>Career Tech Access</strong> é um sistema inovador voltado para aprimorar a educação, explorar profissões e desenvolver habilidades interpessoais para adolescentes, adultos e pessoas com deficiência (PCDs). O projeto aborda desafios na educação personalizada e inclusiva, destacando limitações de conteúdo, deficiência em soft skills e falta de orientação profissional.
 
-<h2><strong><a href="https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit" target="_blank" rel="noopener noreferrer">Documentação 📄</strong></h2></a>
-
-## Modelo conceitual
-
-<details>
-  <summary>Diagrama de Classes</summary><br />
-  
-   ![diagrama_de_classes](https://github.com/Vinicius-Oliveira-Bk/vs13-squad6-back-career-tech-access/assets/71534326/14b0dd81-6565-4a8a-8094-8494eb0eae53)
-
-</details>
-<details>
-  <summary>Diagrama Entidade Relacionamento (ER)</summary><br />
-  
-   ![Diagrama ER](https://github.com/Vinicius-Oliveira-Bk/vs13-squad6-back-career-tech-access/assets/71534326/4d95ed05-ea8d-41d3-bf1e-c4d83f9ff31e)
-
-</details>
+<h3><strong><a href="https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit" target="_blank" rel="noopener noreferrer">Documentação 📄</strong></h2></a>
+<h3><strong><a href="https://app.diagrams.net/#G1uftoxEFbaYXf88aNL2nyoZTPyJI_MxUL" target="_blank" rel="noopener noreferrer">Diagrama de Classes 📐</strong></h2></a>
+<h3><strong><a href="https://app.diagrams.net/#G1o3RmOLzOddBnWxYj7Upn1JQGz-ZNVDqu" target="_blank" rel="noopener noreferrer">Diagrama ER 📐</strong></h2></a>
 
 ## Tecnologias e técnicas utilizadas
 

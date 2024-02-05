@@ -2,6 +2,7 @@ package br.com.dbc.vemser.controllers.documentacao;
 
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.RelatorioAgendaDTO;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,10 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 public interface IAgendaControllerDoc {
 
@@ -133,10 +136,15 @@ public interface IAgendaControllerDoc {
     ResponseEntity<Void> delete(@PathVariable("idAgenda") Long id) throws Exception;
 
 
-
-
-
-
-
+    @Operation(summary = "Relatório de agenda", description = "Relatório de agenda")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<Set<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda);
 
 }

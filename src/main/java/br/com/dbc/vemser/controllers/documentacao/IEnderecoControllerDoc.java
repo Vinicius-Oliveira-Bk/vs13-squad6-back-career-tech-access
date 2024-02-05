@@ -71,5 +71,4 @@ public interface IEnderecoControllerDoc {
     ResponseEntity<Void> delete(@PathVariable("idEndereco") Long id) throws Exception;
 
 
-
 }
