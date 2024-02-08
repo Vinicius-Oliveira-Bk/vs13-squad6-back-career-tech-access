@@ -12,7 +12,7 @@ import java.util.Set;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByCpf(String cpf);
 
-    Usuario findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
     @Query(value = """
             SELECT * FROM USUARIO U

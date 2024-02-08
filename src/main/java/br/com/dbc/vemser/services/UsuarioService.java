@@ -2,10 +2,10 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
+import br.com.dbc.vemser.model.entities.Cargo;
 import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
@@ -15,9 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,16 +30,28 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
+    private final CargoService cargoService;
     private final String RESOURCE_NOT_FOUND = "Não foi possível encontrar usuário com este filtro.";
 
-    public UsuarioResponseDTO create(UsuarioRequestDTO usuarioRequestDTO) throws Exception {
-        Usuario usuarioEntity = objectMapper.convertValue(usuarioRequestDTO, Usuario.class);
+    public UsuarioResponseDTO create(UsuarioRequestDTO usuarioRequestDTO) throws RegraDeNegocioException {
+        Usuario usuario = objectMapper.convertValue(usuarioRequestDTO, Usuario.class);
         usuarioExistenteCreate(usuarioRequestDTO);
-        usuarioRepository.save(usuarioEntity);
-        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuarioEntity, UsuarioResponseDTO.class);
+
+        Set<Cargo> cargos = usuarioRequestDTO.getCargos()
+                .stream()
+                .map(cargo -> cargoService.getCargo(cargo.name()))
+                .collect(Collectors.toSet());
+
+        usuario.setCargos(cargos);
+        usuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
+        usuario.setAtivo(true);
+        usuarioRepository.save(usuario);
+        UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuario, UsuarioResponseDTO.class);
         emailService.sendEmail(usuarioResponseDTO, usuarioResponseDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
         return usuarioResponseDTO;
     }
+
 
     public Page<UsuarioResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
         Page<Usuario> usuarioEntity= usuarioRepository.findAll(pageable);
@@ -85,7 +98,7 @@ public class UsuarioService {
         if (usuarioRepository.findByCpf(newUser.getCpf()) != null) {
             throw new RegraDeNegocioException("Já existe um usuário com este CPF.");
         }
-        if (usuarioRepository.findByEmail(newUser.getEmail()) != null) {
+        if (usuarioRepository.findByEmail(newUser.getEmail()).isPresent()) {
             throw new RegraDeNegocioException("Já existe um usuário com este Email.");
         }
         return true;
@@ -113,24 +126,22 @@ public class UsuarioService {
         return usuarioRepository.relatorioUsuario(idUsuario).stream().map(usuario -> objectMapper.convertValue(usuario, UsuarioResponseDTO.class)).collect(Collectors.toSet());
     }
 
-    public Optional<Usuario> findByLoginAndSenha(String login, String senha) {
-        return usuarioRepository.findByEmailAndSenha(login, senha);
-    }
-
     public Optional<Usuario> findById(Long idUsuario) {
         return usuarioRepository.findById(idUsuario);
     }
 
-    public Usuario findByLogin(String login) {
-        return usuarioRepository.findByEmail(login);
-    }
-
-    public UsuarioResponseDTO getLoggedUser() throws RegraDeNegocioException {
+    public UsuarioResponseDTO getLoggedUser() {
         return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioResponseDTO.class);
     }
 
     public Long getIdLoggedUser() {
         return Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+    }
+
+    public Usuario findByEmail(String email) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(RESOURCE_NOT_FOUND));
     }
 
 }

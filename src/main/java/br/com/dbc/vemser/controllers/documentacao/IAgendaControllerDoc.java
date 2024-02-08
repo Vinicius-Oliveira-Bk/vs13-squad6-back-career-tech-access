@@ -53,7 +53,7 @@ public interface IAgendaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception;
+    ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception;
 
     @Operation(summary = "Cancela um horário", description = "Cancela o agendamento e volta a situação do horário para disponível.")
     @ApiResponses(
@@ -66,16 +66,16 @@ public interface IAgendaControllerDoc {
     )
     ResponseEntity<Void> cancelarHorario(@NotNull @PathVariable("idAgenda") Long id) throws Exception;
 
-    @Operation(summary = "Reagenda um cliente", description = "Altera o agendamento do cliente para outra agenda disponível.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Reagendamento realizado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception;
+//    @Operation(summary = "Reagenda um cliente", description = "Altera o agendamento do cliente para outra agenda disponível.")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Reagendamento realizado com sucesso"),
+//                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+//                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+//                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+//            }
+//    )
+//    ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception;
 
     @Operation(summary = "Busca agenda pelo id", description = "Busca agenda pelo id.")
     @ApiResponses(
@@ -88,38 +88,38 @@ public interface IAgendaControllerDoc {
     )
     ResponseEntity<AgendaResponseDTO> getById(@PathVariable Long idAgenda) throws Exception;
 
-    @Operation(summary = "Busca Agendas por Status", description = "Busca Agendas por Status")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception;
-    @Operation(summary = "Busca Agendas por profissional", description = "Busca Agendas por profissional")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception;
+//    @Operation(summary = "Busca Agendas por Status", description = "Busca Agendas por Status")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
+//                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+//                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+//                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+//            }
+//    )
+//    ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception;
+//    @Operation(summary = "Busca Agendas por profissional", description = "Busca Agendas por profissional")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
+//                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+//                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+//                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+//            }
+//    )
+//    ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception;
 
 
-        @Operation(summary = "Busca Agendas por cliente", description = "Busca Agendas por cliente")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception;
+//        @Operation(summary = "Busca Agendas por cliente", description = "Busca Agendas por cliente")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
+//                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+//                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+//                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+//            }
+//    )
+//    ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception;
 
 
 

@@ -51,23 +51,23 @@ public class AgendaController implements IAgendaControllerDoc {
         return ResponseEntity.ok().body(agendaService.listAll(pageable));
     }
 
-    @GetMapping("/{idCliente}/cliente")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception {
-        log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAllByCliente(idCliente));
-    }
+//    @GetMapping("/{idCliente}/cliente")
+//    public ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception {
+//        log.info("Buscando horários...");
+//        return ResponseEntity.ok().body(agendaService.listAllByCliente(idCliente));
+//    }
 
-    @GetMapping("/{idProfissional}/profissional")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception {
-        log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAllByProfissional(idProfissional));
-    }
+//    @GetMapping("/{idProfissional}/profissional")
+//    public ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception {
+//        log.info("Buscando horários...");
+//        return ResponseEntity.ok().body(agendaService.listAllByProfissional(idProfissional));
+//    }
 
-    @GetMapping("/{statusAgendaEnum}/status")
-    public ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception {
-        log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAllByStatus(statusAgendaEnum));
-    }
+//    @GetMapping("/{statusAgendaEnum}/status")
+//    public ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception {
+//        log.info("Buscando horários...");
+//        return ResponseEntity.ok().body(agendaService.listAllByStatus(statusAgendaEnum));
+//    }
 
     @GetMapping("/{idAgenda}")
     public ResponseEntity<AgendaResponseDTO> getById(@PathVariable Long idAgenda) throws Exception {
@@ -75,11 +75,11 @@ public class AgendaController implements IAgendaControllerDoc {
         return ResponseEntity.ok().body(agendaService.getById(idAgenda));
     }
 
-    @PutMapping("reagendar/{idAgenda}/{idNovaAgenda}")
-    public ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception {
-        log.info("Atualizando horário...");
-        return ResponseEntity.ok().body(agendaService.reagendarHorario(id, idNovaAgenda));
-    }
+//    @PutMapping("reagendar/{idAgenda}/{idNovaAgenda}")
+//    public ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception {
+//        log.info("Atualizando horário...");
+//        return ResponseEntity.ok().body(agendaService.reagendarHorario(id, idNovaAgenda));
+//    }
 
     @PutMapping("cancelar/{idAgenda}")
     public ResponseEntity<Void> cancelarHorario(@NotNull @PathVariable("idAgenda") Long id) throws Exception {

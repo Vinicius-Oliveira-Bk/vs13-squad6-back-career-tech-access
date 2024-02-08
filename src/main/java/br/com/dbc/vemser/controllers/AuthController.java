@@ -29,7 +29,6 @@ import java.util.Optional;
 @Tag(name = "Authorize")
 public class AuthController implements IAuthControllerDoc {
     private final TokenService tokenService;
-
     public final AuthenticationManager authenticationManager;
     public final PasswordEncoder passwordEncoder;
     public final UsuarioService usuarioService;

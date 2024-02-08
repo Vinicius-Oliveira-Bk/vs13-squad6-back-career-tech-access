@@ -1,10 +1,12 @@
 package br.com.dbc.vemser.model.dtos.request;
 
+import br.com.dbc.vemser.model.enums.CargoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class UsuarioRequestDTO {
@@ -38,12 +40,15 @@ public class UsuarioRequestDTO {
     @Schema(description = "Informe se é uma pessoa com deficiência (s/n)", required = true, example = "S")
     private Character ehPcd;
 
-    @Schema(description = "Tipo de deficiência que possuim", required = true, example = "Paralização das pernas")
+    @Schema(description = "Tipo de deficiência que possuim", example = "Paralização das pernas")
     private String tipoDeficiencia;
 
-    @Schema(description = "Comprovante de deficiência", required = true, example = "http://comprovante.com")
+    @Schema(description = "Comprovante de deficiência", example = "http://comprovante.com")
     private String certificadoDeficienciaGov;
 
-    @Schema(description = "Link da imagem do documento", required = true, example = "http://imagemDocumento.com")
+    @Schema(description = "Link da imagem do documento", example = "http://imagemDocumento.com")
     private String imagemDocumento;
+
+    @Schema(description = "Cargos do usuário", example = "[\"ROLE_ADMIN\", \"ROLE_USUARIO\"]")
+    private Set<CargoEnum> cargos;
 }
