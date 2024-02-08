@@ -2,6 +2,7 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
@@ -13,9 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -108,6 +111,26 @@ public class UsuarioService {
         }
 
         return usuarioRepository.relatorioUsuario(idUsuario).stream().map(usuario -> objectMapper.convertValue(usuario, UsuarioResponseDTO.class)).collect(Collectors.toSet());
+    }
+
+    public Optional<Usuario> findByLoginAndSenha(String login, String senha) {
+        return usuarioRepository.findByEmailAndSenha(login, senha);
+    }
+
+    public Optional<Usuario> findById(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario);
+    }
+
+    public Usuario findByLogin(String login) {
+        return usuarioRepository.findByEmail(login);
+    }
+
+    public UsuarioResponseDTO getLoggedUser() throws RegraDeNegocioException {
+        return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioResponseDTO.class);
+    }
+
+    public Long getIdLoggedUser() {
+        return Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 
 }

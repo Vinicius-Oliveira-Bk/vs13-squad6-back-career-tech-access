@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -12,7 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByCpf(String cpf);
 
     Usuario findByEmail(String email);
-
 
     @Query(value = """
             SELECT * FROM USUARIO U
@@ -22,4 +22,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             WHERE :idUsuario = -1 OR  U.ID = :idUsuario
             """, nativeQuery = true)
     Set<Usuario> relatorioUsuario(Long idUsuario);
+
+    Optional<Usuario> findByEmailAndSenha(String login, String senha);
+
 }
