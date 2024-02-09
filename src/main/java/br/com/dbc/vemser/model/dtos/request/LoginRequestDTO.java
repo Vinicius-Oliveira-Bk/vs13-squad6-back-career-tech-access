@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 public class LoginRequestDTO {
 
     @NotNull
-    @Schema(description = "Login do usuário", required = true, example = "maria@gmail.com")
+    @Schema(description = "Login do usuário", required = true, example = "admin@dominio.com")
     private String email;
 
     @NotNull
-    @Schema(description = "Senha do usuário", required = true, example = "12345")
+    @Schema(description = "Senha do usuário", required = true, example = "senha123")
     private String senha;
 }

@@ -29,7 +29,18 @@ public interface IClienteControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable @NotNull Long idUsuario) throws Exception;
+    ResponseEntity<ClienteResponseDTO> createClienteAdmin(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @NotNull @PathVariable("idUsuario") Long idUsuario) throws Exception;
+
+    @Operation(summary = "Cria um cliente", description = "Cria um cliente recebendo o id de um usuário")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Cliente criado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<ClienteResponseDTO> createCliente(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO) throws Exception;
 
     @Operation(summary = "Lista todos os clientes", description = "Lista todos os clientes cadastrados")
     @ApiResponses(

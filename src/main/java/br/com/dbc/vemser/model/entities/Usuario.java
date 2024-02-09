@@ -55,7 +55,6 @@ public class Usuario implements UserDetails {
     @Column(name = "ativo")
     private boolean isAtivo;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "USUARIO_CARGO",

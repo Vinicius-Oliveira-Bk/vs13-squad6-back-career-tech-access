@@ -4,6 +4,7 @@ import br.com.dbc.vemser.controllers.documentacao.IAuthControllerDoc;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.security.TokenService;
@@ -34,7 +35,8 @@ public class AuthController implements IAuthControllerDoc {
     public final UsuarioService usuarioService;
 
     @PostMapping
-    public String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+    public String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO) throws RegraDeNegocioException {
+        usuarioService.userIsAtivo(loginRequestDTO);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDTO.getEmail(),
@@ -51,7 +53,7 @@ public class AuthController implements IAuthControllerDoc {
     }
 
     @GetMapping("/usuario-logado")
-    public ResponseEntity<UsuarioResponseDTO> usuarioLogado() throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioResponseCompletoDTO> usuarioLogado() {
         return new ResponseEntity<>(usuarioService.getLoggedUser(), HttpStatus.OK);
     }
 

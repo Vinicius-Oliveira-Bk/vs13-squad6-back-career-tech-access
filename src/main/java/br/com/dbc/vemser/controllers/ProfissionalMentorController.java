@@ -29,10 +29,18 @@ public class ProfissionalMentorController implements IProfissionalMentorControll
 
     private final ProfissionalMentorService profissionalMentorService;
 
-    @PostMapping("/{idUsuario}")
+    @PostMapping("/criar-profissional-admin/{idUsuario}")
     public ResponseEntity<ProfissionalMentorResponseDTO> create(@PathVariable Long idUsuario, @Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
         log.info("Criando Profissional Mentor...");
         ProfissionalMentorResponseDTO profissionalMentorCriado = profissionalMentorService.create(idUsuario, profissionalMentorRequestDTO);
+        log.info(">>> Profissional Mentor criado com sucesso <<<");
+        return new ResponseEntity<>(profissionalMentorCriado, HttpStatus.OK);
+    }
+
+    @PostMapping("/criar-profissional")
+    public ResponseEntity<ProfissionalMentorResponseDTO> create(@Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
+        log.info("Criando Profissional Mentor...");
+        ProfissionalMentorResponseDTO profissionalMentorCriado = profissionalMentorService.create(null, profissionalMentorRequestDTO);
         log.info(">>> Profissional Mentor criado com sucesso <<<");
         return new ResponseEntity<>(profissionalMentorCriado, HttpStatus.OK);
     }

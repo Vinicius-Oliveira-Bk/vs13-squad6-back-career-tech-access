@@ -3,6 +3,7 @@ package br.com.dbc.vemser.controllers.documentacao;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ public interface IAuthControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO);
+    String auth(@RequestBody @Valid LoginRequestDTO loginRequestDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Exibir usuário logado no sistema", description = "Exibe o usuário que está logado no sistema")
     @ApiResponses(
@@ -34,6 +35,6 @@ public interface IAuthControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<UsuarioResponseDTO> usuarioLogado() throws RegraDeNegocioException;
+    ResponseEntity<UsuarioResponseCompletoDTO> usuarioLogado() ;
 
 }

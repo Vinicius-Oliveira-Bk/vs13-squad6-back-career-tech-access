@@ -2,8 +2,12 @@ package br.com.dbc.vemser.repository;
 
 import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,9 +26,75 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
 //    Page<PessoaEntity> getPorQualquerNomePaginadoNativo(String nome, Pageable pageable);
     List<Agenda> findByCliente_Id(Long id);
 
-    List<Agenda> findByProfissionalMentor_Id(Long id);
+    @Query(value = """
+            SELECT * FROM AGENDA A
+            	JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+             	WHERE   (TO_NUMBER(:ID_MENTOR)  IS NULL     OR TO_NUMBER(:ID_MENTOR)    = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:ID_CLIENTE) IS NULL     OR TO_NUMBER(:ID_CLIENTE)   = A.ID_CLIENTE)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+                AND     (TO_NUMBER(:ID_AGENDA)  IS NULL     OR TO_NUMBER(:ID_AGENDA)    = A.ID)
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM AGENDA A
+                JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+                WHERE   (TO_NUMBER(:ID_MENTOR)  IS NULL     OR TO_NUMBER(:ID_MENTOR)    = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:ID_CLIENTE) IS NULL     OR TO_NUMBER(:ID_CLIENTE)   = A.ID_CLIENTE)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+                AND     (TO_NUMBER(:ID_AGENDA)  IS NULL     OR TO_NUMBER(:ID_AGENDA)    = A.ID)
+            """,
+            nativeQuery = true)
+    Page<Agenda> findAll(Pageable pageable,
+                         @Param("ID_AGENDA") @Nullable Long idAgenda,
+                         @Param("STATUS") @Nullable Integer status,
+                         @Param("ID_MENTOR") @Nullable Long idProfissionalMentor,
+                         @Param("ID_CLIENTE") @Nullable Long idCliente);
 
-    List<Agenda> findByStatusAgendaEnum(StatusAgendaEnum statusAgendaEnum);
+
+
+    @Query(value = """
+            SELECT * FROM AGENDA A
+            	JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+             	WHERE   (TO_NUMBER(:ID_MENTOR)  IS NULL     OR TO_NUMBER(:ID_MENTOR)    = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+                AND   	(TO_NUMBER(:ID_CLIENTE) = A.ID_CLIENTE)
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM AGENDA A
+                JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+                WHERE   (TO_NUMBER(:ID_MENTOR)  IS NULL     OR TO_NUMBER(:ID_MENTOR)    = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+                AND   	(TO_NUMBER(:ID_CLIENTE) = A.ID_CLIENTE)
+            """,
+            nativeQuery = true)
+    Page<Agenda> findAllClienteLogado(Pageable pageable,
+                                      @Param("STATUS") @Nullable Integer status,
+                                      @Param("ID_MENTOR") @Nullable Long idProfissionalMentor,
+                                      @Param("ID_CLIENTE") Long idCliente);
+
+
+    @Query(value = """
+            SELECT * FROM AGENDA A
+            	JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+             	WHERE   (TO_NUMBER(:ID_MENTOR) = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM AGENDA A
+                JOIN PROFISSIONAL_MENTOR PM ON (A.ID_MENTOR = PM.ID)
+                LEFT JOIN CLIENTE C ON (A.ID_CLIENTE = C.ID)
+                WHERE   (TO_NUMBER(:ID_MENTOR) = A.ID_MENTOR)
+                AND   	(TO_NUMBER(:STATUS)     IS NULL     OR TO_NUMBER(:STATUS)       = A.STATUS)
+            """,
+            nativeQuery = true)
+    Page<Agenda> findAllProfissionalLogado(Pageable pageable,
+                                           @Param("STATUS") @Nullable Integer status,
+                                           @Param("ID_MENTOR") Long idProfissionalMentor);
+
 
     @Query(value = "SELECT * FROM AGENDA AG\n" +
             "    LEFT JOIN CLIENTE CL on CL.ID = AG.ID_CLIENTE\n" +

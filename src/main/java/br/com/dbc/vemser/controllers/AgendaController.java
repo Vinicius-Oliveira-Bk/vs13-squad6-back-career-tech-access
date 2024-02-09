@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.controllers;
 
 import br.com.dbc.vemser.controllers.documentacao.IAgendaControllerDoc;
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.RelatorioAgendaDTO;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,41 +47,42 @@ public class AgendaController implements IAgendaControllerDoc {
         return new ResponseEntity<>(agendaService.agendarHorario(idAgenda, idCliente), HttpStatus.OK);
     }
 
+    @PutMapping("marcar-presente/{idAgenda}")
+    public ResponseEntity<String> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception {
+        log.info("Agendando Cliente...");
+        return new ResponseEntity<>(agendaService.marcarPresente(idAgenda), HttpStatus.OK);
+    }
+
     @GetMapping
-    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception {
+    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                           @RequestParam(required = false) Long idAgenda,
+                                                           @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum,
+                                                           @RequestParam(required = false) Long idProfissionalMentor,
+                                                           @RequestParam(required = false) Long idCliente) throws Exception {
         log.info("Buscando horários...");
-        return ResponseEntity.ok().body(agendaService.listAll(pageable));
+        return ResponseEntity.ok().body(agendaService.listAll(pageable, idAgenda, statusAgendaEnum, idProfissionalMentor, idCliente));
     }
 
-//    @GetMapping("/{idCliente}/cliente")
-//    public ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception {
-//        log.info("Buscando horários...");
-//        return ResponseEntity.ok().body(agendaService.listAllByCliente(idCliente));
-//    }
-
-//    @GetMapping("/{idProfissional}/profissional")
-//    public ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception {
-//        log.info("Buscando horários...");
-//        return ResponseEntity.ok().body(agendaService.listAllByProfissional(idProfissional));
-//    }
-
-//    @GetMapping("/{statusAgendaEnum}/status")
-//    public ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception {
-//        log.info("Buscando horários...");
-//        return ResponseEntity.ok().body(agendaService.listAllByStatus(statusAgendaEnum));
-//    }
-
-    @GetMapping("/{idAgenda}")
-    public ResponseEntity<AgendaResponseDTO> getById(@PathVariable Long idAgenda) throws Exception {
-        log.info("Buscando horário...");
-        return ResponseEntity.ok().body(agendaService.getById(idAgenda));
+    @GetMapping("/cliente")
+    public ResponseEntity<Page<AgendaResponseDTO>> listAllAgendasCliente(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                           @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum,
+                                                           @RequestParam(required = false) Long idProfissionalMentor) throws RegraDeNegocioException {
+        log.info("Buscando horários...");
+        return ResponseEntity.ok().body(agendaService.listAllAgendasClienteLogado(pageable, statusAgendaEnum, idProfissionalMentor));
     }
 
-//    @PutMapping("reagendar/{idAgenda}/{idNovaAgenda}")
-//    public ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception {
-//        log.info("Atualizando horário...");
-//        return ResponseEntity.ok().body(agendaService.reagendarHorario(id, idNovaAgenda));
-//    }
+    @GetMapping("/profissional")
+    public ResponseEntity<Page<AgendaResponseDTO>> listAllAgendasProfissional(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                           @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum) throws RegraDeNegocioException {
+        log.info("Buscando horários...");
+        return ResponseEntity.ok().body(agendaService.listAllAgendasProfissionalLogado(pageable, statusAgendaEnum));
+    }
+
+    @PutMapping("alterar-horario/{idAgenda}")
+    public ResponseEntity<AgendaResponseDTO> alterarHorario(@PathVariable("idAgenda") @NotNull Long idAgenda, @RequestBody @Valid AgendaRequestDTO agendaRequestDTO) throws Exception {
+        log.info("Agendando Cliente...");
+        return new ResponseEntity<>(agendaService.alterarHorario(idAgenda, agendaRequestDTO), HttpStatus.OK);
+    }
 
     @PutMapping("cancelar/{idAgenda}")
     public ResponseEntity<Void> cancelarHorario(@NotNull @PathVariable("idAgenda") Long id) throws Exception {
