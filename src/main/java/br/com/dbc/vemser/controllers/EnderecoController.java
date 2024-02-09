@@ -4,6 +4,7 @@ import br.com.dbc.vemser.controllers.documentacao.IEnderecoControllerDoc;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.EnderecoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
+import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.services.EnderecoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,22 +31,32 @@ public class EnderecoController implements IEnderecoControllerDoc {
 
     private final EnderecoService enderecoService;
 
-    @PostMapping("/{idUsuario}")
+    @PostMapping("/criar-endereco")
+    public ResponseEntity<EnderecoResponseDTO> create(@Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception {
+        log.info("Criando endereço...");
+        return new ResponseEntity<>(enderecoService.create(null, enderecoRequestDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/criar-endereco-admin/{idUsuario}")
     public ResponseEntity<EnderecoResponseDTO> create(@NotNull @PathVariable("idUsuario") Long idUsuario, @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) throws Exception {
         log.info("Criando endereço...");
         return new ResponseEntity<>(enderecoService.create(idUsuario, enderecoRequestDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Page<EnderecoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws BancoDeDadosException {
+    public ResponseEntity<Page<EnderecoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                             @RequestParam(required = false) Long idUsuario,
+                                                             @RequestParam(required = false) Long idEndereco,
+                                                             @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException {
         log.info("Buscando endereços...");
-        return ResponseEntity.ok().body(enderecoService.listAll(pageable));
+        return ResponseEntity.ok().body(enderecoService.listAll(pageable, idUsuario, idEndereco, tipoEnum));
     }
 
-    @GetMapping("/{idEndereco}")
-    public ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception {
-        log.info("Buscando endereço...");
-        return ResponseEntity.ok().body(enderecoService.listById(idEndereco));
+    @GetMapping("/usuario")
+    public ResponseEntity<Page<EnderecoResponseDTO>> listAllUsuario(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                                    @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException {
+        log.info("Buscando endereços...");
+        return ResponseEntity.ok().body(enderecoService.listAllUsuario(pageable, tipoEnum));
     }
 
     @PutMapping("/{idEndereco}")

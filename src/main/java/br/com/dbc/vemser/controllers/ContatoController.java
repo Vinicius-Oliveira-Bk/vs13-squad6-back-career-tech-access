@@ -3,7 +3,12 @@ package br.com.dbc.vemser.controllers;
 import br.com.dbc.vemser.controllers.documentacao.IContatoControllerDoc;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.ContatoRequestDTO;
+import br.com.dbc.vemser.model.dtos.request.EnderecoRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ContatoResponseDTO;
+import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
+import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
+import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.services.ContatoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -33,22 +38,32 @@ public class ContatoController implements IContatoControllerDoc {
 
     private final ContatoService contatoService;
 
-    @PostMapping("{idUsuario}")
+    @PostMapping("/criar-contato")
+    public ResponseEntity<ContatoResponseDTO> create(@Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception {
+        log.info("Criando contato...");
+        return new ResponseEntity<>(contatoService.create(null, contatoRequestDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/criar-contato-admin/{idUsuario}")
     public ResponseEntity<ContatoResponseDTO> create(@NotNull @PathVariable("idUsuario") Long idUsuario, @Valid @RequestBody ContatoRequestDTO contatoRequestDTO) throws Exception {
         log.info("Criando contato...");
         return new ResponseEntity<>(contatoService.create(idUsuario, contatoRequestDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ContatoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws BancoDeDadosException {
+    public ResponseEntity<Page<ContatoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                            @RequestParam(required = false) Long idUsuario,
+                                                            @RequestParam(required = false) Long idContato,
+                                                            @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException {
         log.info("Buscando contatos...");
-        return ResponseEntity.ok().body(contatoService.listAll(pageable));
+        return ResponseEntity.ok().body(contatoService.listAll(pageable, idUsuario, idContato, tipoEnum));
     }
 
-    @GetMapping("/{idContato}")
-    public ResponseEntity<ContatoResponseDTO> listById(@PathVariable Long idContato) throws Exception {
-        log.info("Buscando contato...");
-        return ResponseEntity.ok().body(contatoService.listById(idContato));
+    @GetMapping("/usuario")
+    public ResponseEntity<Page<ContatoResponseDTO>> listAllUsuario(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                            @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException {
+        log.info("Buscando contatos...");
+        return ResponseEntity.ok().body(contatoService.listAllUsuario(pageable, tipoEnum));
     }
 
     @PutMapping("/{idContato}")
