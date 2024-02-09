@@ -9,6 +9,7 @@ import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.entities.*;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
+import br.com.dbc.vemser.repository.CargoRepository;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ClienteService {
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
     private final String RESOURCE_NOT_FOUND = "Não foi possível encontrar clientes com este filtro.";
+    private final CargoRepository cargoRepository;
 
     public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, @Nullable Long idUsuario) throws Exception {
         Usuario usuario;
@@ -93,13 +95,15 @@ public class ClienteService {
         return clienteResponseDTO;
     }
 
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) throws RegraDeNegocioException {
         Cliente cliente = getCliente(id);
-
+        if (!cliente.getAgendas().isEmpty()) {
+            throw new RegraDeNegocioException("Há agendas cadastradas com este cliente, não é possível deletá-lo.");
+        }
+        clienteRepository.delete(cliente);
         Set<Cargo> cargos = cliente.getUsuario().getCargos();
         cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
-
-        clienteRepository.delete(cliente);
+        usuarioService.atualizarRole(cliente.getUsuario(), cargos);
     }
 
     public ClienteResponseCompletoDTO listById(Long id) throws Exception {

@@ -197,4 +197,9 @@ public class UsuarioService {
             throw new RegraDeNegocioException("Usuário inativo, login cancelado.");
         }
     }
+
+    public void atualizarRole(Usuario usuario, Set<Cargo> cargos) {
+        usuario.setCargos(cargos);
+        usuarioRepository.save(usuario);
+    }
 }
