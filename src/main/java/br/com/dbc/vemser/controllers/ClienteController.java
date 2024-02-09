@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +32,16 @@ public class ClienteController implements IClienteControllerDoc {
 
     private final ClienteService clienteService;
 
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @PathVariable("idUsuario") @NotNull Long idUsuario) throws Exception {
+    @PostMapping("/criar-cliente-admin/{idUsuario}")
+    public ResponseEntity<ClienteResponseDTO> createClienteAdmin(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO, @NotNull @PathVariable("idUsuario") Long idUsuario) throws Exception {
         log.info("Criando cliente...");
         return new ResponseEntity<>(clienteService.create(clienteRequestDTO, idUsuario), HttpStatus.OK);
+    }
+
+    @PostMapping("/criar-cliente")
+    public ResponseEntity<ClienteResponseDTO> createCliente(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO) throws Exception {
+        log.info("Criando cliente...");
+        return new ResponseEntity<>(clienteService.create(clienteRequestDTO, null), HttpStatus.OK);
     }
 
     @GetMapping

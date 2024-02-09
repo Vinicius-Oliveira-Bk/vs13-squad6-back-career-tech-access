@@ -6,9 +6,7 @@ import br.com.dbc.vemser.mappers.ProfissionalMentorMapper;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
-import br.com.dbc.vemser.model.entities.AreaAtuacao;
-import br.com.dbc.vemser.model.entities.ProfissionalMentor;
-import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.entities.*;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.ProfissionalMentorRepository;
@@ -16,9 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -26,13 +26,20 @@ import java.util.stream.Collectors;
 public class ProfissionalMentorService {
 
     private final ProfissionalMentorRepository profissionalMentorRepository;
+    private final CargoService cargoService;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
     private final EmailService emailService;
+    private final String RESOURCE_NOT_FOUND = "Não foi encontrado nenhum profissional com este filtro.";
 
-    public ProfissionalMentorResponseDTO create(Long idUsuario, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
+    public ProfissionalMentorResponseDTO create(@Nullable Long idUsuario, ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
+        Usuario usuario;
+        if (idUsuario != null) {
+            usuario = usuarioService.getUsuario(idUsuario);
+        } else {
+            usuario = usuarioService.getUsuario(usuarioService.getIdLoggedUser());
+        }
         List<ProfissionalMentor> mentores = profissionalMentorRepository.findAll();
-        Usuario usuario = usuarioService.getUsuario(idUsuario);
         boolean mentorExiste = mentores.stream()
                 .anyMatch(mentor -> mentor.getUsuario().getId().equals(idUsuario));
 
@@ -41,6 +48,8 @@ public class ProfissionalMentorService {
         }
         ProfissionalMentor profissionalMentor = ProfissionalMentorMapper.profissionalMentorToEntity(profissionalMentorRequestDTO);
 
+
+        usuario.getCargos().add(cargoService.getCargo("ROLE_PROFISSIONAL"));
         profissionalMentor.setUsuario(usuario);
         ProfissionalMentor criado = profissionalMentorRepository.save(profissionalMentor);
 
@@ -73,6 +82,9 @@ public class ProfissionalMentorService {
 
     public void delete(Long idProfissionalMentor) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
+        Set<Cargo> cargos = prof.getUsuario().getCargos();
+        cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
+
         profissionalMentorRepository.delete(prof);
     }
 
@@ -96,5 +108,10 @@ public class ProfissionalMentorService {
                     return areaAtuacao;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public ProfissionalMentor getByUsuario(Long idUsuario) throws RegraDeNegocioException {
+        return profissionalMentorRepository.findByUsuario_Id(idUsuario)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 }
