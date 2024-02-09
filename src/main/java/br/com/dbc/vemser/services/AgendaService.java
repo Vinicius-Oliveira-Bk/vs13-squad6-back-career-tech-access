@@ -122,7 +122,7 @@ public class AgendaService {
 
     public String marcarPresente(Long idAgenda) throws Exception {
         Agenda agenda = getAgenda(idAgenda);
-        if (validarDisponibilidadeAgenda(agenda)) {
+        if (Objects.isNull(agenda.getCliente())) {
             throw new RegraDeNegocioException("Não é possível marcar como presente, não há cliente cadastrado.");
         }
         if (agenda.getDataHoraInicio().isAfter(LocalDateTime.now())) {

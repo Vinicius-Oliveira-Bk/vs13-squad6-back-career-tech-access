@@ -175,17 +175,20 @@ public class UsuarioService {
         String message;
         if (idUsuario != null) {
             usuario = getUsuario(idUsuario);
-            if (usuario.isAtivo()) {
-                usuario.setAtivo(false);
+            usuario.setAtivo(!usuario.isAtivo());
+            if (!usuario.isAtivo()) {
                 message = "Usuario inativado com sucesso.";
             } else {
-                usuario.setAtivo(true);
                 message = "Usuario ativado com sucesso.";
             }
         } else {
             usuario = getUsuario(getIdLoggedUser());
-            usuario.setAtivo(false);
-            message = "Usuario inativado com sucesso.";
+            usuario.setAtivo(!usuario.isAtivo());
+            if (!usuario.isAtivo()) {
+                message = "Usuario inativado com sucesso.";
+            } else {
+                message = "Usuario ativado com sucesso.";
+            }
         }
         usuarioRepository.save(usuario);
         return message;
