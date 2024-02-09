@@ -82,10 +82,13 @@ public class ProfissionalMentorService {
 
     public void delete(Long idProfissionalMentor) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
+        if (!prof.getAgendas().isEmpty()) {
+            throw new RegraDeNegocioException("Há agendas cadastradas com este mentor, não é possível deletá-lo.");
+        }
+        profissionalMentorRepository.delete(prof);
         Set<Cargo> cargos = prof.getUsuario().getCargos();
         cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
-
-        profissionalMentorRepository.delete(prof);
+        usuarioService.atualizarRole(prof.getUsuario(), cargos);
     }
 
     public ProfissionalMentorResponseCompletoDTO getById(Long idProfissionalMentor) throws Exception {

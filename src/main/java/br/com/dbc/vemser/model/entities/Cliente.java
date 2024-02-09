@@ -76,5 +76,4 @@ public class Cliente {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
     private List<Agenda> agendas;
-
 }
