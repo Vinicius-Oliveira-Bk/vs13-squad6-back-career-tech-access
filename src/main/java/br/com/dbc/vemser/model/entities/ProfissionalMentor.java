@@ -25,6 +25,8 @@ public class ProfissionalMentor {
     private NivelExperienciaEnum nivelExperienciaEnum;
     @Column(name = "carteira_trabalho")
     private String carteiraDeTrabalho;
+    @Column(name = "ativo")
+    private boolean isAtivo;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)

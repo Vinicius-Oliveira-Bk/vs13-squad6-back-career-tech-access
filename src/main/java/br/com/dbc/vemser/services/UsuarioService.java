@@ -175,17 +175,20 @@ public class UsuarioService {
         String message;
         if (idUsuario != null) {
             usuario = getUsuario(idUsuario);
-            if (usuario.isAtivo()) {
-                usuario.setAtivo(false);
+            usuario.setAtivo(!usuario.isAtivo());
+            if (!usuario.isAtivo()) {
                 message = "Usuario inativado com sucesso.";
             } else {
-                usuario.setAtivo(true);
                 message = "Usuario ativado com sucesso.";
             }
         } else {
             usuario = getUsuario(getIdLoggedUser());
-            usuario.setAtivo(false);
-            message = "Usuario inativado com sucesso.";
+            usuario.setAtivo(!usuario.isAtivo());
+            if (!usuario.isAtivo()) {
+                message = "Usuario inativado com sucesso.";
+            } else {
+                message = "Usuario ativado com sucesso.";
+            }
         }
         usuarioRepository.save(usuario);
         return message;
@@ -196,5 +199,10 @@ public class UsuarioService {
         if (!usuario.isAtivo()) {
             throw new RegraDeNegocioException("Usuário inativo, login cancelado.");
         }
+    }
+
+    public void atualizarRole(Usuario usuario, Set<Cargo> cargos) {
+        usuario.setCargos(cargos);
+        usuarioRepository.save(usuario);
     }
 }

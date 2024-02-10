@@ -3,6 +3,7 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.ProfissionalMentorMapper;
+import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
@@ -82,10 +83,13 @@ public class ProfissionalMentorService {
 
     public void delete(Long idProfissionalMentor) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
+        if (!prof.getAgendas().isEmpty()) {
+            throw new RegraDeNegocioException("Há agendas cadastradas com este mentor, não é possível deletá-lo.");
+        }
+        profissionalMentorRepository.delete(prof);
         Set<Cargo> cargos = prof.getUsuario().getCargos();
         cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
-
-        profissionalMentorRepository.delete(prof);
+        usuarioService.atualizarRole(prof.getUsuario(), cargos);
     }
 
     public ProfissionalMentorResponseCompletoDTO getById(Long idProfissionalMentor) throws Exception {
@@ -113,5 +117,40 @@ public class ProfissionalMentorService {
     public ProfissionalMentor getByUsuario(Long idUsuario) throws RegraDeNegocioException {
         return profissionalMentorRepository.findByUsuario_Id(idUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
+    }
+
+    public String ativarInativarProfissional(@Nullable Long idProfissional) throws Exception {
+        ProfissionalMentor profissional;
+        Usuario usuario;
+        Set<Cargo> cargos;
+        String message;
+        if (idProfissional != null) {
+            profissional = getProfissionalMentor(idProfissional);
+            usuario = profissional.getUsuario();
+            cargos = usuario.getCargos();
+            profissional.setAtivo(!profissional.isAtivo());
+            if (!profissional.isAtivo()) {
+                message = "Profissional inativado com sucesso.";
+                cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
+            } else {
+                message = "Profissional ativado com sucesso.";
+                cargos.add(cargoService.getCargo("ROLE_PROFISSIONAL"));
+            }
+        } else {
+            profissional = getByUsuario(usuarioService.getIdLoggedUser());
+            usuario = profissional.getUsuario();
+            cargos = usuario.getCargos();
+            profissional.setAtivo(!profissional.isAtivo());
+            if (!profissional.isAtivo()) {
+                message = "Profissional inativado com sucesso.";
+                cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
+            } else {
+                message = "Profissional ativado com sucesso.";
+                cargos.add(cargoService.getCargo("ROLE_PROFISSIONAL"));
+            }
+        }
+        usuarioService.atualizarRole(usuario, cargos);
+        profissionalMentorRepository.save(profissional);
+        return message;
     }
 }

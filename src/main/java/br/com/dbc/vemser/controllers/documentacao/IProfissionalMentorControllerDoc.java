@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface IProfissionalMentorControllerDoc {
 
-    @Operation(summary = "Cria um profissional mentor", description = "Cria um profissional mentor")
+    @Operation(summary = "Cria um profissional mentor através do id informado", description = "Cria um profissional mentor através do id informado")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Profissional mentor criado com sucesso"),
@@ -29,6 +29,16 @@ public interface IProfissionalMentorControllerDoc {
     )
     ResponseEntity<ProfissionalMentorResponseDTO> create(@PathVariable Long idUsuario, @Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception;
 
+    @Operation(summary = "Cria um profissional mentor no usuário logado", description = "Cria um profissional mentor no usuário logado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Profissional mentor criado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro na requisição"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<ProfissionalMentorResponseDTO> create(@Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception;
 
     @Operation(summary = "Lista todos profissionais mentores", description = "Lista todos profissionais mentorres do sistema")
     @ApiResponses(

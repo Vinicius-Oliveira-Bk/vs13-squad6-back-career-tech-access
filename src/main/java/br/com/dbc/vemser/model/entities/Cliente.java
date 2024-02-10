@@ -64,6 +64,9 @@ public class Cliente {
     @Column(name = "data_termino")
     private LocalDate dataTermino;
 
+    @Column(name = "ativo")
+    private boolean isAtivo;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
@@ -76,5 +79,4 @@ public class Cliente {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
     private List<Agenda> agendas;
-
 }
