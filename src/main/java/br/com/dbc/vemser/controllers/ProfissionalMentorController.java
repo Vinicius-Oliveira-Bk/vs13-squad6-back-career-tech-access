@@ -1,9 +1,13 @@
 package br.com.dbc.vemser.controllers;
 
 import br.com.dbc.vemser.controllers.documentacao.IProfissionalMentorControllerDoc;
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
+import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.services.ProfissionalMentorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +34,18 @@ public class ProfissionalMentorController implements IProfissionalMentorControll
 
     private final ProfissionalMentorService profissionalMentorService;
 
-    @PostMapping("/{idUsuario}")
+    @PostMapping("/criar-profissional-admin/{idUsuario}")
     public ResponseEntity<ProfissionalMentorResponseDTO> create(@PathVariable Long idUsuario, @Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
         log.info("Criando Profissional Mentor...");
         ProfissionalMentorResponseDTO profissionalMentorCriado = profissionalMentorService.create(idUsuario, profissionalMentorRequestDTO);
+        log.info(">>> Profissional Mentor criado com sucesso <<<");
+        return new ResponseEntity<>(profissionalMentorCriado, HttpStatus.OK);
+    }
+
+    @PostMapping("/criar-profissional")
+    public ResponseEntity<ProfissionalMentorResponseDTO> create(@Valid @RequestBody ProfissionalMentorRequestDTO profissionalMentorRequestDTO) throws Exception {
+        log.info("Criando Profissional Mentor...");
+        ProfissionalMentorResponseDTO profissionalMentorCriado = profissionalMentorService.create(null, profissionalMentorRequestDTO);
         log.info(">>> Profissional Mentor criado com sucesso <<<");
         return new ResponseEntity<>(profissionalMentorCriado, HttpStatus.OK);
     }
@@ -60,6 +73,23 @@ public class ProfissionalMentorController implements IProfissionalMentorControll
         log.info(">>> Profissional Mentor atualizado com sucesso <<<");
         return ResponseEntity.ok().body(atualizaProfissionalMentor);
     }
+
+    @PutMapping("/ativar-inativar")
+    public ResponseEntity<String> ativarInativarUsuario() throws Exception {
+        log.info("Alterando situação do profissional...");
+        String message = profissionalMentorService.ativarInativarProfissional(null);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PutMapping("/ativar-inativar-admin")
+    public ResponseEntity<String> ativarInativarUsuarioAdmin(@Nullable @RequestParam Long idUsuario) throws Exception {
+        log.info("Alterando situação do profissional...");
+        String message = profissionalMentorService.ativarInativarProfissional(idUsuario);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{idProfissionalMentor}")
     public ResponseEntity<Void> delete(@PathVariable("idProfissionalMentor") Long idProfissionalMentor) throws Exception {

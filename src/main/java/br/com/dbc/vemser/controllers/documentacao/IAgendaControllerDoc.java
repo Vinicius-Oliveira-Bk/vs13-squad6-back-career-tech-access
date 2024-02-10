@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.controllers.documentacao;
 
+import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.AgendaRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.RelatorioAgendaDTO;
@@ -53,7 +54,11 @@ public interface IAgendaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    public ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"dataHoraInicio"}) Pageable pageable) throws Exception;
+    ResponseEntity<Page<AgendaResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                    @RequestParam(required = false) Long idAgenda,
+                                                    @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum,
+                                                    @RequestParam(required = false) Long idProfissionalMentor,
+                                                    @RequestParam(required = false) Long idCliente) throws Exception;
 
     @Operation(summary = "Cancela um horário", description = "Cancela o agendamento e volta a situação do horário para disponível.")
     @ApiResponses(
@@ -65,63 +70,6 @@ public interface IAgendaControllerDoc {
             }
     )
     ResponseEntity<Void> cancelarHorario(@NotNull @PathVariable("idAgenda") Long id) throws Exception;
-
-    @Operation(summary = "Reagenda um cliente", description = "Altera o agendamento do cliente para outra agenda disponível.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Reagendamento realizado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<AgendaResponseDTO> reagendarHorario(@NotNull @PathVariable("idAgenda") Long id, @NotNull @PathVariable("idNovaAgenda") Long idNovaAgenda) throws Exception;
-
-    @Operation(summary = "Busca agenda pelo id", description = "Busca agenda pelo id.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agenda encontrada"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<AgendaResponseDTO> getById(@PathVariable Long idAgenda) throws Exception;
-
-    @Operation(summary = "Busca Agendas por Status", description = "Busca Agendas por Status")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByStatus(@PathVariable("statusAgendaEnum") @NotNull StatusAgendaEnum statusAgendaEnum) throws Exception;
-    @Operation(summary = "Busca Agendas por profissional", description = "Busca Agendas por profissional")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByProfissional(@PathVariable("idProfissional") @NotNull Long idProfissional) throws Exception;
-
-
-        @Operation(summary = "Busca Agendas por cliente", description = "Busca Agendas por cliente")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Agendas listadas"),
-                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
-                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
-                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
-            }
-    )
-    ResponseEntity<List<AgendaResponseDTO>> listAllByCliente(@PathVariable("idCliente") @NotNull Long idCliente) throws Exception;
-
-
 
     @Operation(summary = "Exclui uma agenda", description = "Exclui uma agenda recebendo o id")
     @ApiResponses(
@@ -147,4 +95,50 @@ public interface IAgendaControllerDoc {
     )
     ResponseEntity<Set<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda);
 
+    @Operation(summary = "Alterar horário da agenda pelo seu id", description = "Altera o horário da agenda pelo idAgenda informado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<AgendaResponseDTO> alterarHorario(@PathVariable("idAgenda") @NotNull Long idAgenda, @RequestBody @Valid AgendaRequestDTO agendaRequestDTO) throws Exception;
+
+    @Operation(summary = "Marcar o status da agenda para presente", description = "Marca o status da agenda para presente")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<String> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception;
+
+    @Operation(summary = "Listar a agenda dos profissionais mentores", description = "Lista a agenda dos profissionais mentores por status (DISPONIVEL/AGENDADO/PRESENTE)")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<Page<AgendaResponseDTO>> listAllAgendasProfissional(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                                       @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum) throws RegraDeNegocioException;
+
+    @Operation(summary = "Listar a agenda do cliente por status", description = "Lista a agenda do cliente por status (DISPONIVEL/AGENDADO/PRESENTE)")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
+                    @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
+            }
+    )
+    ResponseEntity<Page<AgendaResponseDTO>> listAllAgendasCliente(@PageableDefault(page = 0, size = 10, sort = {"data_inicio"}) Pageable pageable,
+                                                                  @RequestParam(required = false) StatusAgendaEnum statusAgendaEnum,
+                                                                  @RequestParam(required = false) Long idProfissionalMentor) throws RegraDeNegocioException;
 }

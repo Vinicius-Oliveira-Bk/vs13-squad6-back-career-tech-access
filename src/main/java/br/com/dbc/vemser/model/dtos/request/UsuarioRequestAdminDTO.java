@@ -1,13 +1,15 @@
 package br.com.dbc.vemser.model.dtos.request;
 
+import br.com.dbc.vemser.model.enums.CargoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
-public class UsuarioRequestDTO {
+public class UsuarioRequestAdminDTO {
 
     @NotBlank(message = "O campo não pode ser nulo, vazio ou conter apenas espaços em branco")
     @Schema(description = "Informe o nome", required = true, example = "Gabriel Silva")
@@ -46,4 +48,7 @@ public class UsuarioRequestDTO {
 
     @Schema(description = "Link da imagem do documento", example = "http://imagemDocumento.com")
     private String imagemDocumento;
+
+    @Schema(description = "Cargos do usuário", required = true , example = "[\"ROLE_ADMIN\", \"ROLE_USUARIO\"]")
+    private Set<CargoEnum> cargos;
 }

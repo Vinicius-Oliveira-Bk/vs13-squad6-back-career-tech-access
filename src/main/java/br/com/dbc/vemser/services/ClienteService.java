@@ -4,21 +4,23 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
+import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
-import br.com.dbc.vemser.model.entities.AreaInteresse;
-import br.com.dbc.vemser.model.entities.Cliente;
-import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.entities.*;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
+import br.com.dbc.vemser.repository.CargoRepository;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -26,15 +28,21 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final CargoService cargoService;
     private final UsuarioService usuarioService;
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
     private final String RESOURCE_NOT_FOUND = "Não foi possível encontrar clientes com este filtro.";
+    private final CargoRepository cargoRepository;
 
-    public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, Long idUsuario) throws Exception {
+    public ClienteResponseDTO create(ClienteRequestDTO clienteRequestDTO, @Nullable Long idUsuario) throws Exception {
+        Usuario usuario;
+        if (idUsuario != null) {
+            usuario = usuarioService.getUsuario(idUsuario);
+        } else {
+            usuario = usuarioService.getUsuario(usuarioService.getIdLoggedUser());
+        }
         List<Cliente> clientesEntity= clienteRepository.findAll();
-
-        Usuario usuario = usuarioService.getUsuario(idUsuario);
 
         boolean clienteExistente = clientesEntity.stream()
                 .anyMatch(cliente -> cliente.getUsuario().getId().equals(idUsuario));
@@ -44,6 +52,9 @@ public class ClienteService {
         }
 
         Cliente cliente = ClienteMapper.clienteRequestDTOtoEntity(clienteRequestDTO);
+
+
+        usuario.getCargos().add(cargoService.getCargo("ROLE_CLIENTE"));
 
         cliente.setUsuario(usuario);
         Cliente criado = clienteRepository.save(cliente);
@@ -85,9 +96,15 @@ public class ClienteService {
         return clienteResponseDTO;
     }
 
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) throws RegraDeNegocioException {
         Cliente cliente = getCliente(id);
+        if (!cliente.getAgendas().isEmpty()) {
+            throw new RegraDeNegocioException("Há agendas cadastradas com este cliente, não é possível deletá-lo.");
+        }
         clienteRepository.delete(cliente);
+        Set<Cargo> cargos = cliente.getUsuario().getCargos();
+        cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
+        usuarioService.atualizarRole(cliente.getUsuario(), cargos);
     }
 
     public ClienteResponseCompletoDTO listById(Long id) throws Exception {
@@ -111,6 +128,46 @@ public class ClienteService {
                     return areaInteresse;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Cliente getByUsuario(Long idUsuario) throws RegraDeNegocioException {
+        return clienteRepository.findByUsuario_Id(idUsuario)
+                .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
+    }
+
+    public String ativarInativarCliente(@Nullable Long idCliente) throws Exception {
+        Cliente cliente;
+        String message;
+        Usuario usuario;
+        Set<Cargo> cargos;
+        if (idCliente != null) {
+            cliente = getCliente(idCliente);
+            usuario = cliente.getUsuario();
+            cargos = usuario.getCargos();
+            cliente.setAtivo(!cliente.isAtivo());
+            if (!cliente.isAtivo()) {
+                message = "Cliente inativado com sucesso.";
+                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
+            } else {
+                message = "Cliente ativado com sucesso.";
+                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
+            }
+        } else {
+            cliente = getByUsuario(usuarioService.getIdLoggedUser());
+            usuario = cliente.getUsuario();
+            cargos = usuario.getCargos();
+            cliente.setAtivo(!cliente.isAtivo());
+            if (!cliente.isAtivo()) {
+                message = "Cliente inativado com sucesso.";
+                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
+            } else {
+                message = "Cliente ativado com sucesso.";
+                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
+            }
+        }
+        usuarioService.atualizarRole(usuario, cargos);
+        clienteRepository.save(cliente);
+        return message;
     }
 }
 

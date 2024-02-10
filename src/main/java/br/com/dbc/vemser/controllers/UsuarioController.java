@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.controllers;
 
 import br.com.dbc.vemser.controllers.documentacao.IUsuarioControllerDoc;
+import br.com.dbc.vemser.model.dtos.request.AlterarSenhaRequestDTO;
+import br.com.dbc.vemser.model.dtos.request.UsuarioRequestAdminDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
@@ -13,11 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -29,6 +31,14 @@ import java.util.Set;
 public class UsuarioController implements IUsuarioControllerDoc {
 
     private final UsuarioService usuarioService;
+
+    @PostMapping("/create-admin")
+    public ResponseEntity<UsuarioResponseCompletoDTO> createByAdmin(@Valid @RequestBody UsuarioRequestAdminDTO usuarioRequestAdminDTO) throws Exception {
+        log.info("Criando usuario...");
+        UsuarioResponseCompletoDTO usuarioCriado = usuarioService.createByAdmin(usuarioRequestAdminDTO);
+        log.info(">>> Usuário criado com sucesso <<<");
+        return new ResponseEntity<>(usuarioCriado, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> create(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO) throws Exception {
@@ -60,6 +70,30 @@ public class UsuarioController implements IUsuarioControllerDoc {
         UsuarioResponseDTO atualizaUsuario = usuarioService.update(id, usuarioRequestDTO);
         log.info(">>> Usuário atualizado com sucesso <<<");
         return ResponseEntity.ok().body(atualizaUsuario);
+    }
+
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<String> alterarSenha(@Valid @RequestBody AlterarSenhaRequestDTO alterarSenhaRequestDTO) throws Exception {
+        log.info("Alterando senha...");
+        usuarioService.atualizarSenha(alterarSenhaRequestDTO);
+        log.info(">>> Senha atualizada com sucesso <<<");
+        return new ResponseEntity<>("Senha alterada com sucesso!", HttpStatus.OK);
+    }
+
+    @PutMapping("/ativar-inativar")
+    public ResponseEntity<String> ativarInativarUsuario() throws Exception {
+        log.info("Alterando situação do usuário...");
+        String message = usuarioService.ativarInativarUsuario(null);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PutMapping("/ativar-inativar-admin")
+    public ResponseEntity<String> ativarInativarUsuarioAdmin(@Nullable @RequestParam Long idUsuario) throws Exception {
+        log.info("Alterando situação do usuário...");
+        String message = usuarioService.ativarInativarUsuario(idUsuario);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("{idUsuario}")

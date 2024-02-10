@@ -3,6 +3,7 @@ package br.com.dbc.vemser.controllers.documentacao;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.model.dtos.request.EnderecoRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.EnderecoResponseDTO;
+import br.com.dbc.vemser.model.enums.TipoEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -37,17 +39,22 @@ public interface IEnderecoControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<Page<EnderecoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable) throws BancoDeDadosException;
+    ResponseEntity<Page<EnderecoResponseDTO>> listAll(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                      @RequestParam(required = false) Long idUsuario,
+                                                      @RequestParam(required = false) Long idEndereco,
+                                                      @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException;
 
-    @Operation(summary = "Listar um endereço", description = "Lista o endereço do banco pela sua id")
+    @Operation(summary = "Listar endereços", description = "Lista todos os endereços do banco")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Endereço retornado com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Lista de endereços retornados com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
                     @ApiResponse(responseCode = "403", description = "Acesso negado"),
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<EnderecoResponseDTO> listById(@PathVariable Long idEndereco) throws Exception;
+    ResponseEntity<Page<EnderecoResponseDTO>> listAllUsuario(@PageableDefault(page = 0, size = 10, sort = {"id"}) Pageable pageable,
+                                                             @RequestParam(required = false) TipoEnum tipoEnum) throws BancoDeDadosException;
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço no banco")
     @ApiResponses(
