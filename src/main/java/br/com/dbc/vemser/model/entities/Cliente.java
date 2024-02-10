@@ -64,6 +64,9 @@ public class Cliente {
     @Column(name = "data_termino")
     private LocalDate dataTermino;
 
+    @Column(name = "ativo")
+    private boolean isAtivo;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")

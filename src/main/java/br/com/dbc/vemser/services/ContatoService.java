@@ -4,14 +4,20 @@ package br.com.dbc.vemser.services;
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.model.dtos.request.ContatoRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.AgendaResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ContatoResponseDTO;
+import br.com.dbc.vemser.model.entities.Agenda;
 import br.com.dbc.vemser.model.entities.Contato;
+import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.entities.Usuario;
+import br.com.dbc.vemser.model.enums.TipoEnum;
 import br.com.dbc.vemser.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,16 +34,35 @@ public class ContatoService {
 
     public ContatoResponseDTO create(Long idUsuario, ContatoRequestDTO contatoRequestDTO) throws Exception {
         Contato contato = objectMapper.convertValue(contatoRequestDTO, Contato.class);
-        Usuario usuario = usuarioService.getUsuario(idUsuario);
+        Usuario usuario;
+        if (idUsuario != null) {
+            usuario = usuarioService.getUsuario(idUsuario);
+        } else {
+            usuario = usuarioService.getUsuario(usuarioService.getIdLoggedUser());
+        }
         contato.setUsuario(usuario);
             contatoRepository.save(contato);
         ContatoResponseDTO contatoResponseDTO = objectMapper.convertValue(contato, ContatoResponseDTO.class);
         return contatoResponseDTO;
     }
 
-    public Page<ContatoResponseDTO> listAll(Pageable pageable) throws BancoDeDadosException {
-        Page<Contato> contatosEntity= contatoRepository.findAll(pageable);
-        return contatosEntity.map(contatoEntity -> objectMapper.convertValue(contatoEntity, ContatoResponseDTO.class));
+    public Page<ContatoResponseDTO> listAll(Pageable pageable,
+                                            @Nullable Long idContato,
+                                            @Nullable Long idUsuario,
+                                            @Nullable TipoEnum tipoEnum) throws BancoDeDadosException {
+        Integer status = tipoEnum != null ? tipoEnum.ordinal() : null;
+        Page<Contato> contatos= contatoRepository.findAll(pageable, status, idContato, idUsuario);
+        return contatos.map(contato -> objectMapper.convertValue(contato, ContatoResponseDTO.class));
+    }
+
+    public Page<ContatoResponseDTO> listAllUsuario(Pageable pageable,
+                                                   @Nullable TipoEnum tipoEnum) throws BancoDeDadosException {
+
+        Integer status = tipoEnum != null ? tipoEnum.ordinal() : null;
+        Long idUsuarioLogado = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        Page<Contato> contatos = contatoRepository.findAllUsuarioLogado(pageable, status, idUsuarioLogado);
+
+        return contatos.map(contato -> objectMapper.convertValue(contato, ContatoResponseDTO.class));
     }
 
     public ContatoResponseDTO update(Long id, ContatoRequestDTO contatoRequestDTO) throws Exception {
@@ -62,9 +87,5 @@ public class ContatoService {
     private Contato getContato(Long id) throws RegraDeNegocioException {
         return contatoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
-    }
-
-    public List<Contato> getContatosByUser(Long idUsuario) throws BancoDeDadosException {
-        return contatoRepository.findByUsuario_Id(idUsuario);
     }
 }

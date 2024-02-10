@@ -62,6 +62,22 @@ public class ClienteController implements IClienteControllerDoc {
         return ResponseEntity.ok().body(clienteService.update(id, clienteRequestDTO));
     }
 
+    @PutMapping("/ativar-inativar")
+    public ResponseEntity<String> ativarInativarUsuario() throws Exception {
+        log.info("Alterando situação do cliente...");
+        String message = clienteService.ativarInativarCliente(null);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PutMapping("/ativar-inativar-admin")
+    public ResponseEntity<String> ativarInativarUsuarioAdmin(@Nullable @RequestParam Long idUsuario) throws Exception {
+        log.info("Alterando situação do cliente...");
+        String message = clienteService.ativarInativarCliente(idUsuario);
+        log.info(">>> Situação atualizada com sucesso <<<");
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<Void> delete(@PathVariable("idCliente") Long id) throws Exception {
         log.info("Deletando cliente...");
