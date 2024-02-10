@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET,"/cliente/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST,"/cliente/criar-cliente").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.POST,"/cliente/criar-cliente-admin/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.PUT,"/cliente").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/cliente").hasAnyRole("CLIENTE", "ADMIN")
                         //CONTATO
                         .antMatchers(HttpMethod.DELETE,"/contato").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.GET,"/contato/**").hasRole("ADMIN")
@@ -65,12 +65,11 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET,"/profissional-mentor/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST,"/profissional-mentor/criar-mentor").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.POST,"/profissional-mentor/criar-mentor-admin/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.PUT,"/profissional-mentor").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/profissional-mentor").hasAnyRole("PROFISSIONAL", "ADMIN")
                         //USUARIO
                         .antMatchers(HttpMethod.DELETE,"/usuario").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET,"/usuario/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.POST,"/usuario/create-admin").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST,"/usuario").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.PUT,"/usuario").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.PUT,"/usuario/alterar-senha").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.PUT,"/usuario/ativar-inativar").hasAnyRole("USUARIO", "ADMIN")
