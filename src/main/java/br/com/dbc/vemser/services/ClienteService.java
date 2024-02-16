@@ -4,10 +4,12 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
-import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
-import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.entities.AreaInteresse;
+import br.com.dbc.vemser.model.entities.Cargo;
+import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.CargoRepository;
@@ -98,7 +100,7 @@ public class ClienteService {
 
     public void delete(Long id) throws RegraDeNegocioException {
         Cliente cliente = getCliente(id);
-        if (!cliente.getAgendas().isEmpty()) {
+        if (cliente.getAgendas() != null && !cliente.getAgendas().isEmpty()) {
             throw new RegraDeNegocioException("Há agendas cadastradas com este cliente, não é possível deletá-lo.");
         }
         clienteRepository.delete(cliente);
