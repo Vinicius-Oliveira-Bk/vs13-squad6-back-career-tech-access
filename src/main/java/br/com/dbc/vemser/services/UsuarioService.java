@@ -33,7 +33,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final EmailService emailService;
+//    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final CargoService cargoService;
     private final String RESOURCE_NOT_FOUND = "Não foi possível encontrar usuário com este filtro.";
@@ -51,7 +51,7 @@ public class UsuarioService {
         usuario.setAtivo(true);
         usuarioRepository.save(usuario);
         UsuarioResponseCompletoDTO usuarioResponseCompletoDTO = objectMapper.convertValue(usuario, UsuarioResponseCompletoDTO.class);
-        emailService.sendEmail(usuarioResponseCompletoDTO, usuarioResponseCompletoDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
+//        emailService.sendEmail(usuarioResponseCompletoDTO, usuarioResponseCompletoDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
         return usuarioResponseCompletoDTO;
     }
 
@@ -63,7 +63,7 @@ public class UsuarioService {
         usuario.setAtivo(true);
         usuarioRepository.save(usuario);
         UsuarioResponseDTO usuarioResponseDTO = objectMapper.convertValue(usuario, UsuarioResponseDTO.class);
-        emailService.sendEmail(usuarioResponseDTO, usuarioResponseDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
+//        emailService.sendEmail(usuarioResponseDTO, usuarioResponseDTO.getEmail(), EmailTemplate.CRIAR_USUARIO);
         return usuarioResponseDTO;
     }
 
