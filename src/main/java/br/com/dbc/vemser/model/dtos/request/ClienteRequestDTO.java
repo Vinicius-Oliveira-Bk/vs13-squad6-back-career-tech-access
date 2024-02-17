@@ -3,6 +3,7 @@ package br.com.dbc.vemser.model.dtos.request;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class ClienteRequestDTO {
     @NotNull
     @Schema(description = "Tipo de plano GRATUITO, BASICO, PREMIUM", required = true, example = "GRATUITO")

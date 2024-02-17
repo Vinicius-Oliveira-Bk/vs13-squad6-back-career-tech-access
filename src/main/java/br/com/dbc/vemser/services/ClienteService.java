@@ -4,10 +4,12 @@ import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
-import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
-import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.entities.AreaInteresse;
+import br.com.dbc.vemser.model.entities.Cargo;
+import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.EmailTemplate;
 import br.com.dbc.vemser.repository.CargoRepository;
@@ -98,7 +100,7 @@ public class ClienteService {
 
     public void delete(Long id) throws RegraDeNegocioException {
         Cliente cliente = getCliente(id);
-        if (!cliente.getAgendas().isEmpty()) {
+        if (cliente.getAgendas() != null && !cliente.getAgendas().isEmpty()) {
             throw new RegraDeNegocioException("Há agendas cadastradas com este cliente, não é possível deletá-lo.");
         }
         clienteRepository.delete(cliente);
@@ -140,34 +142,30 @@ public class ClienteService {
         String message;
         Usuario usuario;
         Set<Cargo> cargos;
+
         if (idCliente != null) {
             cliente = getCliente(idCliente);
-            usuario = cliente.getUsuario();
-            cargos = usuario.getCargos();
-            cliente.setAtivo(!cliente.isAtivo());
-            if (!cliente.isAtivo()) {
-                message = "Cliente inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
-            } else {
-                message = "Cliente ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
-            }
         } else {
             cliente = getByUsuario(usuarioService.getIdLoggedUser());
-            usuario = cliente.getUsuario();
-            cargos = usuario.getCargos();
-            cliente.setAtivo(!cliente.isAtivo());
-            if (!cliente.isAtivo()) {
-                message = "Cliente inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
-            } else {
-                message = "Cliente ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
-            }
         }
+
+        usuario = cliente.getUsuario();
+        cargos = usuario.getCargos();
+        cliente.setAtivo(!cliente.isAtivo());
+
+        if (!cliente.isAtivo()) {
+            message = "Cliente inativado com sucesso.";
+            cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
+        } else {
+            message = "Cliente ativado com sucesso.";
+            cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
+        }
+
         usuarioService.atualizarRole(usuario, cargos);
         clienteRepository.save(cliente);
+
         return message;
     }
+
 }
 
