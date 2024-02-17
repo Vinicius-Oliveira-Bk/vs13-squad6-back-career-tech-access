@@ -1,14 +1,12 @@
 package br.com.dbc.vemser.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<<<<<<< Updated upstream
 import lombok.*;
-=======
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
->>>>>>> Stashed changes
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -20,8 +18,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "CARGO")
-@NoArgsConstructor
-@AllArgsConstructor
 public class Cargo implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
