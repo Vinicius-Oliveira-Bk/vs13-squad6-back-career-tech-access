@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.model.dtos.response;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-@Builder
 public class UsuarioResponseCompletoDTO {
     private Long id;
     private String nome;

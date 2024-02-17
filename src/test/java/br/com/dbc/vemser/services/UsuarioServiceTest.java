@@ -2,10 +2,13 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestAdminDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
+import br.com.dbc.vemser.model.entities.Cargo;
+import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.CargoEnum;
 import br.com.dbc.vemser.repository.UsuarioRepository;
@@ -25,12 +28,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -227,6 +233,39 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("Não deve atualizar usuário pois já existe usuário com o mesmo cpf")
+    void naoDeveAtualizarUsuarioPoisJaExisteUsuarioComMesmoCpf() {
+        // Given
+        UsuarioRequestDTO usuarioRequestDTO = UsuarioServiceTestUtils.createUsuarioRequestDTO();
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        usuario.setCpf("98765432100");
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByCpf(anyString())).thenReturn(usuarioDefault);
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.update(1L, usuarioRequestDTO));
+    }
+
+    @Test
+    @DisplayName("Não deve atualizar usuário pois já existe usuário com o mesmo email")
+    void naoDeveAtualizarUsuarioPoisJaExisteUsuarioComMesmoEmail() {
+        // Given
+        UsuarioRequestDTO usuarioRequestDTO = UsuarioServiceTestUtils.createUsuarioRequestDTO();
+        usuarioRequestDTO.setEmail("usuario@gmail.com");
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        usuario.setEmail("usuario2@gmail.com");
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByEmail(anyString())).thenReturn(Optional.of(usuarioDefault));
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.update(1L, usuarioRequestDTO));
+    }
+
+    @Test
     @DisplayName("Deve deletar usuário")
     void deveDeletarUsuario() throws Exception {
         // Given
@@ -251,4 +290,178 @@ class UsuarioServiceTest {
         assertThrows(RegraDeNegocioException.class, () -> usuarioService.delete(1L));
     }
 
+    @Test
+    @DisplayName("Deve listar usuário por id")
+    void deveListarUsuarioPorId() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+        when(objectMapper.convertValue(usuario, UsuarioResponseCompletoDTO.class)).thenReturn(UsuarioServiceTestUtils.createUsuarioResponseCompletoDTO());
+
+        // Then
+        UsuarioResponseCompletoDTO usuarioResponseCompletoDTO = usuarioService.listById(1L);
+
+        assertEquals(usuario.getId(), usuarioResponseCompletoDTO.getId());
+    }
+
+    @Test
+    @DisplayName("Não deve listar usuário por id, usuário não encontrado")
+    void naoDeveListarUsuarioPorIdPoisUsuarioNaoEncontrado() {
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.listById(1L));
+    }
+
+    @Test
+    @DisplayName("Deve remover endereço")
+    void deveRemoverEndereco() throws Exception {
+        // Given
+        Long idEnderecoRemocao = 1L;
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuarioDefault));
+
+        // Then
+        usuarioService.removerEndereco(usuarioDefault.getId(), idEnderecoRemocao);
+
+        verify(usuarioRepository, times(1)).save(usuarioDefault);
+    }
+
+    @Test
+    @DisplayName("Deve retornar o usuario com id passado")
+    void deveRetornarUsuarioAoPassarIDRelatorioDeUsuario() {
+        // Given
+        Set<Usuario> setUsuarios = Set.of(UsuarioServiceTestUtils.createBaseUser());
+
+
+        // When
+        when(usuarioRepository.relatorioUsuario(anyLong())).thenReturn(setUsuarios);
+        when(objectMapper.convertValue(setUsuarios.toArray()[0], UsuarioResponseDTO.class)).thenReturn(UsuarioServiceTestUtils.createUsuarioResponseDTO());
+
+        // Then
+        Set<UsuarioResponseDTO> usuariosResponse = usuarioService.relatorioUsuario(1L);
+        assertEquals(1, usuariosResponse.size());
+    }
+
+    @Test
+    @DisplayName("Deve retornar a lista de relatorio de usuario")
+    void deveRetornarListaDeRelatorioDeUsuario() {
+        // Given
+        Set<Usuario> setUsuarios = Set.of(UsuarioServiceTestUtils.createBaseUser(), UsuarioServiceTestUtils.createUsuarioDefault());
+        UsuarioResponseDTO usuarioResponseDTO2 = UsuarioServiceTestUtils.createUsuarioResponseDTO();
+        usuarioResponseDTO2.setId(2L);
+
+        // When
+        when(usuarioRepository.relatorioUsuario(anyLong())).thenReturn(setUsuarios);
+        when(objectMapper.convertValue(setUsuarios.toArray()[0], UsuarioResponseDTO.class)).thenReturn(UsuarioServiceTestUtils.createUsuarioResponseDTO());
+        when(objectMapper.convertValue(setUsuarios.toArray()[1], UsuarioResponseDTO.class)).thenReturn(usuarioResponseDTO2);
+
+
+        // Then
+        Set<UsuarioResponseDTO> usuariosResponse = usuarioService.relatorioUsuario(null);
+        assertEquals(2, usuariosResponse.size());
+    }
+
+    @Test
+    @DisplayName("Deve retornar o usuario com id passado")
+    void deveRetornarUsuarioAoPassarID() {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+
+        // Then
+        Optional<Usuario> usuarioResponse = usuarioService.findById(1L);
+        assertEquals(usuario.getId(), usuarioResponse.get().getId());
+    }
+
+    @Test
+    @DisplayName("Deve retornar o usuário por email")
+    void deveRetornarUsuarioPorEmail() {
+        // When
+        when(usuarioRepository.findByEmail(anyString())).thenReturn(Optional.of(usuarioDefault));
+
+        // Then
+        Usuario usuarioResponse = usuarioService.findByEmail(usuarioDefault.getEmail());
+        assertEquals(usuarioDefault.getId(), usuarioResponse.getId());
+    }
+
+    @Test
+    @DisplayName("Deve desativar usuário passando id")
+    void deveDesativarUsuarioPassandoID() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+
+        // Then
+        usuarioService.ativarInativarUsuario(1L);
+
+        verify(usuarioRepository, times(1)).save(usuario);
+    }
+
+    @Test
+    @DisplayName("Deve desativar usuário passando id")
+    void deveAtivarUsuarioPassandoID() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        usuario.setAtivo(false);
+
+        // When
+        when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
+
+        // Then
+        usuarioService.ativarInativarUsuario(1L);
+
+        verify(usuarioRepository, times(1)).save(usuario);
+    }
+
+    @Test
+    @DisplayName("Deve verificar se o usuário está ativo")
+    void deveVerificarSeOUsuarioEstaAtivo() throws RegraDeNegocioException {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
+        loginRequestDTO.setEmail(usuario.getEmail());
+
+        // When
+        when(usuarioRepository.findByEmail(anyString())).thenReturn(Optional.of(usuario));
+
+        // Then
+        usuarioService.userIsAtivo(loginRequestDTO);
+    }
+
+    @Test
+    @DisplayName("Deve dar erro ao verificar se o usuário está ativo")
+    void deveDarErroAoVerificarSeOUsuarioEstaAtivo() {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        usuario.setAtivo(false);
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
+        loginRequestDTO.setEmail(usuario.getEmail());
+
+        // When
+        when(usuarioRepository.findByEmail(anyString())).thenReturn(Optional.of(usuario));
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.userIsAtivo(loginRequestDTO));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar roles de usuário")
+    void deveAtualizarRolesDeUsuario() {
+        // Given
+        Set<Cargo> cargos = Set.of(UsuarioServiceTestUtils.createCargoUsuario());
+
+        // Then
+        usuarioService.atualizarRole(usuarioDefault, cargos);
+
+        verify(usuarioRepository, times(1)).save(usuarioDefault);
+    }
 }

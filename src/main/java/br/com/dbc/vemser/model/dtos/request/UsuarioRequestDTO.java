@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
-@Builder
 public class UsuarioRequestDTO {
 
     @NotBlank(message = "O campo não pode ser nulo, vazio ou conter apenas espaços em branco")

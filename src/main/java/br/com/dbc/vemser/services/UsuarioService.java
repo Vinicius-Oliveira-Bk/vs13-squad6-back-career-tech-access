@@ -103,8 +103,13 @@ public class UsuarioService {
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
-    public void removerEndereco(Usuario usuario, Endereco endereco) {
-        usuario.getEnderecos().remove(endereco);
+    public void removerEndereco(Long idUsuario,  Long idEndereco) throws Exception {
+        Usuario usuario = getUsuario(idUsuario);
+
+        usuario.setEnderecos(usuario.getEnderecos().stream()
+                .filter(endereco -> !endereco.getId().equals(idEndereco))
+                .toList());
+
         usuarioRepository.save(usuario);
     }
 
