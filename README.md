@@ -9,6 +9,7 @@
 <h3><strong><a href="https://docs.google.com/document/d/1MtV4xytTCXQmWsc4Lt2vo7vxvdVKc3U3UtfwAtSMtZQ/edit" target="_blank" rel="noopener noreferrer">Documentação 📄</strong></h2></a>
 <h3><strong><a href="https://app.diagrams.net/#G1uftoxEFbaYXf88aNL2nyoZTPyJI_MxUL" target="_blank" rel="noopener noreferrer">Diagrama de Classes 📐</strong></h2></a>
 <h3><strong><a href="https://app.diagrams.net/#G1o3RmOLzOddBnWxYj7Upn1JQGz-ZNVDqu" target="_blank" rel="noopener noreferrer">Diagrama ER 📐</strong></h2></a>
+<h3><strong><a href="https://app.diagrams.net/?src=about#G1hFtWmmgY47H0rtOgxeykhbFPBExk2D47" target="_blank" rel="noopener noreferrer">Diagrama de Permissão 🔓</strong></h2></a>
 
 ## Tecnologias e técnicas utilizadas
 
