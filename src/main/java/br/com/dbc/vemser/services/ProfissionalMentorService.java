@@ -83,7 +83,7 @@ public class ProfissionalMentorService {
 
     public void delete(Long idProfissionalMentor) throws Exception {
         ProfissionalMentor prof = getProfissionalMentor(idProfissionalMentor);
-        if (!prof.getAgendas().isEmpty()) {
+        if (prof.getAgendas() != null && !prof.getAgendas().isEmpty()) {
             throw new RegraDeNegocioException("Há agendas cadastradas com este mentor, não é possível deletá-lo.");
         }
         profissionalMentorRepository.delete(prof);
@@ -124,33 +124,34 @@ public class ProfissionalMentorService {
         Usuario usuario;
         Set<Cargo> cargos;
         String message;
+
         if (idProfissional != null) {
             profissional = getProfissionalMentor(idProfissional);
-            usuario = profissional.getUsuario();
-            cargos = usuario.getCargos();
-            profissional.setAtivo(!profissional.isAtivo());
-            if (!profissional.isAtivo()) {
-                message = "Profissional inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
-            } else {
-                message = "Profissional ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_PROFISSIONAL"));
-            }
         } else {
             profissional = getByUsuario(usuarioService.getIdLoggedUser());
-            usuario = profissional.getUsuario();
-            cargos = usuario.getCargos();
-            profissional.setAtivo(!profissional.isAtivo());
-            if (!profissional.isAtivo()) {
-                message = "Profissional inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_PROFISSIONAL"));
-            } else {
-                message = "Profissional ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_PROFISSIONAL"));
-            }
         }
+
+        usuario = profissional.getUsuario();
+        cargos = usuario.getCargos();
+        profissional.setAtivo(!profissional.isAtivo());
+
+        if (!profissional.isAtivo()) {
+            message = "Profissional inativado com sucesso.";
+        } else {
+            message = "Profissional ativado com sucesso.";
+        }
+
+        Cargo cargoProfissional = cargoService.getCargo("ROLE_PROFISSIONAL");
+        if (!profissional.isAtivo()) {
+            cargos.remove(cargoProfissional);
+        } else {
+            cargos.add(cargoProfissional);
+        }
+
         usuarioService.atualizarRole(usuario, cargos);
         profissionalMentorRepository.save(profissional);
+
         return message;
     }
+
 }
