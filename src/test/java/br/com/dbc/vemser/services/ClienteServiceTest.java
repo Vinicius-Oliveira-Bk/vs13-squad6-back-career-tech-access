@@ -6,7 +6,10 @@ import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
-import br.com.dbc.vemser.model.entities.*;
+import br.com.dbc.vemser.model.entities.Agenda;
+import br.com.dbc.vemser.model.entities.AreaInteresse;
+import br.com.dbc.vemser.model.entities.Cliente;
+import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import br.com.dbc.vemser.repository.ClienteRepository;
@@ -18,8 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -142,16 +143,15 @@ class ClienteServiceTest {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = new Cliente();
-        clienteMock.setAgendas(Collections.singletonList(new Agenda())); // Simulando agendas associadas
+        clienteMock.setAgendas(Collections.singletonList(new Agenda()));
 
-        // Configurando o mock do clienteRepository para retornar o cliente com agendas associadas
+        // ACT
         when(clienteRepository.findById(idAleatorio)).thenReturn(java.util.Optional.of(clienteMock));
 
-        // ACT e ASSERT
+        // ASSERT
         RegraDeNegocioException exception = assertThrows(RegraDeNegocioException.class, () -> clienteService.delete(idAleatorio));
         assertEquals("Há agendas cadastradas com este cliente, não é possível deletá-lo.", exception.getMessage());
 
-        // Verificando se o método delete não foi chamado
         verify(clienteRepository, never()).delete(any());
     }
 
