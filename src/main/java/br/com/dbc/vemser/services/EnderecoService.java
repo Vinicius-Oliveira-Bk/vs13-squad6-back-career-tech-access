@@ -79,7 +79,13 @@ public class EnderecoService {
     public void delete(Long id) throws Exception {
         Endereco buscaEndereco = getEndereco(id);
         buscaEndereco.getUsuarios()
-                .forEach(usuario -> usuarioService.removerEndereco(usuario, buscaEndereco));
+                .forEach(usuario -> {
+                    try {
+                        usuarioService.removerEndereco(usuario.getId(), id);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         buscaEndereco.setUsuarios(null);
         enderecoRepository.delete(buscaEndereco);
     }
