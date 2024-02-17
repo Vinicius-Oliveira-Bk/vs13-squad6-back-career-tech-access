@@ -142,34 +142,30 @@ public class ClienteService {
         String message;
         Usuario usuario;
         Set<Cargo> cargos;
+
         if (idCliente != null) {
             cliente = getCliente(idCliente);
-            usuario = cliente.getUsuario();
-            cargos = usuario.getCargos();
-            cliente.setAtivo(!cliente.isAtivo());
-            if (!cliente.isAtivo()) {
-                message = "Cliente inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
-            } else {
-                message = "Cliente ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
-            }
         } else {
             cliente = getByUsuario(usuarioService.getIdLoggedUser());
-            usuario = cliente.getUsuario();
-            cargos = usuario.getCargos();
-            cliente.setAtivo(!cliente.isAtivo());
-            if (!cliente.isAtivo()) {
-                message = "Cliente inativado com sucesso.";
-                cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
-            } else {
-                message = "Cliente ativado com sucesso.";
-                cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
-            }
         }
+
+        usuario = cliente.getUsuario();
+        cargos = usuario.getCargos();
+        cliente.setAtivo(!cliente.isAtivo());
+
+        if (!cliente.isAtivo()) {
+            message = "Cliente inativado com sucesso.";
+            cargos.remove(cargoService.getCargo("ROLE_CLIENTE"));
+        } else {
+            message = "Cliente ativado com sucesso.";
+            cargos.add(cargoService.getCargo("ROLE_CLIENTE"));
+        }
+
         usuarioService.atualizarRole(usuario, cargos);
         clienteRepository.save(cliente);
+
         return message;
     }
+
 }
 
