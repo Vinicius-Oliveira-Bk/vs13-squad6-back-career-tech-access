@@ -93,7 +93,7 @@ public interface IAgendaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<Set<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda);
+    ResponseEntity<List<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda);
 
     @Operation(summary = "Alterar horário da agenda pelo seu id", description = "Altera o horário da agenda pelo idAgenda informado")
     @ApiResponses(
@@ -115,7 +115,7 @@ public interface IAgendaControllerDoc {
                     @ApiResponse(responseCode = "500", description = "Falha inesperada no servidor")
             }
     )
-    ResponseEntity<String> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception;
+    ResponseEntity<AgendaResponseDTO> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception;
 
     @Operation(summary = "Listar a agenda dos profissionais mentores", description = "Lista a agenda dos profissionais mentores por status (DISPONIVEL/AGENDADO/PRESENTE)")
     @ApiResponses(

@@ -48,7 +48,7 @@ public class AgendaController implements IAgendaControllerDoc {
     }
 
     @PutMapping("marcar-presente/{idAgenda}")
-    public ResponseEntity<String> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception {
+    public ResponseEntity<AgendaResponseDTO> marcarPresente(@PathVariable("idAgenda") @NotNull Long idAgenda) throws Exception {
         log.info("Agendando Cliente...");
         return new ResponseEntity<>(agendaService.marcarPresente(idAgenda), HttpStatus.OK);
     }
@@ -99,7 +99,7 @@ public class AgendaController implements IAgendaControllerDoc {
     }
 
     @GetMapping("/relatorio")
-    public ResponseEntity<Set<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda) {
+    public ResponseEntity<List<RelatorioAgendaDTO>> relatorioAgenda(@RequestParam(required = false) Long idAgenda) {
         log.info("Gerando relatório...");
         return ResponseEntity.ok().body(agendaService.relatorioAgenda(idAgenda));
     }

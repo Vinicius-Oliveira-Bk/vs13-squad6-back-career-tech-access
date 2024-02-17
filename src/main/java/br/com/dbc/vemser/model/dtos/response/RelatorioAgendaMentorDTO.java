@@ -2,7 +2,9 @@ package br.com.dbc.vemser.model.dtos.response;
 
 import br.com.dbc.vemser.model.enums.NivelExperienciaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -10,6 +12,8 @@ import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RelatorioAgendaMentorDTO {
 
     @Schema(description = "Nome do mentor", example = "João da Silva")

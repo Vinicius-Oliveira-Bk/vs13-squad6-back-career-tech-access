@@ -109,6 +109,6 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
             "    LEFT JOIN USUARIO_ENDERECO UE2 on U2.ID = UE2.ID_USUARIO\n" +
             "    LEFT JOIN ENDERECO E2 on E2.ID = UE2.ID_ENDERECO\n" +
             "    LEFT JOIN AREA_ATUACAO AA on AA.ID_PROFISSIONAL = PM.ID\n" +
-            "WHERE :idAgenda = -1 OR AG.ID = :idAgenda", nativeQuery = true)
-    Set<Agenda> relatorioAgenda(Long idAgenda);
+            "WHERE AG.ID = TU_NUMBER(:idAgenda) OR TU_NUMBER(:idAgenda) IS NULL", nativeQuery = true)
+    List<Agenda> relatorioAgenda(Long idAgenda);
 }
