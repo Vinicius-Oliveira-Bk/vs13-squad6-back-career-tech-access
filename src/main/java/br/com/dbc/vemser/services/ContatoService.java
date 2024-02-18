@@ -41,7 +41,7 @@ public class ContatoService {
             usuario = usuarioService.getUsuario(usuarioService.getIdLoggedUser());
         }
         contato.setUsuario(usuario);
-            contatoRepository.save(contato);
+        contatoRepository.save(contato);
         ContatoResponseDTO contatoResponseDTO = objectMapper.convertValue(contato, ContatoResponseDTO.class);
         return contatoResponseDTO;
     }
