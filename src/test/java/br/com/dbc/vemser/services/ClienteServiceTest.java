@@ -54,8 +54,8 @@ class ClienteServiceTest {
     private ClienteService clienteService;
 
     @Test
-    @DisplayName("Deveria criar um novo cliente com sucesso")
-    public void deveriaCriarClienteComSucesso() throws Exception {
+    @DisplayName("Deve criar um novo cliente com sucesso")
+    public void deveCriarClienteComSucesso() throws Exception {
         // ARRANGE
         ClienteRequestDTO clienteRequestDTOMock = retornarClienteRequestDTO();
         Usuario usuarioMock = retornarUsuario();
@@ -80,8 +80,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria listar todos os clientes com sucesso")
-    public void deveriaListarTodosOsClientesComSucesso() throws Exception {
+    @DisplayName("Deve listar todos os clientes com sucesso")
+    public void deveListarTodosOsClientesComSucesso() throws Exception {
         // ARRANGE
         Cliente clienteMock = retornarCliente();
         List<Cliente> clientesMock = Collections.singletonList(clienteMock);
@@ -99,8 +99,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria remover um cliente com sucesso")
-    public void deveriaRemoverClienteComSucesso() throws RegraDeNegocioException {
+    @DisplayName("Deve remover um cliente com sucesso")
+    public void deveRemoverClienteComSucesso() throws RegraDeNegocioException {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = retornarCliente();
@@ -116,8 +116,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria atualizar um cliente com sucesso")
-    public void deveriaAtualizarClienteComSucesso() throws Exception {
+    @DisplayName("Deve atualizar um cliente com sucesso")
+    public void deveAtualizarClienteComSucesso() throws Exception {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         ClienteRequestDTO clienteRequestDTOMock = retornarClienteRequestDTO();
@@ -138,8 +138,8 @@ class ClienteServiceTest {
 
 
     @Test
-    @DisplayName("Deveria lançar exceção ao remover cliente com agendas associadas")
-    public void deveriaLancarExcecaoAoRemoverClienteComAgendasAssociadas() {
+    @DisplayName("Deve lançar exceção ao remover cliente com agendas associadas")
+    public void deveLancarExcecaoAoRemoverClienteComAgendasAssociadas() {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = new Cliente();
@@ -156,8 +156,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria listar um cliente por id e converter para DTO")
-    public void deveriaBuscarUmClientePorIdEconverterParaDTO() throws Exception {
+    @DisplayName("Deve listar um cliente por id e converter para DTO")
+    public void deveBuscarUmClientePorIdEconverterParaDTO() throws Exception {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = retornarCliente();
@@ -175,8 +175,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria retornar um cliente por id")
-    public void deveriaRetornarClientePorId() throws Exception {
+    @DisplayName("Deve retornar um cliente por id")
+    public void deveRetornarClientePorId() throws Exception {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = retornarCliente();
@@ -192,8 +192,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria retornar o cliente pelo ID do usuário")
-    public void deveriaRetornarClientePeloIdDoUsuario() throws RegraDeNegocioException {
+    @DisplayName("Deve retornar o cliente pelo ID do usuário")
+    public void deveRetornarClientePeloIdDoUsuario() throws RegraDeNegocioException {
         // ARRANGE
         Long idUsuario = 1L;
         Cliente clienteMock = new Cliente();
@@ -209,8 +209,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria ativarInativarCliente com sucesso")
-    public void deveriaAtivarInativarClienteComSucesso() throws Exception {
+    @DisplayName("Deve ativarInativarCliente com sucesso")
+    public void deveAtivarInativarClienteComSucesso() throws Exception {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         Cliente clienteMock = retornarCliente();
@@ -345,7 +345,6 @@ class ClienteServiceTest {
         clienteResponseCompletoDTO.setInteresses(interesses);
 
         return clienteResponseCompletoDTO;
-
     }
 
 }

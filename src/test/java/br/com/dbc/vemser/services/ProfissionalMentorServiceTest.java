@@ -55,8 +55,8 @@ class ProfissionalMentorServiceTest {
     private ProfissionalMentorService profissionalMentorService;
 
     @Test
-    @DisplayName("Deveria criar um novo profissional mentor")
-    public void deveriaCriarUmNovoProfissionalMentor() throws Exception {
+    @DisplayName("Deve criar um novo profissional mentor")
+    public void deveCriarUmNovoProfissionalMentor() throws Exception {
         // ARRANGE
         ProfissionalMentorRequestDTO profissionalMentorRequestDTOMock = retornarProfissionalMentorRequestDTO();
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
@@ -80,8 +80,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria listar todos os profissionais mentores")
-    public void deveriaListarTodosOsProfissionaisMentores() throws BancoDeDadosException {
+    @DisplayName("Deve listar todos os profissionais mentores")
+    public void deveListarTodosOsProfissionaisMentores() throws BancoDeDadosException {
         // ARRANGE
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
         List<ProfissionalMentor> profissionaisMentoresMock = new ArrayList<>();
@@ -100,8 +100,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria atualizar um profissional mentor")
-    public void deveriaAtualizarUmProfissionalMentor() throws Exception {
+    @DisplayName("Deve atualizar um profissional mentor")
+    public void deveAtualizarUmProfissionalMentor() throws Exception {
         // ARRANGE
         ProfissionalMentorRequestDTO profissionalMentorRequestDTOMock = retornarProfissionalMentorRequestDTO();
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
@@ -121,8 +121,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria remover um profissional mentor")
-    public void deveriaDeletarUmProfissionalMentor() throws Exception {
+    @DisplayName("Deve remover um profissional mentor")
+    public void deveDeletarUmProfissionalMentor() throws Exception {
         // ARRANGE
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
         Long idAleatorio = new Random().nextLong();
@@ -137,8 +137,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria lançar exceção ao tentar deletar um profissional mentor com agendas cadastradas")
-    public void deveriaLancaExcecaoAoDeletarProfissionalMentorComAgendasCadastradas() {
+    @DisplayName("Deve lançar exceção ao tentar deletar um profissional mentor com agendas cadastradas")
+    public void deveLancaExcecaoAoDeletarProfissionalMentorComAgendasCadastradas() {
         // ARRANGE
         Long idAleatorio = new Random().nextLong();
         ProfissionalMentor profissionalMentorMock = new ProfissionalMentor();
@@ -152,8 +152,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria retornar um profissional mentor por ID")
-    public void deveriaRetornarUsuarioPorID() throws Exception {
+    @DisplayName("Deve retornar um profissional mentor por ID")
+    public void deveRetornarUsuarioPorID() throws Exception {
         // ARRANGE
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
         Long idAleatorio = new Random().nextLong();
@@ -169,8 +169,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria retornar um profissional mentor completo por ID")
-    public void deveriaRetornarProfissionalMentorCompletoPorID() throws Exception {
+    @DisplayName("Deve retornar um profissional mentor completo por ID")
+    public void deveRetornarProfissionalMentorCompletoPorID() throws Exception {
         // ARRANGE
         Long idProfissionalMentor = new Random().nextLong();
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
@@ -188,8 +188,8 @@ class ProfissionalMentorServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria ativar/inativar um profissional mentor")
-    public void deveriaAtivarInativarProfissionalMentor() throws Exception {
+    @DisplayName("Deve ativar/inativar um profissional mentor")
+    public void deveAtivarInativarProfissionalMentor() throws Exception {
         // ARRANGE
         ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
         Long idAleatorio = new Random().nextLong();
