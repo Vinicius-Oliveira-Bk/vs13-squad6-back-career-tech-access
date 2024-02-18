@@ -120,7 +120,7 @@ public class AgendaService {
         agendaRepository.save(agenda);
     }
 
-    public String marcarPresente(Long idAgenda) throws Exception {
+    public AgendaResponseDTO marcarPresente(Long idAgenda) throws Exception {
         Agenda agenda = getAgenda(idAgenda);
         if (Objects.isNull(agenda.getCliente())) {
             throw new RegraDeNegocioException("Não é possível marcar como presente, não há cliente cadastrado.");
@@ -130,7 +130,7 @@ public class AgendaService {
         }
         agenda.setStatusAgendaEnum(StatusAgendaEnum.PRESENTE);
         agendaRepository.save(agenda);
-        return "Presença marcada com sucesso.";
+        return objectMapper.convertValue(agenda, AgendaResponseDTO.class);
     }
 
     public Agenda getAgenda(Long idAgenda) throws Exception {
@@ -138,7 +138,7 @@ public class AgendaService {
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
 
-    public boolean validarHorarioAgendamento(Agenda agenda, List<Agenda> agendamentos) throws RegraDeNegocioException {
+    private boolean validarHorarioAgendamento(Agenda agenda, List<Agenda> agendamentos) throws RegraDeNegocioException {
         for (Agenda agendamento : agendamentos) {
 
             if (!agenda.getProfissionalMentor().equals(agendamento.getProfissionalMentor())) {
@@ -172,7 +172,7 @@ public class AgendaService {
         return true;
     }
 
-    public boolean validarDisponibilidadeAgenda(Agenda agenda) throws RegraDeNegocioException {
+    private boolean validarDisponibilidadeAgenda(Agenda agenda) throws RegraDeNegocioException {
         if (Objects.nonNull(agenda.getCliente())) {
             throw new RegraDeNegocioException("❌ Já há cliente agendado para este horário, agendamento cancelado.");
         }
@@ -187,10 +187,11 @@ public class AgendaService {
         }
     }
 
-    public Set<RelatorioAgendaDTO> relatorioAgenda(Long idAgenda) {
-        idAgenda = idAgenda == null ? -1 : idAgenda;
-
-        return agendaRepository.relatorioAgenda(idAgenda).stream().map(AgendaMapper::agendaToRelatorioAgendaDTO).collect(Collectors.toSet());
+    public List<RelatorioAgendaDTO> relatorioAgenda(@Nullable Long idAgenda) {
+        List<RelatorioAgendaDTO> relatorioAgendaDTOS = agendaRepository.relatorioAgenda(idAgenda).stream()
+                .map(agenda -> objectMapper.convertValue(agenda, RelatorioAgendaDTO.class))
+                .collect(Collectors.toList());
+        return  relatorioAgendaDTOS;
     }
 
     private AgendarEmailDTO criarObjetoEmail(Agenda agenda) {

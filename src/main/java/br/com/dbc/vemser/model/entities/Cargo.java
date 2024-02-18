@@ -2,6 +2,11 @@ package br.com.dbc.vemser.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -10,9 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "CARGO")
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
+@Table(name = "CARGO")
 public class Cargo implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
