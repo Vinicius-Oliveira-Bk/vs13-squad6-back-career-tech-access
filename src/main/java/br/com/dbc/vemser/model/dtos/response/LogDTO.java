@@ -11,8 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogDTO {
-
-    private String id;
     private LocalDate data;
     private String statusCode;
     private String mensagem;

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Document
+@Document(collection = "logs")
 public class Log {
 
     @Id
