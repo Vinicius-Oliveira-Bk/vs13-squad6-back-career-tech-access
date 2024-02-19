@@ -20,4 +20,14 @@ public class LogController {
         return logService.findAllByStatusCode(statusCode);
     }
 
+    @GetMapping
+    public List<LogDTO> findAll() {
+        return logService.findAll();
+    }
+
+    @GetMapping("/by-date")
+    public List<LogDTO> findByDataBetween(String dataInicio, String dataFim) {
+        return logService.findByDataBetween(dataInicio, dataFim);
+    }
+
 }
