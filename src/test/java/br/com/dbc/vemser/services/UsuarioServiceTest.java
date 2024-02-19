@@ -8,7 +8,6 @@ import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.UsuarioResponseDTO;
 import br.com.dbc.vemser.model.entities.Cargo;
-import br.com.dbc.vemser.model.entities.Endereco;
 import br.com.dbc.vemser.model.entities.Usuario;
 import br.com.dbc.vemser.model.enums.CargoEnum;
 import br.com.dbc.vemser.repository.UsuarioRepository;
@@ -28,7 +27,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
