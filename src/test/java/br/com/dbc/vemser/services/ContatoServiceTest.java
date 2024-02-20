@@ -20,6 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +41,12 @@ class ContatoServiceTest {
 
     @Mock
     private UsuarioService usuarioService;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
+    private Authentication authentication;
 
     @InjectMocks
     private ContatoService contatoService;
@@ -182,6 +191,26 @@ class ContatoServiceTest {
         contatoService.delete(id);
 
         verify(contatoRepository, times(1)).delete(contatoDefaultSemUsuario);
+    }
+
+    @Test
+    void deveListarTodosOsContatosDoUsuarioLogado() throws Exception {
+        // Given
+        TipoEnum tipoEnum = null;
+        SecurityContextHolder.setContext(securityContext);
+
+        // When
+        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn("1");
+        when(contatoRepository.findAllUsuarioLogado(paginacao, null, 1L)).thenReturn(contatos);
+        when(objectMapper.convertValue(contatos.toList().get(0), ContatoResponseDTO.class)).thenReturn(ContatoServiceTestUtils.createContatoResponseDTO());
+        when(objectMapper.convertValue(contatos.toList().get(1), ContatoResponseDTO.class)).thenReturn(ContatoServiceTestUtils.createContatoResponseDTO());
+        when(objectMapper.convertValue(contatos.toList().get(2), ContatoResponseDTO.class)).thenReturn(ContatoServiceTestUtils.createContatoResponseDTO());
+
+        // Then
+        Page<ContatoResponseDTO> contatosResponseDTO = contatoService.listAllUsuario(paginacao, tipoEnum);
+
+        assertEquals(contatosResponseDTO.getContent().size(), contatos.getContent().size());
     }
 
 
