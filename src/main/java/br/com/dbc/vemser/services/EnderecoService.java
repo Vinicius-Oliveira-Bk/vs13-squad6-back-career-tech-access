@@ -16,6 +16,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,8 +37,15 @@ public class EnderecoService {
         } else {
             usuario = usuarioService.getUsuario(usuarioService.getIdLoggedUser());
         }
-        usuario.getEnderecos().add(endereco);
-        endereco.getUsuarios().add(usuario);
+        List<Endereco> listaEnderecosUsuario = new ArrayList<>(usuario.getEnderecos());
+        List<Usuario> listaUsuariosEndereco = new ArrayList<>(endereco.getUsuarios());
+
+        listaEnderecosUsuario.add(endereco);
+        listaUsuariosEndereco.add(usuario);
+
+        usuario.setEnderecos(listaEnderecosUsuario);
+        endereco.setUsuarios(listaUsuariosEndereco);
+
         enderecoRepository.save(endereco);
         EnderecoResponseDTO enderecoResponseDTO = objectMapper.convertValue(endereco, EnderecoResponseDTO.class);
         return enderecoResponseDTO;
@@ -86,11 +94,13 @@ public class EnderecoService {
                         throw new RuntimeException(e);
                     }
                 });
+
+
         buscaEndereco.setUsuarios(null);
         enderecoRepository.delete(buscaEndereco);
     }
 
-    private Endereco getEndereco(Long id) throws RegraDeNegocioException {
+    Endereco getEndereco(Long id) throws RegraDeNegocioException {
         return enderecoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException(RESOURCE_NOT_FOUND));
     }
