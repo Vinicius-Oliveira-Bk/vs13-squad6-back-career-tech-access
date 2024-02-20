@@ -14,6 +14,7 @@ import br.com.dbc.vemser.model.enums.AreasDeInteresse;
 import br.com.dbc.vemser.model.enums.PlanoEnum;
 import br.com.dbc.vemser.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +54,11 @@ class ClienteServiceTest {
     @InjectMocks
     private ClienteService clienteService;
 
+    @BeforeAll
+    public static void setup() {
+        Mockito.mockStatic(ClienteMapper.class);
+    }
+
     @Test
     @DisplayName("Deve criar um novo cliente com sucesso")
     public void deveCriarClienteComSucesso() throws Exception {
@@ -65,7 +71,6 @@ class ClienteServiceTest {
         // ACT
         when(usuarioService.getUsuario(1L)).thenReturn(usuarioMock);
 
-        Mockito.mockStatic(ClienteMapper.class);
 
         when(ClienteMapper.clienteRequestDTOtoEntity(clienteRequestDTOMock)).thenReturn(clienteMock);
         when(clienteRepository.findAll()).thenReturn(new ArrayList<>());
@@ -77,6 +82,47 @@ class ClienteServiceTest {
         // ASSERT
         assertNotNull(clienteResponseDTO);
         assertEquals(clienteResponseDTO.getId(), clienteResponseDTOMock.getId());
+    }
+
+    @Test
+    @DisplayName("Deve criar um Cliente com usuário logado")
+    public void deveCriarClienteComUsuarioLogado() throws Exception {
+        // ARRANGE
+        ClienteRequestDTO clienteRequestDTOMock = retornarClienteRequestDTO();
+        Usuario usuarioMock = retornarUsuario();
+        Cliente clienteMock = retornarCliente();
+        ClienteResponseDTO clienteResponseDTOMock = retornarClienteResponseDTO();
+
+        // ACT
+        when(usuarioService.getIdLoggedUser()).thenReturn(1L);
+        when(usuarioService.getUsuario(1L)).thenReturn(usuarioMock);
+
+        when(ClienteMapper.clienteRequestDTOtoEntity(clienteRequestDTOMock)).thenReturn(clienteMock);
+        when(clienteRepository.findAll()).thenReturn(new ArrayList<>());
+        when(clienteRepository.save(any())).thenReturn(clienteMock);
+        when(objectMapper.convertValue(clienteMock, ClienteResponseDTO.class)).thenReturn(clienteResponseDTOMock);
+
+        ClienteResponseDTO clienteResponseDTO = clienteService.create(clienteRequestDTOMock, null);
+
+        // ASSERT
+        assertNotNull(clienteResponseDTO);
+        assertEquals(clienteResponseDTO.getId(), clienteResponseDTOMock.getId());
+    }
+
+    @Test
+    void deveLancarExecaoAoCriarClienteComUsuarioComClienteJaCriado() {
+        // ARRANGE
+        Cliente clienteMock = retornarCliente();
+        Usuario usuarioMock = retornarUsuario();
+        clienteMock.setUsuario(usuarioMock);
+
+        List<Cliente> clientesMock = List.of(clienteMock);
+
+        // ACT
+        when(clienteRepository.findAll()).thenReturn(clientesMock);
+
+        // ASSERT
+        assertThrows(RegraDeNegocioException.class, () -> clienteService.create(retornarClienteRequestDTO(), 1L));
     }
 
     @Test
@@ -231,6 +277,22 @@ class ClienteServiceTest {
         // ASSERT
         assertTrue(clienteMock.isAtivo());
 
+    }
+
+    @Test
+    @DisplayName("Deve desativar com sucesso com cliente logado")
+    public void deveDesativarComSucessoComClienteLogado() throws Exception {
+        // ARRANGE
+        Cliente clienteMock = retornarCliente();
+
+        // ACT
+        when(usuarioService.getIdLoggedUser()).thenReturn(1L);
+        when(clienteRepository.findByUsuario_Id(1L)).thenReturn(Optional.of(clienteMock));
+
+        clienteService.ativarInativarCliente(null);
+
+        // ASSERT
+        assertFalse(clienteMock.isAtivo());
     }
 
     private static Usuario retornarUsuario() {

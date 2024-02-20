@@ -177,7 +177,7 @@ public class UsuarioService {
 
     public String ativarInativarUsuario(@Nullable Long idUsuario) throws Exception {
         Usuario usuario;
-        String message;
+        String message = "";
         if (idUsuario != null) {
             usuario = getUsuario(idUsuario);
             usuario.setAtivo(!usuario.isAtivo());
@@ -191,8 +191,6 @@ public class UsuarioService {
             usuario.setAtivo(!usuario.isAtivo());
             if (!usuario.isAtivo()) {
                 message = "Usuario inativado com sucesso.";
-            } else {
-                message = "Usuario ativado com sucesso.";
             }
         }
         usuarioRepository.save(usuario);

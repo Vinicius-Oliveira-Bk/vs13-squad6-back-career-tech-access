@@ -20,6 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +45,13 @@ class AgendaServiceTest {
     private AgendaRepository agendaRepository;
     @Mock
     private EmailService emailService;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
+    private Authentication authentication;
+
     @InjectMocks
     private AgendaService agendaService;
     private static final Pageable paginacao = PageRequest.of(0, 10);
@@ -346,6 +356,53 @@ class AgendaServiceTest {
         assertEquals(2, relatorioAgendaDTOListRecuperado.size());
         assertEquals(relatorioAgendaDTOList.get(0).getId(), relatorioAgendaDTOListRecuperado.get(0).getId());
     }
+
+    @Test
+    @DisplayName("Deve listar as agendas do cliente logado.")
+    public void deveListarAgendasDoCliente() throws RegraDeNegocioException {
+        Agenda agenda1 = agendas.getContent().get(0);
+        Agenda agenda2 = agendas.getContent().get(1);
+        Agenda agenda3 = agendas.getContent().get(2);
+        SecurityContextHolder.setContext(securityContext);
+        Long tamanhoEsperado = 5L;
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(1L);
+        when(clienteService.getByUsuario(anyLong())).thenReturn(clienteMock);
+        when(agendaRepository.findAllClienteLogado(paginacao, null, null, clienteMock.getId())).thenReturn(agendas);
+        when(objectMapper.convertValue(agenda1, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+        when(objectMapper.convertValue(agenda2, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+        when(objectMapper.convertValue(agenda3, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+
+        Page<AgendaResponseDTO> agendaResponseDTOS = agendaService.listAllAgendasClienteLogado(paginacao, null, null);
+
+        assertEquals(tamanhoEsperado, agendaResponseDTOS.getTotalElements());
+        assertEquals(agendas.getContent().get(0).getId(), agendaResponseDTOS.getContent().get(0).getId());
+    }
+
+    @Test
+    @DisplayName("Deve listar as agendas do profissional mentor logado.")
+    public void deveListarAgendasDoProfissionalMentor() throws RegraDeNegocioException {
+        Agenda agenda1 = agendas.getContent().get(0);
+        Agenda agenda2 = agendas.getContent().get(1);
+        Agenda agenda3 = agendas.getContent().get(2);
+        SecurityContextHolder.setContext(securityContext);
+        Long tamanhoEsperado = 5L;
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(1L);
+        when(profissionalMentorService.getByUsuario(anyLong())).thenReturn(profissionalMentorMock);
+        when(agendaRepository.findAllProfissionalLogado(paginacao, null, profissionalMentorMock.getId())).thenReturn(agendas);
+        when(objectMapper.convertValue(agenda1, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+        when(objectMapper.convertValue(agenda2, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+        when(objectMapper.convertValue(agenda3, AgendaResponseDTO.class)).thenReturn(getCadastroAgendaResponseValidaDTO());
+
+        Page<AgendaResponseDTO> agendaResponseDTOS = agendaService.listAllAgendasProfissionalLogado(paginacao, null);
+
+        assertEquals(tamanhoEsperado, agendaResponseDTOS.getTotalElements());
+        assertEquals(agendas.getContent().get(0).getId(), agendaResponseDTOS.getContent().get(0).getId());
+    }
+
 
     private Cargo getCargoProfissionalMock() {
         return new Cargo(1, "ROLE_PROFISSIONAL", null);

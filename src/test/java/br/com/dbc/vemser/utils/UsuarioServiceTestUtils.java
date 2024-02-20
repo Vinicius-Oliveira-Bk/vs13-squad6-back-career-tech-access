@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.utils;
 
+import br.com.dbc.vemser.model.dtos.request.AlterarSenhaRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestAdminDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
 import br.com.dbc.vemser.model.dtos.response.CargoResponseDTO;
@@ -150,5 +151,14 @@ public class UsuarioServiceTestUtils {
         contato.setTelefone("123456789");
 
         return contato;
+    }
+
+    public static AlterarSenhaRequestDTO createAlterarSenhaRequestDTO() {
+        AlterarSenhaRequestDTO alterarSenhaRequestDTO = new AlterarSenhaRequestDTO();
+
+        alterarSenhaRequestDTO.setSenha("123456789");
+        alterarSenhaRequestDTO.setSenhaConfirmacao("123456789");
+
+        return alterarSenhaRequestDTO;
     }
 }
