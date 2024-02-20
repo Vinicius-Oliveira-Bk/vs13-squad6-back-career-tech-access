@@ -32,7 +32,7 @@ public class LogService {
     }
 
     public List<LogDTO> findByDataBetween(String dataInicio, String dataFim) {
-        return logRepository.findByDataBetween(LocalDate.parse(dataInicio), LocalDate.parse(dataInicio))
+        return logRepository.findByDataBetween(LocalDate.parse(dataInicio), LocalDate.parse(dataFim))
                 .stream()
                 .map(log -> objectMapper.convertValue(log, LogDTO.class))
                 .collect(Collectors.toList());
