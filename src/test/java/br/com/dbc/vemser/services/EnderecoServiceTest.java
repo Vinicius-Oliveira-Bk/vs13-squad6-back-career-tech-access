@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
@@ -38,6 +40,12 @@ class EnderecoServiceTest {
 
     @Mock
     private UsuarioService usuarioService;
+
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
+    private Authentication authentication;
 
     @Spy
     @InjectMocks
@@ -114,26 +122,29 @@ class EnderecoServiceTest {
         assertEquals(enderecoResponseDTOMock, enderecoService.listAll(EnderecoServiceTestUtils.createPageable(), null, null, null).getContent().get(0));
     }
 
-//    @Test
-//    @DisplayName("Deve listar todos os endereços do usuário corretamente")
-//    void deveListarTodosOsEnderecosDoUsuarioCorretamente() throws Exception {
-//        // given
-//        EnderecoResponseDTO enderecoResponseDTOMock = EnderecoServiceTestUtils.createEnderecoResponseDTO();
-//        Page<Endereco> pageEndereco = EnderecoServiceTestUtils.createPageEndereco();
-//
-//        // when
-//        when(Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString())).thenReturn(1L);
-//        when(enderecoRepository.findAllUsuario(any(), any(), any())).thenReturn(pageEndereco);
-//        when(objectMapper.convertValue(pageEndereco.toList().get(0), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
-//        when(objectMapper.convertValue(pageEndereco.toList().get(1), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
-//        when(objectMapper.convertValue(pageEndereco.toList().get(2), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
-//
-//        // then
-//        enderecoService.listAllUsuario(EnderecoServiceTestUtils.createPageable(), null);
-//
-//        // verify
-//        assertEquals(enderecoResponseDTOMock, enderecoService.listAllUsuario(EnderecoServiceTestUtils.createPageable(), null).getContent().get(0));
-//    }
+    @Test
+    @DisplayName("Deve listar todos os endereços do usuário corretamente")
+    void deveListarTodosOsEnderecosDoUsuarioCorretamente() throws Exception {
+        // given
+        EnderecoResponseDTO enderecoResponseDTOMock = EnderecoServiceTestUtils.createEnderecoResponseDTO();
+        Page<Endereco> pageEndereco = EnderecoServiceTestUtils.createPageEndereco();
+        Long idUsuario = 1L;
+        SecurityContextHolder.setContext(securityContext);
+
+        // When
+        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(idUsuario.toString());
+        when(enderecoRepository.findAllUsuario(any(), any(), any())).thenReturn(pageEndereco);
+        when(objectMapper.convertValue(pageEndereco.toList().get(0), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
+        when(objectMapper.convertValue(pageEndereco.toList().get(1), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
+        when(objectMapper.convertValue(pageEndereco.toList().get(2), EnderecoResponseDTO.class)).thenReturn(enderecoResponseDTOMock);
+
+        // then
+        enderecoService.listAllUsuario(EnderecoServiceTestUtils.createPageable(), null);
+
+        // verify
+        assertEquals(enderecoResponseDTOMock, enderecoService.listAllUsuario(EnderecoServiceTestUtils.createPageable(), null).getContent().get(0));
+    }
 
     @Test
     @DisplayName("Deve atualizar endereço corretamente")
@@ -158,10 +169,10 @@ class EnderecoServiceTest {
     @DisplayName("Deve deletar endereço corretamente")
     void deveDeletarEnderecoCorretamente() throws Exception {
         // given
-        Endereco enderecoMock = EnderecoServiceTestUtils.createEnderecoDefault();
+        Endereco enderecoMock = EnderecoServiceTestUtils.createEnderecoComPessoa();
 
         // when
-        when(enderecoRepository.findById(1L)).thenReturn(java.util.Optional.of(enderecoMock));
+        when(enderecoRepository.findById(1L)).thenReturn(Optional.of(enderecoMock));
 
         // then
         enderecoService.delete(1L);
@@ -174,11 +185,12 @@ class EnderecoServiceTest {
         Endereco enderecoMock = EnderecoServiceTestUtils.createEnderecoDefault();
 
         // when
-        when(enderecoRepository.findById(1L)).thenReturn(java.util.Optional.of(enderecoMock));
+        when(enderecoRepository.findById(1L)).thenReturn(Optional.of(enderecoMock));
 
         // then
         assertThrows(Exception.class, () -> enderecoService.delete(2L));
     }
+
 
     @Test
     @DisplayName("Deve lançar exceção ao tentar atualizar endereço inexistente")
@@ -187,7 +199,7 @@ class EnderecoServiceTest {
         Endereco enderecoMock = EnderecoServiceTestUtils.createEnderecoDefault();
 
         // when
-        when(enderecoRepository.findById(1L)).thenReturn(java.util.Optional.of(enderecoMock));
+        when(enderecoRepository.findById(1L)).thenReturn(Optional.of(enderecoMock));
 
         // then
         assertThrows(Exception.class, () -> enderecoService.update(2L, EnderecoServiceTestUtils.createEnderecoRequestDTO()));
@@ -214,7 +226,7 @@ class EnderecoServiceTest {
         Endereco enderecoMock = EnderecoServiceTestUtils.createEnderecoDefault();
 
         // when
-        when(enderecoRepository.findById(1L)).thenReturn(java.util.Optional.of(enderecoMock));
+        when(enderecoRepository.findById(1L)).thenReturn(Optional.of(enderecoMock));
 
         // then
         enderecoService.getEndereco(1L);
