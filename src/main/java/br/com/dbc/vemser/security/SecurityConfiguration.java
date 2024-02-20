@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/auth", "/", "/usuario", "/log/**").permitAll()   // Para liberar o acesso de tudo: "/**"
+                        .antMatchers("/auth", "/", "/usuario", "/log/**", "/notificacao-log/**").permitAll()   // Para liberar o acesso de tudo: "/**"
                         .antMatchers("/auth/usuario-logado").authenticated()
                         //AGENDA
                         .antMatchers(HttpMethod.GET, "/agenda").hasRole("ADMIN")
