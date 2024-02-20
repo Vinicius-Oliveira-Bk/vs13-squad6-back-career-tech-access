@@ -2,6 +2,7 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.model.dtos.request.AlterarSenhaRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.LoginRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestAdminDTO;
 import br.com.dbc.vemser.model.dtos.request.UsuarioRequestDTO;
@@ -21,11 +22,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -51,15 +56,23 @@ class UsuarioServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Spy
     @InjectMocks
     private UsuarioService usuarioService;
 
     @Mock
     private CargoService cargoService;
 
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private SecurityContext securityContext;
+
     private Usuario usuarioDefault;
     private static final Pageable paginacao = PageRequest.of(0, 10);
     private static Page<Usuario> usuarios;
+
 
     @BeforeAll
     static void setUpAll() {
@@ -423,6 +436,26 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("Deve desativar usuário logado")
+    void deveDesativarUsuarioLogado() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        Long idUsuarioConsulta = null;
+        Long idUsuario = 1L;
+        String respostaEsperada = "Usuario inativado com sucesso.";
+
+        // When
+        doReturn(idUsuario).when(usuarioService).getIdLoggedUser();
+        doReturn(usuario).when(usuarioService).getUsuario(idUsuario);
+
+        // Then
+        String resposta = usuarioService.ativarInativarUsuario(idUsuarioConsulta);
+        verify(usuarioRepository, times(1)).save(usuario);
+
+        assertEquals(respostaEsperada, resposta);
+    }
+
+    @Test
     @DisplayName("Deve verificar se o usuário está ativo")
     void deveVerificarSeOUsuarioEstaAtivo() throws RegraDeNegocioException {
         // Given
@@ -464,4 +497,96 @@ class UsuarioServiceTest {
 
         verify(usuarioRepository, times(1)).save(usuarioDefault);
     }
+
+    @Test
+    @DisplayName("Deve retornar id quando estiver um usuário logado")
+    void deveRetornarIdQuandoEstiverUmUsuarioLogado() {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        SecurityContextHolder.setContext(securityContext);
+
+        // When
+        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(usuario.getId().toString());
+
+        // Then
+        Long id = usuarioService.getIdLoggedUser();
+        assertEquals(usuario.getId(), id);
+    }
+
+    @Test
+    @DisplayName("Deve retornar usuário quando houver usuário logado")
+    void deveRetornarUsuarioQuandoHouverUsuarioLogado() {
+        // Given
+        Optional<Usuario> usuario = Optional.of(UsuarioServiceTestUtils.createBaseUser());
+        UsuarioResponseCompletoDTO usuarioResponse = UsuarioServiceTestUtils.createUsuarioResponseCompletoDTO();
+        SecurityContextHolder.setContext(securityContext);
+
+        // When
+        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(usuario.get().getId().toString());
+        when(usuarioRepository.findById(anyLong())).thenReturn(usuario);
+        when(objectMapper.convertValue(usuario, UsuarioResponseCompletoDTO.class)).thenReturn(usuarioResponse);
+
+        // Then
+        UsuarioResponseCompletoDTO usuarioResponseCompletoDTO = usuarioService.getLoggedUser();
+        assertEquals(usuarioResponseCompletoDTO.getId(), usuarioResponse.getId());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar senha corretamente")
+    void deveAtualizarSenhaCorretamente() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        AlterarSenhaRequestDTO atualizarSenhaDTO = UsuarioServiceTestUtils.createAlterarSenhaRequestDTO();
+        Long idUsuario = 1L;
+
+        // When
+        doReturn(idUsuario).when(usuarioService).getIdLoggedUser();
+        doReturn(usuario).when(usuarioService).getUsuario(idUsuario);
+        passwordEncoder.encode(usuario.getSenha());
+
+        // Then
+        usuarioService.atualizarSenha(atualizarSenhaDTO);
+        verify(usuarioRepository, times(1)).save(usuario);
+    }
+
+    @Test
+    @DisplayName("Deve dar erro ao atualizar senha, senhas não coincidem")
+    void deveDarErroAoAtualizarSenhaSenhasNaoCoincidem() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        AlterarSenhaRequestDTO atualizarSenhaDTO = UsuarioServiceTestUtils.createAlterarSenhaRequestDTO();
+        Long idUsuario = 1L;
+
+        atualizarSenhaDTO.setSenhaConfirmacao("123456");
+
+        // When
+        doReturn(idUsuario).when(usuarioService).getIdLoggedUser();
+        doReturn(usuario).when(usuarioService).getUsuario(idUsuario);
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.atualizarSenha(atualizarSenhaDTO));
+    }
+
+    @Test
+    @DisplayName("Deve dar erro ao atualizar senha, nova senha igual a senha atual")
+    void deveDarErroAoAtualizarSenhaNovaSenhaIgualASenhaAtual() throws Exception {
+        // Given
+        Usuario usuario = UsuarioServiceTestUtils.createBaseUser();
+        AlterarSenhaRequestDTO atualizarSenhaDTO = UsuarioServiceTestUtils.createAlterarSenhaRequestDTO();
+        Long idUsuario = 1L;
+
+        atualizarSenhaDTO.setSenha(usuario.getSenha());
+        atualizarSenhaDTO.setSenhaConfirmacao(usuario.getSenha());
+
+        // When
+        doReturn(idUsuario).when(usuarioService).getIdLoggedUser();
+        doReturn(usuario).when(usuarioService).getUsuario(idUsuario);
+        when(passwordEncoder.matches(atualizarSenhaDTO.getSenha(), usuario.getSenha())).thenReturn(true);
+
+        // Then
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.atualizarSenha(atualizarSenhaDTO));
+    }
+
 }
