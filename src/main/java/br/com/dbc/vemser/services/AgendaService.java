@@ -188,7 +188,8 @@ public class AgendaService {
     }
 
     public List<RelatorioAgendaDTO> relatorioAgenda(@Nullable Long idAgenda) {
-        List<RelatorioAgendaDTO> relatorioAgendaDTOS = agendaRepository.relatorioAgenda(idAgenda).stream()
+        List<RelatorioAgendaDTO> relatorioAgendaDTOS = agendaRepository.relatorioAgenda(idAgenda)
+                .stream()
                 .map(agenda -> objectMapper.convertValue(agenda, RelatorioAgendaDTO.class))
                 .collect(Collectors.toList());
         return  relatorioAgendaDTOS;

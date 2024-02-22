@@ -15,14 +15,6 @@ public class AgendaMapper {
         relatorioAgendaDTO.setDataHoraInicio(agenda.getDataHoraInicio());
         relatorioAgendaDTO.setDataHoraFim(agenda.getDataHoraFim());
 
-        if (Objects.nonNull(agenda.getCliente())) {
-            relatorioAgendaDTO.setCliente(ClienteMapper.clienteToRelatorioAgendaClienteDTO(agenda.getCliente()));
-        }
-
-        if (Objects.nonNull(agenda.getProfissionalMentor())) {
-            relatorioAgendaDTO.setProfissionalMentor(ProfissionalMentorMapper.profissionalMentorToRelatorioAgendaProfissionalMentorDTO(agenda.getProfissionalMentor()));
-        }
-
         return relatorioAgendaDTO;
     }
 
