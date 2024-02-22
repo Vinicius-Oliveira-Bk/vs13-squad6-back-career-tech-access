@@ -29,6 +29,7 @@
 <details>
   <summary>Banco de Dados</summary><br />
    - Oracle
+   - MongoDB
 </details>
 
 ## Integrantes do Grupo
