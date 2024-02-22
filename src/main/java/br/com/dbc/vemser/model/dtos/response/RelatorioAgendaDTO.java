@@ -1,7 +1,5 @@
 package br.com.dbc.vemser.model.dtos.response;
 
-import br.com.dbc.vemser.model.entities.Cliente;
-import br.com.dbc.vemser.model.entities.ProfissionalMentor;
 import br.com.dbc.vemser.model.enums.StatusAgendaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,11 +26,4 @@ public class RelatorioAgendaDTO {
 
     @Schema(description = "Status da agenda", example = "AGENDADO")
     private StatusAgendaEnum statusAgendaEnum;
-
-    @Schema(description = "Cliente da agenda")
-    private RelatorioAgendaClienteDTO cliente;
-
-    @Schema(description = "Mentor da agenda")
-    private RelatorioAgendaMentorDTO profissionalMentor;
-
 }

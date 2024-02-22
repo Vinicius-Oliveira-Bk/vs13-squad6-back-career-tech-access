@@ -95,8 +95,8 @@ class AgendaServiceTest {
         agendaRelatorioList.add(new Agenda(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO, clienteMock, profissionalMentorMock));
         agendaRelatorioList.add(new Agenda(2L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO, clienteMock, profissionalMentorMock));
 
-        relatorioAgendaDTOList.add(new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO, null, relatorioAgendaMentorDTO));
-        relatorioAgendaDTOList.add(new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO, null, relatorioAgendaMentorDTO));
+        relatorioAgendaDTOList.add(new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO));
+        relatorioAgendaDTOList.add(new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO));
 
         agendas = new PageImpl<>(agendaList, paginacao, agendaList.size());
     }
@@ -469,6 +469,6 @@ class AgendaServiceTest {
     }
 
     private RelatorioAgendaDTO getRelatorioAgendaDTO() {
-        return new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO, null, relatorioAgendaMentorDTO);
+        return new RelatorioAgendaDTO(1L, LocalDateTime.of(2024, 05, 15, 16,30, 0), LocalDateTime.of(2024, 05, 15, 17,30, 0), StatusAgendaEnum.AGENDADO);
     }
 }
