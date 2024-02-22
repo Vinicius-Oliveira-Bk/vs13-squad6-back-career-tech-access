@@ -2,8 +2,11 @@ package br.com.dbc.vemser.services;
 
 import br.com.dbc.vemser.exceptions.BancoDeDadosException;
 import br.com.dbc.vemser.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.mappers.ClienteMapper;
 import br.com.dbc.vemser.mappers.ProfissionalMentorMapper;
+import br.com.dbc.vemser.model.dtos.request.ClienteRequestDTO;
 import br.com.dbc.vemser.model.dtos.request.ProfissionalMentorRequestDTO;
+import br.com.dbc.vemser.model.dtos.response.ClienteResponseDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseCompletoDTO;
 import br.com.dbc.vemser.model.dtos.response.ProfissionalMentorResponseDTO;
 import br.com.dbc.vemser.model.entities.*;
@@ -30,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -77,6 +81,47 @@ class ProfissionalMentorServiceTest {
         // ASSERT
         assertNotNull(profissionalMentorResponseDTO);
         assertEquals(profissionalMentorResponseDTO.getCarteiraDeTrabalho(), profissionalMentorRequestDTOMock.getCarteiraDeTrabalho());
+    }
+
+    @Test
+    @DisplayName("Deve criar um Profissional Mentor com usuário logado")
+    public void deveCriarProfissionalMentorComUsuarioLogado() throws Exception {
+        // ARRANGE
+        ProfissionalMentorRequestDTO profissionalMentorDTOMock = retornarProfissionalMentorRequestDTO();
+        Usuario usuarioMock = retornarUsuario();
+        ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
+        ProfissionalMentorResponseDTO profissionalMentorResponseDTOMock = retornarProfissionalMentorResponseDTO();
+
+        // ACT
+        when(usuarioService.getIdLoggedUser()).thenReturn(1L);
+        when(usuarioService.getUsuario(1L)).thenReturn(usuarioMock);
+
+        when(ProfissionalMentorMapper.profissionalMentorToEntity(profissionalMentorDTOMock)).thenReturn(profissionalMentorMock);
+        when(profissionalMentorRepository.findAll()).thenReturn(new ArrayList<>());
+        when(profissionalMentorRepository.save(any())).thenReturn(profissionalMentorMock);
+        when(objectMapper.convertValue(profissionalMentorMock, ProfissionalMentorResponseDTO.class)).thenReturn(profissionalMentorResponseDTOMock);
+
+        ProfissionalMentorResponseDTO profissionalMentorResponseDTO = profissionalMentorService.create(null, profissionalMentorDTOMock);
+
+        // ASSERT
+        assertNotNull(profissionalMentorResponseDTO);
+        assertEquals(profissionalMentorResponseDTO.getId(), profissionalMentorResponseDTOMock.getId());
+    }
+
+    @Test
+    void deveLancarExecaoAoCriarMentorComUsuarioComMentorJaCriado() {
+        // ARRANGE
+        ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
+        Usuario usuarioMock = retornarUsuario();
+        profissionalMentorMock.setUsuario(usuarioMock);
+
+        List<ProfissionalMentor> clientesMock = List.of(profissionalMentorMock);
+
+        // ACT
+        when(profissionalMentorRepository.findAll()).thenReturn(clientesMock);
+
+        // ASSERT
+        assertThrows(RegraDeNegocioException.class, () -> profissionalMentorService.create(1L, retornarProfissionalMentorRequestDTO()));
     }
 
     @Test
@@ -202,6 +247,39 @@ class ProfissionalMentorServiceTest {
 
         // ASSERT
         verify(profissionalMentorRepository, Mockito.times(1)).save(profissionalMentorMock);
+    }
+
+    @Test
+    @DisplayName("Deve ativar com sucesso com profissional mentor logado")
+    public void deveAtivarComSucessoComMentorLogado() throws Exception {
+        // ARRANGE
+        ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
+        profissionalMentorMock.setAtivo(false);
+
+        // ACT
+        when(usuarioService.getIdLoggedUser()).thenReturn(1L);
+        when(profissionalMentorRepository.findByUsuario_Id(1L)).thenReturn(Optional.of(profissionalMentorMock));
+
+        profissionalMentorService.ativarInativarProfissional(null);
+
+        // ASSERT
+        assertTrue(profissionalMentorMock.isAtivo());
+    }
+
+    @Test
+    @DisplayName("Deve desativar com sucesso com profissional mentor logado")
+    public void deveDesativarComSucessoComMentorLogado() throws Exception {
+        // ARRANGE
+        ProfissionalMentor profissionalMentorMock = retornarProfissionalMentor();
+
+        // ACT
+        when(usuarioService.getIdLoggedUser()).thenReturn(1L);
+        when(profissionalMentorRepository.findByUsuario_Id(1L)).thenReturn(Optional.of(profissionalMentorMock));
+
+        profissionalMentorService.ativarInativarProfissional(null);
+
+        // ASSERT
+        assertFalse(profissionalMentorMock.isAtivo());
     }
 
     private static ProfissionalMentorRequestDTO retornarProfissionalMentorRequestDTO() {
